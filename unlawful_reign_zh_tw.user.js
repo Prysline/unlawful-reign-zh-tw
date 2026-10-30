@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.12
+// @version      0.3.13
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -516,11 +516,50 @@
         "You deal your home": "你以高價販售自家",
         "You learn a little more about the stranger's life to build a fake profile...": "你進一步了解這名陌生人的生活，以建立虛假的個人資料……",
         "grown drugs for a hefty markup.": "種植的毒品。",
+
+        // 2026-10-31：亡靈、幫派對手、特警隊與襲擊紀錄。
+        "Choose to give an Undead Minion instead of souls to the Devil": "可以選擇交給魔鬼一名亡靈僕從，而不是靈魂",
+        "Devilish Bargain": "魔鬼交易",
+        "Gang Coupons": "幫派優惠券",
+        "Grave Robber": "盜墓者",
+        "LOSE ALL MONEY": "失去所有金錢",
+        "LOSE ALL NOTORIETY": "失去所有惡名",
+        "Large Jewelry Box": "大型珠寶盒",
+        "Next Recruitment in": "距離下次招募還有",
+        "No more running": "不必再逃跑了",
+        "Notoriety Multiplier": "惡名倍率",
+        "Raided": "已遭突襲",
+        "Recruited": "已招募",
+        "Rivals Defeated": "擊敗的對手",
+        "SWAT Team": "特警隊",
+        "SWAT Team:": "特警隊：",
+        "Shady Debates": "可疑辯論",
+        "Swiper, Yes Swiping": "偷竊者，沒錯，就是偷竊",
+        "The Crown Cannons": "王冠火砲",
+        "The Jade Blades": "翡翠之刃",
+        "Undead Force": "亡靈軍團",
+        "Whistle Lure": "口哨誘餌",
+        "Your Gang manages to attract another Shady Associate...": "你的幫派成功吸引了另一名可疑同夥……",
+        "The SWAT Team raids your safehouse and supplies,": "特警隊突襲了你的安全屋與物資，",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // 亡靈、招募、幫派對手與戰鬥紀錄：保留數值、百分比及可變名稱。
+        [/^([+-]\d+)\s+Undead Minions?\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => `亡靈僕從：${m[1]}（${m[2]}%）`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Shoplift Stolen Goods chance$/i, m => `商店行竊獲得贓物的機率：${m[1]}%`],
+        [/^([+-]\d+)\s+Max Undead Minions$/i, m => `亡靈僕從上限：${m[1]}`],
+        [/^(\d+)\s+Members? into your Gang$/i, m => `${m[1]} 名成員加入你的幫派`],
+        [/^([+-]?\d+(?:[.,]\d+)?)%\s+Global Notoriety$/i, m => `全域惡名：${m[1]}%`],
+        [/^New Gang Members are\s+(\d+(?:[.,]\d+)?)%\s+cheaper to recruit$/i, m => `招募新幫派成員的費用降低 ${m[1]}%`],
+        [/^Try Awaken Dead\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => `嘗試喚醒死者（${m[1]}%）`],
+        [/^You defeated (['"])(.+?)\1, earning you$/i, m => `你擊敗了「${translateItemName(m[2])}」，並獲得`],
+        [/^You hit (['"])(.+?)\1 with (.+?), dealing$/i, m => `你以「${translateItemName(m[3])}」擊中「${translateItemName(m[2])}」，造成`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Notoriety gained from talking with Shady Strangers$/i, m => `與可疑陌生人交談獲得的惡名 ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Raid Grave Money Reward$/i, m => `盜墓金錢獎勵 ×${m[1]}`],
+        // 舊版本已部分中文化的幫派戰爭通知，補譯對手名稱而不再次記錄整句。
+        [/^與「([^」]+)」開戰。勝利可獲得 ([+-]\d+(?:[.,]\d+)?)% 全域惡名。如果你的幫派戰敗，你將失去所有惡名與幫派成員。$/u, m => `與「${translateItemName(m[1])}」開戰。勝利可獲得 ${m[2]}% 全域惡名。如果你的幫派戰敗，你將失去所有惡名與幫派成員。`],
         // 2026-10-31：武裝搶劫需求、武器數量、偽造身分、傷害、邪教建築及升級等動態格式。
         [/^Armed Robbery\s*\(\s*(\d+)\s+G\.M\.?\s*,\s*(\d+)\s+([^()]+?)\s*\)$/i, m => `持械搶劫（${m[1]} 名幫派成員、${m[2]} 把${translateItemName(m[3].trim())}）`],
         [/^You need a minimum of\s+(\d+)\s+Gang Members and\s+(\d+)\s+(.+)$/i, m => `你至少需要 ${m[1]} 名幫派成員與 ${m[2]} 把${translateItemName(m[3].trim())}`],
@@ -806,6 +845,60 @@
         return false;
     }
 
+    // 特警隊突襲的訊息可能由日期、文字、粗體金錢與粗體惡名組成。
+    // 在保留粗體元素的前提下，將被拆開的負號與惡名欄位恢復成同一數值。
+    const SWAT_RAID_FRAGMENT = /(?:The SWAT Team raids your safehouse and supplies|特警隊突襲了你的安全屋與物資)/;
+    function normalizeSwatRaidLog(element) {
+        if (!(element instanceof Element) || skipElement(element)) return false;
+        const text = element.textContent;
+        if (!text || text.length > 350 || !SWAT_RAID_FRAGMENT.test(text)) return false;
+        const tree = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        let current;
+        while ((current = tree.nextNode())) {
+            if (current.nodeValue.trim()) {
+                if (skipElement(current.parentElement) || usesIconFont(current.parentElement)) return false;
+                nodes.push(current);
+                if (nodes.length > 24) return false;
+            }
+        }
+        const parseNotoriety = value => {
+            const match = value.match(/^([+-]?)([\d,.]+(?:[KMBT])?)(?:\s+Not\.|\s*點惡名)$/i)
+                || value.match(/^([+-]?)惡名：([\d,.]+(?:[KMBT])?)$/u);
+            return match ? {sign: match[1], value: match[2]} : null;
+        };
+        let updated = false;
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
+            const original = node.nodeValue;
+            const content = original.trim();
+            const notoriety = parseNotoriety(content);
+            if (!notoriety) continue;
+            const previous = i ? nodes[i - 1] : null;
+            const detachedMinus = previous && /^-$/.test(previous.nodeValue.trim());
+            if (detachedMinus) {
+                previous.nodeValue = previous.nodeValue.replace('-', '');
+                updated = true;
+            }
+            const sign = notoriety.sign || (detachedMinus ? '-' : '');
+            const target = `惡名：${sign}${notoriety.value}`;
+            const leading = original.match(/^\s*/u)[0];
+            const trailing = original.match(/\s*$/u)[0];
+            if (content !== target) {
+                node.nodeValue = leading + target + trailing;
+                updated = true;
+            }
+        }
+        return updated;
+    }
+
+    function normalizeSwatRaidLogInAncestors(element) {
+        for (let depth = 0; element && depth < 5; depth++, element = element.parentElement) {
+            if (normalizeSwatRaidLog(element)) return true;
+        }
+        return false;
+    }
+
     function translateText(node) {
         if (!node || node.nodeType !== Node.TEXT_NODE || skipElement(node.parentElement) || usesIconFont(node.parentElement)) return;
         const translated = translateString(node.nodeValue);
@@ -830,12 +923,14 @@
     function scan(root) {
         if (!root) return;
         if (root.nodeType === Node.TEXT_NODE) {
+            normalizeSwatRaidLogInAncestors(root.parentElement);
             if (!translateGroupedPurchaseInAncestors(root.parentElement)) translateText(root);
             return;
         }
         if (root.nodeType !== Node.ELEMENT_NODE && root.nodeType !== Node.DOCUMENT_NODE) return;
         if (root.nodeType === Node.ELEMENT_NODE) {
             if (skipElement(root)) return;
+            normalizeSwatRaidLogInAncestors(root);
             translateGroupedPurchaseInAncestors(root);
             translateAttributes(root);
         }
@@ -846,6 +941,7 @@
             if (node.nodeType === Node.TEXT_NODE) {
                 translateText(node);
             } else {
+                normalizeSwatRaidLog(node);
                 translateGroupedPurchase(node);
                 translateAttributes(node);
             }
