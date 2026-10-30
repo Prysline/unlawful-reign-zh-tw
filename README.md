@@ -30,7 +30,7 @@ Tampermonkey 選單提供：
 
 ## 專案狀態
 
-* 目前版本：`0.3.8`
+* 目前版本：`0.3.9`
 * 版本狀態：測試版，尚未完成全面遊玩驗證。
 * 適用網站：`https://unlawfulreign.netlify.app/`
 * 原有 `@name` 與 `@namespace` 維持不變，盡量延續既有安裝識別與儲存鍵名。
@@ -40,3 +40,9 @@ Tampermonkey 選單提供：
 ## 圖示保護
 
 翻譯時會跳過 Material Icons、Material Symbols、`md-icon`、`mat-icon` 和 SVG 的圖示內容，以免將 `settings` 等圖示名稱當成一般英文翻譯。一般選單中的設定文字仍會照常翻譯。
+
+## 翻譯模組與測試
+
+* 可變動的金額、百分比、幫派等級與人數、搶劫需求、獎勵倍率等使用正規表示式動態處理；道具固有名稱保留在固定詞庫。
+* 購買裝備與升級通知可辨識拆分成多個文字節點的情況，避免重複收集殘句。
+* 可用 Node.js 執行 `node tests/test_translation.cjs` 進行翻譯格式、圖示及紀錄保存的回歸測試。
