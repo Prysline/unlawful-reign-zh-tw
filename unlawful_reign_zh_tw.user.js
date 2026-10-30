@@ -1,0 +1,712 @@
+// ==UserScript==
+// @name         Unlawful Reign 繁體中文化（測試版）
+// @namespace    https://unlawfulreign.netlify.app/
+// @version      0.3.8
+// @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
+// @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
+// @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
+// @updateURL    https://raw.githubusercontent.com/Prysline/unlawful-reign-zh-tw/main/unlawful_reign_zh_tw.user.js
+// @downloadURL  https://raw.githubusercontent.com/Prysline/unlawful-reign-zh-tw/main/unlawful_reign_zh_tw.user.js
+// @match        https://unlawfulreign.netlify.app/*
+// @run-at       document-idle
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_registerMenuCommand
+// ==/UserScript==
+
+(() => {
+    'use strict';
+
+    // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
+    // 後者不代表已逐一核實在目前版本中的原文拼寫。
+    const BUILTIN = Object.freeze({
+
+    // 2026-10-30：依照第二批玩家匯出的文字補充。
+        "+10% chance to get Stolen Goods when Shoplifting": "商店行竊時獲得贓物的機率增加 10%",
+        "Be able to recruit Shady Strangers and start your Gang": "能夠招募可疑的陌生人並建立自己的幫派",
+        "Black Market Invitation": "黑市邀請函",
+        "Chance to steal jewels when pickpocketing": "扒竊時有機會偷到珠寶",
+        "Double Shoplifting Reward": "商店行竊獎勵加倍",
+        "Double notoriety when talking with shady strangers if you're not a criminal": "如果你不是罪犯，與可疑的陌生人交談時，惡名加倍",
+        "Doubles Shoplifting Reward": "使商店行竊獎勵加倍",
+        "Fancier Folk": "更講究穿著的人們",
+        "Fancier Stores": "更高級的商店",
+        "No One's Listening": "沒有人在聽",
+        "Purse Snatcher": "搶包賊",
+        "Shady Stranger:": "可疑的陌生人：",
+        "Shoplift": "商店行竊",
+        "Small Business Theft": "小型商家竊盜",
+        "Squad Up": "組隊",
+        "Superstores": "大型賣場",
+        "Triple pickpocket reward": "扒竊獎勵變為三倍",
+        "Unlock the Black Market": "解鎖黑市",
+        "Year": "年份",
+
+    // v0.3 整合版：新增玩家提供的後續遊戲文字。
+        "Be able to Mug Strangers": "能夠搶劫陌生人",
+        "Distracted Store Clerks": "分心的店員",
+        "Increases Stolen Goods capacity": "增加贓物容量",
+        "Just an everyday criminal": "只是一名普通罪犯",
+        "Reduce Shoplift Crime penalty by one": "將商店行竊的犯罪懲罰減少 1",
+        "Scare Tactics": "恐嚇手段",
+        "Shady Stranger": "可疑的陌生人",
+        "Shady Talk": "可疑交談",
+        "Show purchased upgrades": "顯示已購買的升級項目",
+        "Small Safe": "小型保險箱",
+        "You share your misdeeds and misadventures. You gain": "你分享了自己的惡行與荒唐遭遇。你獲得",
+        "You shoplift": "你在商店行竊",
+
+    // 根據玩家實際匯出的遊戲文字補充，保持英文原文精確比對。
+        "A store full of freebies (I think?)": "一間到處都是免費商品的商店（我想是吧？）",
+        "Avoid Eye Contact": "避免眼神接觸",
+        "Be able to find Jewelry Stores": "能夠找到珠寶店",
+        "Be able to meet Shady Strangers": "能夠遇見可疑的陌生人",
+        "Burst of Courage": "勇氣爆發",
+        "Busted!": "被逮到了！",
+        "Busted! You lose": "被逮到了！你失去",
+        "Collapse log": "收合紀錄",
+        "Criminal": "罪犯",
+        "Crowd Diversion": "轉移人群注意力",
+        "Diamonds Are Forever": "鑽石恆久遠",
+        "Double Pickpocket reward": "扒竊獎勵加倍",
+        "Double your pickpocket profits": "讓你的扒竊收益加倍",
+        "EXPORT SAVE": "匯出存檔",
+        "Encounter Chances": "遭遇機率",
+        "Experienced Pick-Pocketer": "經驗豐富的扒手",
+        "Hide purchased upgrades": "隱藏已購買的升級項目",
+        "IMPORT SAVE": "匯入存檔",
+        "Lose 50% of your money": "失去你 50% 的金錢",
+        "Meet Shadier Strangers": "遇見更可疑的陌生人",
+        "Oink Oink": "哼哼",
+        "Pass Through": "通過",
+        "Police:": "警察：",
+        "Progress:": "進度：",
+        "Purchased": "已購買",
+        "Purchased Upgrades": "已購買的升級項目",
+        "RESTART": "重新開始",
+        "Shop:": "商店：",
+        "Show floating numbers": "顯示浮動數字",
+        "Stranger:": "陌生人：",
+        "Thicker Wallets": "更厚的錢包",
+        "Unlocks Shoplift": "解鎖商店行竊",
+        "Warning! This will delete all of your current save data!": "警告！這將刪除你目前所有的存檔資料！",
+        "You pickpocket": "你扒竊了",
+        "You've recently commited a crime and the police have your arrest warrant": "你最近犯下了罪行，警方已持有對你的逮捕令",
+        'Day': '天數',
+        'settings': '設定',
+        'Settings': '設定',
+        'Money': '金錢',
+        'City': '城市',
+        'Player': '玩家',
+        'Stranger': '陌生人',
+        'Just an everyday man': '只是一名普通人',
+        'Talk': '交談',
+        'Pickpocket': '扒竊',
+        'Back': '返回',
+        'Return': '返回',
+        'Continue': '繼續',
+        'Close': '關閉',
+        'OK': '確定',
+        'Confirm': '確認',
+        'Cancel': '取消',
+        'Yes': '是',
+        'No': '否',
+        'On': '開啟',
+        'Off': '關閉',
+        'Enable': '啟用',
+        'Disable': '停用',
+        'Start': '開始',
+        'Restart': '重新開始',
+        'Reset': '重置',
+        'Save': '儲存',
+        'Load': '讀取',
+        'Export': '匯出',
+        'Import': '匯入',
+        'Options': '選項',
+        'Help': '說明',
+        'Tutorial': '教學',
+        'Achievements': '成就',
+        'Statistics': '統計',
+        'Stats': '數值',
+        'Status': '狀態',
+        'Level': '等級',
+        'Experience': '經驗值',
+        'XP': '經驗值',
+        'Reputation': '聲望',
+        'Notoriety': '惡名',
+        'Heat': '警方關注度',
+        'Health': '生命值',
+        'Energy': '精力',
+        'Stamina': '體力',
+        'Inventory': '物品欄',
+        'Items': '物品',
+        'Equipment': '裝備',
+        'Weapons': '武器',
+        'Skills': '技能',
+        'Upgrades': '升級項目',
+        'Upgrade': '升級',
+        'Research': '研究',
+        'Unlock': '解鎖',
+        'Unlocked': '已解鎖',
+        'Locked': '未解鎖',
+        'Requirements': '需求條件',
+        'Cost': '花費',
+        'Price': '價格',
+        'Reward': '獎勵',
+        'Rewards': '獎勵',
+        'Income': '收入',
+        'Expenses': '支出',
+        'Profit': '利潤',
+        'Buy': '購買',
+        'Sell': '出售',
+        'Purchase': '購買',
+        'Hire': '雇用',
+        'Recruit': '招募',
+        'Work': '工作',
+        'Rest': '休息',
+        'Wait': '等待',
+        'Search': '搜尋',
+        'Explore': '探索',
+        'Travel': '旅行',
+        'Attack': '攻擊',
+        'Defend': '防禦',
+        'Escape': '逃跑',
+        'Steal': '偷竊',
+        'Crime': '犯罪',
+        'Crimes': '犯罪行動',
+        'Theft': '竊盜',
+        'Robbery': '搶劫',
+        'Heist': '重大劫案',
+        'Heists': '重大劫案',
+        'Bribe': '賄賂',
+        'Bribery': '行賄',
+        'Money Laundering': '洗錢',
+        'Gang': '幫派',
+        'Gangs': '幫派',
+        'Gang War': '幫派戰爭',
+        'Mafia': '黑手黨',
+        'Cult': '邪教',
+        'Pirate': '海盜',
+        'Pirates': '海盜',
+        'Piracy': '海盜活動',
+        'Ship': '船隻',
+        'Ships': '船隻',
+        'Sail': '航行',
+        'Sailing': '航海',
+        'Sea': '海洋',
+        'Port': '港口',
+        'Crew': '船員',
+        'Bounty': '懸賞金',
+        'Bounty Board': '懸賞公告欄',
+        'Prestige': '威望重置',
+        'Business': '生意',
+        'Businesses': '生意',
+        'Police': '警察',
+        'Prison': '監獄',
+        'Bank': '銀行',
+        'Shop': '商店',
+        'Market': '市場',
+        'Success': '成功',
+        'Failure': '失敗',
+        'Failed': '失敗',
+        'Completed': '已完成',
+        'Available': '可使用',
+        'Owned': '已擁有',
+        'Not enough money': '金錢不足',
+        'Insufficient funds': '資金不足',
+        'New Game': '新遊戲',
+        'Game Over': '遊戲結束',
+
+    // 由四份待翻譯文字 JSON 去重後新增的固定詞彙。
+        "Access the": "進入",
+        "All": "全部",
+        "Be able to Graffiti the outside of stores": "能夠在商店外牆塗鴉",
+        "Be able to sacrifice Strangers": "能夠獻祭陌生人",
+        "Black Market": "黑市",
+        "Creative Mind": "創意思維",
+        "Credible Bling": "令人信服的閃亮飾品",
+        "Deeper Alleys": "更深的巷弄",
+        "Expensive Produce": "昂貴的農產品",
+        "Find shady items to sell": "尋找可疑的物品出售",
+        "Gain more Notoriety from Shady Talk per Gang Member": "每名幫派成員都會使「可疑交談」獲得更多惡名",
+        "Illicit Armory": "非法軍械庫",
+        "Mugging": "搶劫",
+        "Naive Tourists": "天真的遊客",
+        "Shadow Bazaar": "暗影市集",
+        "Sinister Intent": "邪惡意圖",
+        "Stolen Goods": "贓物",
+        "Word on the Street": "街頭傳聞",
+        "You sold": "你賣出了",
+        "You talk about how great your gang is but they don't care": "你談論自己的幫派有多麼厲害，但他們並不在乎",
+        "You're not Welcome here yet...": "你目前還不受這裡歡迎……",
+        "and": "和",
+        "and earned": "並賺得",
+
+    // 玩家第五批待翻譯文字：裝備、技能與遊戲進程。
+        "'Yeah, b*tch! Magnets!' - J. Pinkman": "「對啊，婊子！磁鐵！」，J. Pinkman",
+        "2 For 1 Sale": "買一送一促銷",
+        "5 Finger Discount": "五指折扣",
+        "A Sinister Setting": "陰森的環境",
+        "A professional look makes half the sale": "專業的外表就讓交易成功了一半",
+        "Able to bribe cops if Criminal status is 1": "若罪犯狀態為 1，便能賄賂警察",
+        "Able to rob Stores with your gang": "能夠與你的幫派一起搶劫商店",
+        "Bandana": "頭巾",
+        "Be able to visit the Cemetery": "能夠造訪墓園",
+        "Better Paints": "更好的顏料",
+        "Bit more hesitant to yank money away from a fellow cop": "從警察同僚手中搶錢時會稍微有些猶豫",
+        "Body": "身體",
+        "Collected:": "已收集：",
+        "Doubles Graffiti Reward": "塗鴉獎勵加倍",
+        "Easier to hide things in": "更容易在裡面藏東西",
+        "Fake Body Tattoos": "假刺青",
+        "Fancy Tie": "華麗的領帶",
+        "Feet": "腳部",
+        "Hands": "手部",
+        "Head": "頭部",
+        "High Resale Value": "高轉售價值",
+        "I was never actually going to use it on someone... probably": "我原本真的沒打算拿它對付任何人……大概吧",
+        "I'm not superstitious but I swear these pair of boots are magic": "我並不迷信，但我發誓這雙靴子有魔法",
+        "I'm not sure what to get for my real tattoos yet": "我還不確定真正的刺青要刺什麼圖案",
+        "Jewelry Box": "珠寶盒",
+        "Jewelry Store:": "珠寶店：",
+        "Knife": "刀",
+        "Legs": "腿部",
+        "Lesser of Two Evils": "兩害相權取其輕",
+        "Lose 10% less total money when Busted": "被逮捕時，損失的總金錢減少 10%",
+        "Lucky Hunting Boots": "幸運狩獵靴",
+        "Magnetic Bracelet": "磁力手環",
+        "Memorized Guard Shift": "熟記守衛輪班時間",
+        "Representing your colors": "展現你的代表色",
+        "Self-Storage Space": "自助倉儲空間",
+        "Sheriff Badge": "警長徽章",
+        "Store Robbery": "商店搶劫",
+        "Trench Coat": "風衣",
+        "You mug": "你搶劫了",
+        "You pay a small finder's fee to be able to visit the Illicit Armory": "你支付了一小筆介紹費，因此能夠造訪非法軍械庫",
+
+    // 第六批玩家回報的邪教、劫案與裝備文字（保留既有詞庫）。
+        "+ Unlock New Ritual": "＋解鎖新儀式",
+        "+All": "＋全部",
+        "-All": "－全部",
+        "/ Built": "／已建造",
+        "A thief's paradise": "小偷的天堂",
+        "Activate": "啟用",
+        "Active": "已啟用",
+        "Altar": "祭壇",
+        "Can finally find where the exit signs are located": "終於能找到出口標誌的位置了",
+        "Cast": "施放",
+        "Consumes Money daily": "每日消耗金錢",
+        "Consumes Notoriety daily": "每日消耗惡名",
+        "Cult Level": "邪教等級",
+        "Cultist Training Ground": "邪教徒訓練場",
+        "Deactivate": "停用",
+        "Demonic Rites": "惡魔儀式",
+        "Doubles Notoriety from Shady Talk": "「可疑交談」獲得的惡名加倍",
+        "Flower Crown": "花冠",
+        "Graffiti": "塗鴉",
+        "I was born with an artist's soul": "我天生就有藝術家的靈魂",
+        "Increases Souls capacity": "增加靈魂容量",
+        "Increases Souls gained from Sacrifices": "增加獻祭獲得的靈魂",
+        "Increases Souls gained from Sacrifices per Gang Member": "每名幫派成員都會增加獻祭獲得的靈魂",
+        "Jewelry Heists are rerolled if unsuccessful": "珠寶劫案若未成功，會重新擲骰判定",
+        "Jewelry Store": "珠寶店",
+        "Next Level:": "下一等級：",
+        "Ninja Tabi": "忍者足袋",
+        "Not Active": "未啟用",
+        "Occult Constructs": "秘術建築",
+        "Ritual": "儀式",
+        "Rituals cost 50% of your Souls to cast (Min 20 Souls)": "施放儀式需消耗你 50% 的靈魂（最低 20 個靈魂）",
+        "Sacrifice": "獻祭",
+        "Sacrificing just feels a little more right when I'm wearing this crown": "戴著這頂花冠獻祭時，總覺得更對勁了一點",
+        "Silent but deadly": "無聲卻致命",
+        "Sinner": "罪人",
+        "Soul Gem": "靈魂寶石",
+        "Soul Infused Dagger": "注入靈魂的匕首",
+        "Souls": "靈魂",
+        "Spectacles": "眼鏡",
+        "Spraycan": "噴漆罐",
+        "Stolen Jewels": "偷來的珠寶",
+        "Strange Dagger": "奇異匕首",
+        "Street Smarts": "街頭智慧",
+        "Upgrade Cult": "升級邪教",
+        "You can feel a strange power eminates from its blade": "你能感覺到一股奇異的力量從刀刃散發出來",
+        "You continue making meticulous heist preparations...": "你繼續進行周密的劫案準備……",
+        "You may encounter The Devil if your sin is at least 5": "如果你的罪孽至少為 5，就可能遇見魔鬼",
+        "You sacrifice the stranger and harvest": "你獻祭了陌生人，並收穫了",
+        "You tag the side of a store and earn": "你在商店側面塗鴉，並賺得",
+        "You've recently commited a sin, the devil draws closer": "你最近犯下了罪孽，魔鬼正逐漸靠近",
+
+    // 第七批：新增裝備、珠寶店劫案與邪教相關文字。
+        "'Ebonics' Music CD": "「Ebonics（非裔美國英語）」音樂光碟",
+        "Able to rob Jewelry Stores with your gang": "能夠與你的幫派一起搶劫珠寶店",
+        "Armed Robbery": "持械搶劫",
+        "Constant Surveillance": "持續監視",
+        "Fake Cameras": "假監視器",
+        "Master Lifter": "竊盜高手",
+        "Pocket Gems": "口袋寶石",
+        "Shoplift has no criminal penalty": "商店行竊沒有犯罪懲罰",
+        "Sinner-gy": "罪人協同效應",
+        "Soul Lantern": "靈魂提燈",
+        "Triples pickpocket reward": "使扒竊獎勵變為三倍",
+        "Unholy Aid": "邪惡援助",
+        "Very Loose Change": "非常零散的零錢",
+        "You carry out your heist and manage to get away!": "你執行了劫案，並成功逃脫！",
+        "You feel fully prepared to execute your heist": "你覺得自己已做好充分準備，可以執行劫案了",
+        "You've recently commited a sin, the devil haunts you": "你最近犯下了罪孽，魔鬼正糾纏著你",
+        "「對啊，婊子！磁鐵！」，J. Pinkman": "「對啊，婊子！磁鐵！」，J. Pinkman",
+
+    // 第九批：新出現的裝備、升級名稱及效果。
+        "Disguise Toolkit": "偽裝工具組",
+        "Doubles Stolen Goods sell price": "贓物出售價格加倍",
+        "Going-out-of-business Sale": "歇業清倉特賣",
+        "“How To Sell” for Dummies": "「如何出售」傻瓜指南",
+
+    // 第八批：幫派升級、招募與懺悔相關文字。
+        "Expand your Gang to new territories": "將你的幫派擴展至新的地盤",
+        "Gang Level": "幫派等級",
+        "Gang Members": "幫派成員",
+        "Its time to repent for your sins": "是時候為你的罪孽懺悔了",
+        "LOSE ALL YOUR SOULS": "失去你所有的靈魂",
+        "Passive Gain": "被動獲得",
+        "REPENT!": "懺悔！",
+        "Recruit Member": "招募成員",
+        "Soul Vessel": "靈魂容器",
+        "The Devil": "魔鬼",
+        "Upgrade Gang": "升級幫派",
+        "You persuade your fellow criminal to join in your misdoings.": "你說服另一名罪犯加入你的惡行。",
+        "You repent for your sins. The devil gladly collects your gathered souls.": "你為自己的罪孽懺悔。魔鬼欣然收走你收集的靈魂。",
+        "/ Day": "／天",
+        "per Member": "每名成員",
+    });
+
+    // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
+    // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
+    const DYNAMIC = [
+        // 第八批：幫派成員、生命值與成員上限。統一處理所有數值。
+        [/^([+-]\s*\d+(?:[.,]\d+)?)\s+HP Regen$/i, m => `生命值恢復：${m[1].replace(/\s+/g, '')}`],
+        [/^([+-]\s*\d+)\s+Max Members$/i, m => `成員上限：${m[1].replace(/\s+/g, '')}`],
+        [/^([+-]\s*\d+)\s+Max HP$/i, m => `生命值上限：${m[1].replace(/\s+/g, '')}`],
+        [/^([+-]?\s*\d+(?:[.,]\d+)?)\s+Gang Members?$/i, m => `${m[1].replace(/\s+/g, '')} 名幫派成員`],
+        // 第七批：新增動態百分比與劫案策劃加成。
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Money while sinner$/i, m => `處於罪人狀態時，金錢：${m[1]}%`],
+        [/^([+-]\d+)\s+Jewelry Store Heist Plan Speed$/i, m => `珠寶店劫案策劃速度：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Ritual Power$/i, m => `儀式威力：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Pickpocket Jewels chance$/i, m => `扒竊珠寶的機率：${m[1]}%`],
+        // 第六批：邪教、獻祭、劫案進度與可變化的數值。
+        [/^\(\+?(\d+)\s+Souls per Sacrifice\/Altar\)$/i, m => `（每座祭壇每次獻祭獲得的靈魂 +${m[1]}）`],
+        [/^\(-\$([\d,.]+)\s+per day\/Altar\)$/i, m => `（每座祭壇每天的金錢 -$${m[1]}）`],
+        [/^([+-]\d+)\s+Souls per Sacrifice$/i, m => `每次獻祭獲得的靈魂：${m[1]}`],
+        [/^([+-]\d+)\s+base Souls from sacrifices$/i, m => `獻祭獲得的基礎靈魂：${m[1]}`],
+        [/^([+-]\d+)\s+Stolen Jewels(?:\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\))?$/i, m => `偷來的珠寶：${m[1]}${m[2] !== undefined ? `（${m[2]}%）` : ""}`],
+        [/^([+-]?\d+)\s+Stolen Jewels(?:\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\))?$/i, m => `偷來的珠寶：${m[1]}${m[2] !== undefined ? `（${m[2]}%）` : ""}`],
+        [/^([+-]\d+)\s+Jewelry Heist Planning Progress$/i, m => `珠寶劫案策劃進度：${m[1]}`],
+        [/^([+-]\d+)\s+progress$/i, m => `進度：${m[1]}`],
+        [/^-\$([\d,.]+)\s+per day$/i, m => `每日金錢：-$${m[1]}`],
+        [/^([+-]\d+)\s+Sinner penalty when Sacrificing$/i, m => `獻祭時的罪人懲罰：${m[1]}`],
+        [/^([+-]?\d+(?:[.,]\d+)*)\s+Souls$/i, m => `靈魂：${m[1]}`],
+        [/^(\d+(?:[.,]\d+)?)%\s+chance of getting busted$/i, m => `被逮捕的機率：${m[1]}%`],
+        [/^(Activate|Deactivate)\s+(\d+|all)\s+(Altar|Cultist Training Ground)$/i, m => `${m[1].toLowerCase() === "activate" ? "啟用" : "停用"}${m[2].toLowerCase() === "all" ? "全部" : ` ${m[2]} 座`}${m[3].toLowerCase() === "altar" ? "祭壇" : "邪教徒訓練場"}`],
+        [/^Heist\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\)$/i, m => `劫案（${m[1]}%）`],
+        [/^Plan Heist\s*\(\s*(\d+)\s*\/\s*(\d+)\s*\)$/i, m => `策劃劫案（${m[1]}/${m[2]}）`],
+        [/^Sinner:\s*([+-]?\d+(?:[.,]\d+)?)$/i, m => `罪人：${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Base Souls from Sacrifice$/i, m => `獻祭獲得的基礎靈魂 ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Notoriety from Graffiti$/i, m => `塗鴉獲得的惡名 ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Money Rewards$/i, m => `金錢獎勵 ×${m[1]}`],
+        // 共用金錢獎勵倍率格式，不依固定倍率建立重複詞條。
+        [/^x(\d+(?:[.,]\d+)*)\s+(Shoplift|Mugging|Pickpocket)\s+Money rewards?$/i, m => `${({shoplift: '商店行竊', mugging: '搶劫', pickpocket: '扒竊'})[m[2].toLowerCase()]}金錢獎勵 ×${m[1]}`],
+        // 裝備加成、機率、數量與搶劫獎勵的動態格式。
+        [/^([+-]\d+)\s+Gang Members\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\)$/i, m => `幫派成員：${m[1]}（${m[2]}%）`],
+        [/^([+-]\d+)\s+Stolen Goods from Shoplifting$/i, m => `商店行竊獲得的贓物：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance to pickpocket Stolen Jewels$/i, m => `扒竊贓珠寶的機率：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Recruit Shady Stranger chance$/i, m => `招募可疑陌生人的機率：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+chance (?:to shoplift items|of shoplifting item)$/i, m => `商店行竊時偷到物品的機率：${m[1]}%`],
+        [/^([+-]\d+)\s+Stolen Goods capacity$/i, m => `贓物容量：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Sale Prices$/i, m => `出售價格：${m[1]}%`],
+        [/^([+-]\d+)\s+Jewelry Heist planning progress speed$/i, m => `珠寶劫案策劃進度速度：${m[1]}`],
+        [/^([+-]\d+)\s+Notoriety when talking with shady strangers$/i, m => `與可疑陌生人交談時的惡名：${m[1]}`],
+        [/^([+-]\d+)\s+Max Stolen Jewels$/i, m => `贓珠寶持有上限：${m[1]}`],
+        [/^Pickpocket\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\)$/i, m => `扒竊（${m[1]}%）`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Money from Mugging$/i, m => `搶劫獲得的金錢 ×${m[1]}`],
+        [/^([+-]?\d+(?:[,.]\d+)*)\s+Stolen Goods(?:\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\))?$/i, m => `${m[1]} 件贓物${m[2] ? `（${m[2]}%）` : ''}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+chance to recruit Shady Strangers$/i, m => `招募可疑的陌生人的機率：${m[1]}%`],
+        [/^Try Recruit\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\)$/i, m => `嘗試招募（${m[1]}%）`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Mugging Reward$/i, m => `搶劫獎勵 ×${m[1]}`],
+        [/^Shoplift\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\)$/i, m => `商店行竊（${m[1]}%）`],
+        [/^已購買(升級|裝備)「([^」]+)」！$/u, m => `已購買${m[1]}「${translateItemName(m[2])}」！`],
+        [/^([+-]?\d+(?:[,.]\d+)*)\s+Not\.$/i, m => `惡名：${m[1]}`],
+        [/^\[D(\d+)\s+Y(\d+)\](:?)$/i, m => `［第 ${m[1]} 天／第 ${m[2]} 年］${m[3] ? '：' : ''}`],
+        [/^\(Max:\s*([\d,.]+)\)$/i, m => `（上限：${m[1]}）`],
+        [/^(\d+)\s+days?\s+remaining$/i, m => `剩餘 ${m[1]} 天`],
+        [/^Hotkey:\s*(\S+)$/i, m => `快捷鍵：${m[1]}`],
+        [/^Criminal:\s*([+-]?\d+(?:[,.]\d+)*)$/i, m => `罪犯：${m[1]}`],
+        [/^Pickpocket has\s+(\d+)\s+Crime Penalty$/i, m => `扒竊的犯罪懲罰為 ${m[1]}`],
+        [/^Purchased (Upgrade|Equipment) (['\"])(.+)\2!$/i, m => `已購買${m[1].toLowerCase() === 'equipment' ? '裝備' : '升級'}「${translateItemName(m[3])}」！`],
+        [/^Day\s+(\d+)$/i, m => `第 ${m[1]} 天`],
+        [/^Level\s+(\d+)$/i, m => `等級 ${m[1]}`],
+        [/^Day\s*:\s*(\d+)$/i, m => `天數：${m[1]}`],
+        [/^Money\s*:\s*([$€£]?\s*[\d,.]+)$/i, m => `金錢：${m[1]}`]
+    ];
+
+    // 技術驗證標記與版本號不得翻譯，也不應加入待翻譯清單。
+    // 匯出時出現的兩筆殘句：
+    // "Purchased Upgrade 'Experienced Pick"、"Pocketer'!"
+    // 尚不能確定其文字節點切分方式，不拆開翻譯，以免破壞介面詞序。
+    const NONTRANSLATABLE = [
+        /^[+-]?\$\d+(?:[.,]\d+)?[kKmMbBtT]?$/, // 單純價格，不要將金額縮寫 K 當成英文
+        /^conveyor_belt$/i,
+        /^groups$/i, // 圖示識別字
+        /^moving$/i, // 圖示識別字
+        /^diamond$/i, // Material Symbols 圖示名稱，不應翻譯成文字
+        /^x\d+(?:[.,]\d+)?$/i,
+        /^快捷鍵：\S+$/u,
+        /^\[incrementaldb_verification:\s*[^\]]+\]$/i,
+        /^v\.\s*\d+(?:\.\d+)+$/i
+    ];
+
+    const getObject = key => {
+        try {
+            const data = GM_getValue(key, {});
+            return data && typeof data === 'object' && !Array.isArray(data) ? data : {};
+        } catch {
+            return {};
+        }
+    };
+
+    // 既有中文化文字若仍含有英文字母，不應再被當成未翻譯原文收集。
+    const translatedBuiltin = new Set(Object.values(BUILTIN));
+    const custom = getObject('ur_zh_tw_custom');
+    const unseen = getObject('ur_zh_tw_untranslated');
+    const translatedCustom = new Set(Object.values(custom).filter(value => typeof value === 'string' && value));
+    const pending = new Set();
+    let translationScheduled = false;
+    const MAX_CAPTURE = 3000;
+
+    function lookup(text) {
+        if (NONTRANSLATABLE.some(pattern => pattern.test(text))) return text;
+        if (translatedBuiltin.has(text) || translatedCustom.has(text)) return text;
+        if (Object.prototype.hasOwnProperty.call(custom, text) && typeof custom[text] === 'string' && custom[text]) {
+            return custom[text];
+        }
+        if (Object.prototype.hasOwnProperty.call(BUILTIN, text)) {
+            return BUILTIN[text];
+        }
+        for (const [pattern, formatter] of DYNAMIC) {
+            const match = text.match(pattern);
+            if (match) return formatter(match);
+        }
+        return null;
+    }
+
+    // 立即寫入 Tampermonkey 儲存空間，避免玩家在 1.5 秒內重新整理或離開時遺失紀錄。
+    // 使用固定鍵名，不覆蓋先前版本已累積的待翻譯文字。
+    function saveUntranslatedNow() {
+        GM_setValue('ur_zh_tw_untranslated', unseen);
+    }
+
+    function recordUntranslated(text) {
+        if (
+            text.length > 240 ||
+            text.length < 2 ||
+            !/[A-Za-z]/.test(text) ||
+            Object.prototype.hasOwnProperty.call(unseen, text) ||
+            Object.keys(unseen).length >= MAX_CAPTURE
+        ) return;
+        unseen[text] = '';
+        saveUntranslatedNow();
+    }
+
+    function translateItemName(name) {
+        const translated = lookup(name);
+        if (translated !== null) return translated;
+        recordUntranslated(name);
+        return name;
+    }
+
+    function translateString(raw) {
+        if (typeof raw !== 'string' || !/[A-Za-z]/.test(raw)) return raw;
+        const core = raw.trim();
+        if (!core) return raw;
+        const replacement = lookup(core);
+        if (replacement === null) {
+            recordUntranslated(core);
+            return raw;
+        }
+        if (core === replacement) return raw;
+        const leading = raw.match(/^\s*/u)[0];
+        const trailing = raw.match(/\s*$/u)[0];
+        return leading + replacement + trailing;
+    }
+
+    // Material Icons / Symbols 以文字（例如 settings）作為圖示字型的連字名稱。
+    // 翻譯此類節點會使齒輪等圖示直接顯示中文字，因此排除整個圖示子樹。
+    const SKIP_SELECTOR = [
+        'script', 'style', 'noscript', 'code', 'pre', 'textarea', 'svg',
+        '[contenteditable=""]', '[contenteditable="true"]', '[data-ur-zh-tw-skip]',
+        '.material-icons', '[class*="material-icons-"]',
+        '.material-symbols', '[class*="material-symbols-"]',
+        'md-icon', 'mat-icon'
+    ].join(', ');
+
+    function skipElement(element) {
+        if (!(element instanceof Element)) return true;
+        return !!element.closest(SKIP_SELECTOR);
+    }
+
+    // 兼容未帶標準 class、但由 CSS 指定 Material 圖示字型的元素。
+    function usesIconFont(element) {
+        if (!(element instanceof Element) || typeof getComputedStyle !== 'function') return false;
+        try {
+            const family = getComputedStyle(element).fontFamily || '';
+            return /material[\s_-]*(?:icons?|symbols?)/i.test(family);
+        } catch {
+            return false;
+        }
+    }
+
+    function translateText(node) {
+        if (!node || node.nodeType !== Node.TEXT_NODE || skipElement(node.parentElement) || usesIconFont(node.parentElement)) return;
+        const translated = translateString(node.nodeValue);
+        if (translated !== node.nodeValue) node.nodeValue = translated;
+    }
+
+    function translateAttributes(element) {
+        if (skipElement(element)) return;
+        for (const attr of ['title', 'placeholder', 'aria-label', 'alt']) {
+            const original = element.getAttribute(attr);
+            if (original === null) continue;
+            const translated = translateString(original);
+            if (translated !== original) element.setAttribute(attr, translated);
+        }
+        if (element instanceof HTMLInputElement && ['button', 'submit', 'reset'].includes(element.type)) {
+            const original = element.value;
+            const translated = translateString(original);
+            if (translated !== original) element.value = translated;
+        }
+    }
+
+    function scan(root) {
+        if (!root) return;
+        if (root.nodeType === Node.TEXT_NODE) {
+            translateText(root);
+            return;
+        }
+        if (root.nodeType !== Node.ELEMENT_NODE && root.nodeType !== Node.DOCUMENT_NODE) return;
+        if (root.nodeType === Node.ELEMENT_NODE) {
+            if (skipElement(root)) return;
+            translateAttributes(root);
+        }
+
+        const iterator = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+        let node;
+        while ((node = iterator.nextNode())) {
+            if (node.nodeType === Node.TEXT_NODE) translateText(node);
+            else translateAttributes(node);
+        }
+    }
+
+    function scheduleScan(node) {
+        if (!node) return;
+        pending.add(node);
+        if (translationScheduled) return;
+        translationScheduled = true;
+        requestAnimationFrame(() => {
+            translationScheduled = false;
+            const nodes = Array.from(pending);
+            pending.clear();
+            for (const item of nodes) scan(item);
+        });
+    }
+
+    function downloadJson(filename, data) {
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json;charset=utf-8'});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 3000);
+    }
+
+    function exportUntranslated() {
+        // 只匯出還未經自訂或內建字典翻譯的字串。
+        const data = Object.fromEntries(
+            Object.keys(unseen).filter(key => lookup(key) === null).sort().map(key => [key, ''])
+        );
+        downloadJson('Unlawful_Reign_待翻譯文字.json', data);
+        alert(`已匯出 ${Object.keys(data).length} 條尚未翻譯的文字。\n填入對應的繁體中文後，可以透過「匯入中文化詞庫」載入。`);
+    }
+
+    function importTranslations() {
+        const selector = document.createElement('input');
+        selector.type = 'file';
+        selector.accept = '.json,application/json';
+        selector.style.display = 'none';
+        document.body.appendChild(selector);
+        selector.addEventListener('change', async () => {
+            try {
+                if (!selector.files || !selector.files[0]) return;
+                const parsed = JSON.parse(await selector.files[0].text());
+                const records = parsed && typeof parsed.translations === 'object' && parsed.translations !== null
+                    ? parsed.translations : parsed;
+                if (!records || typeof records !== 'object' || Array.isArray(records)) {
+                    throw new Error('JSON 必須是「英文原文」對應「繁體中文」的物件。');
+                }
+                let added = 0;
+                for (const [key, value] of Object.entries(records)) {
+                    if (typeof key !== 'string' || typeof value !== 'string' || !key.trim() || !value.trim()) continue;
+                    if (key.length > 500 || value.length > 2000) continue;
+                    custom[key] = value;
+                    added += 1;
+                }
+                GM_setValue('ur_zh_tw_custom', custom);
+                alert(`已匯入 ${added} 條翻譯。網頁將重新整理，以將翻譯套用到所有介面。`);
+                if (added > 0) location.reload();
+            } catch (error) {
+                alert(`匯入失敗：${error.message}`);
+            } finally {
+                selector.remove();
+            }
+        }, {once: true});
+        selector.click();
+    }
+
+    GM_registerMenuCommand('匯出待翻譯文字 JSON', exportUntranslated);
+    GM_registerMenuCommand('匯入中文化詞庫 JSON', importTranslations);
+    GM_registerMenuCommand('清除已收集的待翻譯文字', () => {
+        if (!confirm('確定要清除已收集的待翻譯文字嗎？這不會刪除自訂翻譯詞庫或遊戲存檔。')) return;
+        for (const key of Object.keys(unseen)) delete unseen[key];
+        GM_setValue('ur_zh_tw_untranslated', {});
+        alert('已清除待翻譯文字清單。');
+    });
+
+    window.addEventListener('pagehide', saveUntranslatedNow);
+
+    const observer = new MutationObserver(mutations => {
+        for (const change of mutations) {
+            if (change.type === 'characterData') {
+                scheduleScan(change.target);
+            } else if (change.type === 'attributes') {
+                scheduleScan(change.target);
+            } else if (change.type === 'childList') {
+                for (const added of change.addedNodes) scheduleScan(added);
+            }
+        }
+    });
+
+    function start() {
+        if (!document.body) return;
+        scan(document.body);
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            characterData: true,
+            attributes: true,
+            attributeFilter: ['title', 'placeholder', 'aria-label', 'alt', 'value']
+        });
+    }
+
+    if (document.body) start();
+    else document.addEventListener('DOMContentLoaded', start, {once: true});
+})();
