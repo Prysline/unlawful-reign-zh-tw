@@ -404,6 +404,13 @@
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // 舊詞庫中的變動數值文案；「2 For 1 Sale」等道具固有名稱不拆成數值規則。
+        [/^([+-])(\d+(?:[.,]\d+)?)%\s+chance to get Stolen Goods when Shoplifting$/i, m => `商店行竊時獲得贓物的機率${m[1] === '+' ? '增加' : '減少'} ${m[2]}%`],
+        [/^Lose\s+(\d+(?:[.,]\d+)?)%\s+of your money$/i, m => `失去你 ${m[1]}% 的金錢`],
+        [/^Able to bribe cops if Criminal status is\s+(\d+)$/i, m => `若罪犯狀態為 ${m[1]}，便能賄賂警察`],
+        [/^Lose\s+(\d+(?:[.,]\d+)?)%\s+less total money when Busted$/i, m => `被逮捕時，損失的總金錢減少 ${m[1]}%`],
+        [/^Rituals cost\s+(\d+(?:[.,]\d+)?)%\s+of your Souls to cast \(Min\s+(\d+)\s+Souls\)$/i, m => `施放儀式需消耗你 ${m[1]}% 的靈魂（最低 ${m[2]} 個靈魂）`],
+        [/^You may encounter The Devil if your sin is at least\s+(\d+)$/i, m => `如果你的罪孽至少為 ${m[1]}，就可能遇見魔鬼`],
         // 幫派、搶劫、賄賂與犯罪效果：數值、等級或倍率改變時仍可重用。
         [/^([+-]\d+(?:[.,]\d+)?)\s+Bribe Level$/i, m => `賄賂等級：${m[1]}`],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Money Synergy$/i, m => `金錢協同增益：${m[1]}%`],
