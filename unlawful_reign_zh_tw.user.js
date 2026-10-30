@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.15
+// @version      0.3.16
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -285,7 +285,6 @@
         "You pay a small finder's fee to be able to visit the Illicit Armory": "你支付了一小筆介紹費，因此能夠造訪非法軍械庫",
 
     // 第六批玩家回報的邪教、劫案與裝備文字（保留既有詞庫）。
-        "+ Unlock New Ritual": "＋解鎖新儀式",
         "+All": "＋全部",
         "-All": "－全部",
         "/ Built": "／已建造",
@@ -486,8 +485,6 @@
         "days remaining": "剩餘天數",
         // 2026-10-31：武裝搶劫、邪教擴建與偽造身分等後續內容。
         "(Harvestable)": "（可收成）",
-        "+ Unlock New Rune": "＋解鎖新符文",
-        "+ Unlock New Structures": "＋解鎖新建築",
         "Basic Hitmen": "基礎殺手",
         "Battle Actions": "戰鬥行動",
         "Blood Pool": "血池",
@@ -561,11 +558,72 @@
         "and the dead are pleased...": "而死者們感到滿意……",
         "per Undead Minion": "每名亡靈僕從",
         "simply angers the dead... nothing happens": "卻只是激怒了死者……什麼也沒發生",
+    // v0.3.16：賭場、藏身處、神龕與幫派戰爭相關固定詞彙；句子片段保持原有作用範圍。
+        "A home away from home": "另一個家",
+        "Accurate Crosshairs": "精準準星",
+        "Better Luck Next Time": "下次好運",
+        "Broken Badge": "破損的警徽",
+        "Casino": "賭場",
+        "Casino:": "賭場：",
+        "Count Cards": "算牌",
+        "Creative Stowage": "巧妙收納",
+        "Doesn't hurt to tilt the odds in your favor": "讓勝算偏向自己總沒有壞處",
+        "Fiendish Sacrifice": "邪魔獻祭",
+        "Financial Coaxing": "金錢誘導",
+        "Full Seed Bags": "裝滿種子的袋子",
+        "Gang Reimbursement": "幫派補償",
+        "Godless Offering": "無神供品",
+        "Green Visor": "綠色遮陽帽",
+        "Hideout": "藏身處",
+        "Hire a Gardener to water your plants": "雇用園丁替你的植物澆水",
+        "Intimidation Tactics": "威嚇戰術",
+        "Loaded Dice": "灌鉛骰子",
+        "Lose half of your criminal status": "罪犯狀態數值減半",
+        "Make sure to play your cards right": "確保你打對手中的牌",
+        "Narcotic Negotiations": "毒品談判",
+        "Offer your Undead Minions to be able to collect more Souls": "獻上你的亡靈僕從，以收集更多靈魂",
+        "Quick Retaliation": "迅速反擊",
+        "Regular Cuff-tomer": "手銬常客",
+        "Removes all criminal status": "移除所有罪犯狀態",
+        "Rent '21'": "租借「21」",
+        "Rune": "符文",
+        "Safehouse": "安全屋",
+        "Shades the eyes, hides the tells, and keeps the dealer guessing": "遮住雙眼、掩飾破綻，讓莊家難以猜透",
+        "Shady Gardener": "可疑園丁",
+        "The Nightmare Hyenas": "夢魘鬣狗",
+        "You are able to tilt the chances in your favor using your intellect...": "你能運用智慧，讓勝算偏向自己……",
+        "You gamble and win!": "你賭博獲勝了！",
+        "You hideout somewhere you'll never be found, losing any chasing cop's tail": "你藏身於一個無人能找到的地方，甩掉了所有追蹤你的警察",
+        "to erase some of this world's memories of your criminal misdoings": "以抹去這個世界對你部分犯罪惡行的記憶",
+        "to your gang": "加入你的幫派",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.3.16：可變動數值、賭博倍率、每日消耗及戰鬥訊息前綴。
+        [/^(['"])(.+?)\1\s+deal$/i, m => `「${translateItemName(m[2])}」造成`],
+        [/^\(([+-]\d+(?:[.,]\d+)?)%\s+Ritual (Duration\/Shrine|Power\/Blood Pool)\)$/i, m => `（每座${m[2].toLowerCase().startsWith('duration') ? '神龕的儀式持續時間' : '血池的儀式威力'}：${m[1]}%）`],
+        [/^\(-\$([\d,.]+)\s+per day\/Blood Pool\)$/i, m => `（每座血池每日金錢：-$${m[1]}）`],
+        [/^\(([+-]\d+(?:[.,]\d+)?)\s+Souls per day\/Shrine\)$/i, m => `（每座神龕每日靈魂：${m[1]}）`],
+        [/^\+\s*Unlock New (Equipment|Ritual|Rune|Structures)$/i, m => `＋解鎖新${({equipment: '裝備', ritual: '儀式', rune: '符文', structures: '建築'})[m[1].toLowerCase()]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Ritual Duration$/i, m => `儀式持續時間：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Max bribe level$/i, m => `賄賂等級上限：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Max Drugs Capacity$/i, m => `毒品容量上限：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance to win when gambling$/i, m => `賭博獲勝機率：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Notoriety$/i, m => `惡名：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Souls per day$/i, m => `每日靈魂：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Gang War attack base cooldown$/i, m => `幫派戰爭攻擊的基礎冷卻時間：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Seed Prices$/i, m => `種子價格：${m[1]}%`],
+        [/^(\d+(?:[.,]\d+)?)%\s+Chance to yield x(\d+(?:[.,]\d+)?) harvest$/i, m => `收成獲得 ${m[2]} 倍產量的機率：${m[1]}%`],
+        [/^Gain\s+(\d+(?:[.,]\d+)?)%\s+Gamble success chance$/i, m => `賭博成功機率增加 ${m[1]}%`],
+        [/^Gamble\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => `賭博（${m[1]}%）`],
+        [/^Lose\s+(\d+(?:[.,]\d+)?)%\s+less money when busted$/i, m => `被逮捕時損失的金錢減少 ${m[1]}%`],
+        [/^Weeds, slowing down growth by\s+(\d+(?:[.,]\d+)?)%$/i, m => `雜草，使生長速度減慢 ${m[1]}%`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Counting Cards money$/i, m => `算牌獲得的金錢 ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Drugs Sell Price$/i, m => `毒品出售價格 ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Counting cards reward$/i, m => `算牌獎勵 ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+income from each gang member$/i, m => `每名幫派成員的收入 ×${m[1]}`],
         // 第十一批：亡靈數量、毒品販售上限、假身分機率與持續時間類倍率共用格式。
         [/^([+-]?\d+(?:[.,]\d+)?)\s+Undead Minions?$/i, m => /^[+-]/.test(m[1]) ? `亡靈僕從：${m[1]}` : `${m[1]} 名亡靈僕從`],
         [/^([+-]\d+(?:[.,]\d+)?)\s+max drugs dealt to Shady Strangers$/i, m => `向可疑陌生人販售毒品的上限：${m[1]}`],
@@ -621,7 +679,7 @@
         [/^\(([+-]\d+(?:[.,]\d+)?) Not\. per day\/Cultist Training Ground\)$/i, m => `（每座邪教徒訓練場每天的惡名：${m[1]}）`],
         [/^\((Sickle|Sow|Water)\)$/i, m => `（${translateItemName(m[1])}）`],
         [/^([+-]\d+(?:[.,]\d+)?) Souls per Gang Member \(([+-]\d+(?:[.,]\d+)?) Total\) per Sacrifice$/i, m => `每次獻祭每名幫派成員獲得 ${m[1]} 靈魂（總計 ${m[2]}）`],
-        [/^([+-]\d+)\s+(Altar|Cultist Training Ground)$/i, m => `${m[2] === "Altar" ? "祭壇" : "邪教徒訓練場"}：${m[1]}`],
+        [/^([+-]\d+)\s+(Altar|Cultist Training Ground|Shrine|Blood Pool)$/i, m => `${({altar: "祭壇", "cultist training ground": "邪教徒訓練場", shrine: "神龕", "blood pool": "血池"})[m[2].toLowerCase()]}：${m[1]}`],
         [/^([+-]\d+(?:[.,]\d+)?)% Chance for bonus Drugs on harvest$/i, m => `收成時獲得額外毒品的機率：${m[1]}%`],
         [/^([+-]\d+) Stolen Jewels? from Raid Grave$/i, m => `盜墓獲得的贓珠寶：${m[1]}`],
         [/^([+-]\d+) Stolen Jewels? from Jewelry Store Heists$/i, m => `珠寶店劫案獲得的贓珠寶：${m[1]}`],
@@ -723,6 +781,7 @@
     // "Purchased Upgrade 'Experienced Pick"、"Pocketer'!"
     // 尚不能確定其文字節點切分方式，不拆開翻譯，以免破壞介面詞序。
     const NONTRANSLATABLE = [
+        /^\d+(?:[.,]\d+)?[KMBT]$/i, // 單純數量縮寫（例如 1.1K），不是英文詞彙
         /^[+-]?\$\d+(?:[.,]\d+)?[kKmMbBtT]?$/, // 單純價格，不要將金額縮寫 K 當成英文
         /^Purchased (?:Upgrade|Equipment) ['"][^'"]+$/i, // 購買通知的前段殘句；合併處理完整節點
         /^(?:Pocketer|gy)['"]!$/i, // 已觀察到的購買通知末段殘句
@@ -983,6 +1042,99 @@
         return false;
     }
 
+    // 小範圍跨節點文字片段：只合併整個元素恰好符合已知句子片段的情況。
+    // 不處理包含粗體、互動控制或圖示的元素，避免破壞數值及原始顯示格式。
+    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!)$/i;
+    function normalizeSplitFragment(element) {
+        if (!(element instanceof Element) || skipElement(element)) return false;
+        if (element.querySelector('button, a, input, textarea, select, strong, b, em, i, svg, [contenteditable]')) return false;
+        const phrase = (element.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!phrase || phrase.length > 180 || !SPLIT_FRAGMENT.test(phrase)) return false;
+        const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        let node;
+        while ((node = walker.nextNode())) {
+            if (node.nodeValue.trim()) {
+                if (skipElement(node.parentElement) || usesIconFont(node.parentElement)) return false;
+                nodes.push(node);
+                if (nodes.length > 10) return false;
+            }
+        }
+        if (nodes.length < 2) return false;
+        const translation = lookup(phrase);
+        if (translation === null || translation === phrase) return false;
+        nodes[0].nodeValue = translation;
+        for (const rest of nodes.slice(1)) rest.nodeValue = '';
+        return true;
+    }
+
+    function normalizeSplitFragmentInAncestors(element) {
+        for (let depth = 0; element && depth < 4; depth++, element = element.parentElement) {
+            if (normalizeSplitFragment(element)) return true;
+        }
+        return false;
+    }
+
+    // 戰鬥記錄可能拆成「敵人 deal」、粗體傷害值和「to your gang」。
+    // 僅組合完整且單一的戰鬥傷害訊息，並在原本的粗體節點內修改數字文字。
+    const BATTLE_DAMAGE_LOG = /^(?<date>\s*(?:(?:\[D\d+\s+Y\d+\]|［第[^］]+］)\s*[:：]?\s*)?)(?<attacker>(?:'([^']+)'|"([^"]+)")\s+deal|「([^」]+)」造成)\s*(?<damage>[+-]?\d+(?:[.,]\d+)?\s*(?:Dmg|點傷害)|傷害：[+-]?\d+(?:[.,]\d+)?)\s*(?<suffix>to your gang|加入你的幫派)\s*[.!。]?\s*$/i;
+
+    function normalizeBattleDamageLog(element) {
+        if (!(element instanceof Element) || skipElement(element)) return false;
+        const original = element.textContent || '';
+        if (original.length > 300 || !/deal|造成/i.test(original) || !/Dmg|傷害/i.test(original)) return false;
+        if (element.querySelector('button, a, input, textarea, select, [contenteditable]')) return false;
+        const match = original.match(BATTLE_DAMAGE_LOG);
+        if (!match) return false;
+        const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        let node;
+        while ((node = walker.nextNode())) {
+            if (skipElement(node.parentElement) || usesIconFont(node.parentElement)) return false;
+            nodes.push(node);
+            if (nodes.length > 24) return false;
+        }
+        const attackerName = match[3] || match[4] || match[5];
+        const number = match.groups.damage.match(/[+-]?\d+(?:[.,]\d+)?/)[0];
+        const segments = [
+            [match.groups.attacker, `「${translateItemName(attackerName)}」對你的幫派造成`],
+            [match.groups.damage, `${number} 點傷害`],
+            [match.groups.suffix, '']
+        ];
+        const changes = [];
+        let cursor = match.groups.date.length;
+        for (const [oldText, newText] of segments) {
+            const index = original.indexOf(oldText, cursor);
+            if (index < 0) return false;
+            changes.push({start: oldText === match.groups.suffix ? cursor : index, end: index + oldText.length, replacement: newText});
+            cursor = index + oldText.length;
+        }
+        // 由後往前修改，偏移量才不會受較後方的新字串長度影響。
+        for (const change of changes.reverse()) {
+            let offset = 0;
+            let inserted = false;
+            for (const item of nodes) {
+                const begin = offset;
+                const end = offset + item.nodeValue.length;
+                offset = end;
+                if (end <= change.start || begin >= change.end) continue;
+                const from = Math.max(0, change.start - begin);
+                const to = Math.min(item.nodeValue.length, change.end - begin);
+                const remaining = item.nodeValue.slice(0, from) + (inserted ? '' : change.replacement) + item.nodeValue.slice(to);
+                if (!inserted) inserted = true;
+                item.nodeValue = remaining;
+            }
+        }
+        return true;
+    }
+
+    function normalizeBattleDamageLogInAncestors(element) {
+        for (let depth = 0; element && depth < 5; depth++, element = element.parentElement) {
+            if (normalizeBattleDamageLog(element)) return true;
+        }
+        return false;
+    }
+
     function translateText(node) {
         if (!node || node.nodeType !== Node.TEXT_NODE || skipElement(node.parentElement) || usesIconFont(node.parentElement)) return;
         const translated = translateString(node.nodeValue);
@@ -1007,6 +1159,8 @@
     function scan(root) {
         if (!root) return;
         if (root.nodeType === Node.TEXT_NODE) {
+            normalizeBattleDamageLogInAncestors(root.parentElement);
+            normalizeSplitFragmentInAncestors(root.parentElement);
             normalizeSacrificeLogInAncestors(root.parentElement);
             normalizeSwatRaidLogInAncestors(root.parentElement);
             if (!translateGroupedPurchaseInAncestors(root.parentElement)) translateText(root);
@@ -1015,6 +1169,8 @@
         if (root.nodeType !== Node.ELEMENT_NODE && root.nodeType !== Node.DOCUMENT_NODE) return;
         if (root.nodeType === Node.ELEMENT_NODE) {
             if (skipElement(root)) return;
+            normalizeBattleDamageLogInAncestors(root);
+            normalizeSplitFragmentInAncestors(root);
             normalizeSacrificeLogInAncestors(root);
             normalizeSwatRaidLogInAncestors(root);
             translateGroupedPurchaseInAncestors(root);
@@ -1027,6 +1183,8 @@
             if (node.nodeType === Node.TEXT_NODE) {
                 translateText(node);
             } else {
+                normalizeBattleDamageLog(node);
+                normalizeSplitFragment(node);
                 normalizeSacrificeLog(node);
                 normalizeSwatRaidLog(node);
                 translateGroupedPurchase(node);
