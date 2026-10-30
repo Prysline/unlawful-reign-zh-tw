@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.16
+// @version      0.3.17
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -596,11 +596,96 @@
         "You hideout somewhere you'll never be found, losing any chasing cop's tail": "你藏身於一個無人能找到的地方，甩掉了所有追蹤你的警察",
         "to erase some of this world's memories of your criminal misdoings": "以抹去這個世界對你部分犯罪惡行的記憶",
         "to your gang": "加入你的幫派",
+    // v0.3.17：航海、船員、船艦、賭場及海戰固定詞彙；原文拼字保留為比對鍵。
+        "A hardened pirate's replacement that hits decks and enemy hulls with equal menace": "一條堅固的海盜義腿，踏在甲板或敵船船殼上都同樣充滿威脅",
+        "Avoid the ensuing battle": "避開接下來的戰鬥",
+        "Base DMG": "基礎傷害",
+        "Battle": "戰鬥",
+        "Battle the Navy Ship for the potential of earning rewards": "與海軍艦艇交戰，有機會獲得獎勵",
+        "Begin Voyage": "開始航程",
+        "Boarding": "登船作戰",
+        "Body Cam Footage": "密錄器影像",
+        "Build the": "建造",
+        "Charismatic Smile": "迷人的笑容",
+        "Chip Multiplier": "籌碼倍率",
+        "Continue Voyage": "繼續航程",
+        "Corruptable Law": "可被收買的法律",
+        "Crewmates": "船員",
+        "DMG": "傷害",
+        "DMG / Crewmate": "每名船員傷害",
+        "Distance": "距離",
+        "Doubloons": "杜布隆金幣",
+        "Driftport": "漂流港",
+        "End Voyage": "結束航程",
+        "Establish": "建立",
+        "Establish the": "建立",
+        "Foggy": "起霧",
+        "High Roller": "豪賭客",
+        "Hire Crewmate": "雇用船員",
+        "Hire Shipbuilder": "雇用造船工",
+        "Human Calculator": "人體計算機",
+        "Level Up": "升級",
+        "N.M Away": "海里外",
+        "Nautical Miles": "海里",
+        "Nautical Miles / Day": "海里／天",
+        "Navy Ship": "海軍艦艇",
+        "Nimble Fingers": "靈巧的手指",
+        "No Prying Eyes": "沒有窺探的目光",
+        "Parlay": "交涉",
+        "Passenger Boat": "客船",
+        "Peg Leg": "木製義腿",
+        "Pirate Cove": "海盜海灣",
+        "Pirate Hat": "海盜帽",
+        "Pirate Port": "海盜港口",
+        "Pirating": "海盜活動",
+        "Plunder": "掠奪",
+        "Rainy": "下雨",
+        "Recruitment paused": "招募已暫停",
+        "Repair": "修理",
+        "Safe Haven": "避風港",
+        "Shipyard": "造船廠",
+        "Speed": "速度",
+        "Stormy": "暴風雨",
+        "Supplies": "補給品",
+        "Supplies Chance": "獲得補給品的機率",
+        "Targeted Mugging": "針對性搶劫",
+        "Team Effort": "團隊合作",
+        "Terrorize": "恐嚇",
+        "The winds carry your ship away into the horizon, leaving the Navy Ship in your wake": "風帶著你的船駛向地平線，把海軍艦艇甩在身後",
+        "Treasure Maps": "藏寶圖",
+        "Unlock Player Expertise": "解鎖玩家專精",
+        "Yo ho, yo ho, a pirate's life for me": "喲呵，喲呵，海盜生活屬於我",
+        "You dock your ship at a friendly port while you regain your strength": "你將船停靠在友善的港口，同時恢復體力",
+        "You find an unsuspecting Passanger Boat, alone in the middle of the sea": "你發現一艘毫無戒心的客船，獨自在海中央航行",
+        "You gamble and lose!": "你賭博輸了！",
+        "You sail into a hostile Navy Ship, its crew ready for battle": "你航行時遭遇一艘敵對的海軍艦艇，船員們已準備好戰鬥",
+        "You try to inspire but instead terrify the timid crew... nothing happens": "你試圖鼓舞膽小的船員，卻反而嚇壞了他們……什麼也沒發生",
+        "You undermine the cop's actions, earning you": "你暗中破壞警察的行動，並獲得",
+        "Your Ship": "你的船隻",
+        "Your crew spots and recovers some floating supplies drifting out at sea...": "你的船員發現並打撈起一些漂浮在海上的補給品……",
+        "Your sails unfurl and you catch the breeze, setting off towards the horizon...": "你展開船帆，乘著微風朝地平線啟航……",
+        "day remaining": "天剩餘",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.3.17：航海／船員／金幣／補給／天氣及賭博數值皆使用變動格式。
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Crewmates?\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => `船員：${m[1]}（${m[2]}%）`],
+        [/^([+-]?\d+)\s*\/\s*(\d+)\s+Crewmates?$/i, m => `船員：${m[1]} / ${m[2]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance to recruit Shady Strangers when not a criminal$/i, m => `非罪犯狀態時招募可疑陌生人的機率：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+(Ship Speed|HP|Sailing Speed|Supplies Find Chance)$/i, m => `${({'ship speed': '船隻速度', hp: '生命值', 'sailing speed': '航行速度', 'supplies find chance': '找到補給品的機率'})[m[2].toLowerCase()]}：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+during Foggy Weather$/i, m => `起霧天氣時：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Ship HP per day while docked at the Safe Haven$/i, m => `停靠在避風港時，每日船隻生命值 ${m[1]}`],
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Doubloons?$/i, m => `${/^[+-]/.test(m[1]) ? '杜布隆金幣：' + m[1] : m[1] + ' 枚杜布隆金幣'}`],
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Supplies$/i, m => `${/^[+-]/.test(m[1]) ? '補給品：' + m[1] : m[1] + ' 份補給品'}`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Fake Identity\s*\(\s*(\d+(?:[.,]\d+)?)% Chance not Used\s*\)$/i, m => `假身分：${m[1]}（${m[2]}% 機率不消耗）`],
+        [/^(\d+(?:[.,]\d+)?)%\s+chance of escaping the Navy Ship$/i, m => `逃離海軍艦艇的機率：${m[1]}%`],
+        [/^(\d+(?:[.,]\d+)?)%\s+Chance of finding (\d+(?:[.,]\d+)?) to (\d+(?:[.,]\d+)?) Supplies per Day while Sailing$/i, m => `航行時每天有 ${m[1]}% 機率找到 ${m[2]} 至 ${m[3]} 份補給品`],
+        [/^Flee\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => `逃離（${m[1]}%）`],
+        [/^Recruit Crewmate\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => `招募船員（${m[1]}%）`],
+        [/^Gain\s+([+-]\d+(?:[.,]\d+)?)% more when you gamble and win than when you lose$/i, m => `賭博獲勝時比落敗時多獲得 ${m[1]}%`],
+        [/^x(\d+(?:[.,]\d+)?)\s+(Pirating Damage|Notoriety from Undermining the Police|Pickpocket and Shoplifting Rewards|Amount you gamble|Gang Passive Money Income)$/i, m => `${({'pirating damage':'海盜活動傷害','notoriety from undermining the police':'暗中破壞警方行動獲得的惡名','pickpocket and shoplifting rewards':'扒竊與商店行竊獎勵','amount you gamble':'賭注金額','gang passive money income':'幫派被動金錢收入'})[m[2].toLowerCase()]} ×${m[1]}`],
         // v0.3.16：可變動數值、賭博倍率、每日消耗及戰鬥訊息前綴。
         [/^(['"])(.+?)\1\s+deal$/i, m => `「${translateItemName(m[2])}」造成`],
         [/^\(([+-]\d+(?:[.,]\d+)?)%\s+Ritual (Duration\/Shrine|Power\/Blood Pool)\)$/i, m => `（每座${m[2].toLowerCase().startsWith('duration') ? '神龕的儀式持續時間' : '血池的儀式威力'}：${m[1]}%）`],
@@ -1044,7 +1129,7 @@
 
     // 小範圍跨節點文字片段：只合併整個元素恰好符合已知句子片段的情況。
     // 不處理包含粗體、互動控制或圖示的元素，避免破壞數值及原始顯示格式。
-    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!)$/i;
+    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining)$/i;
     function normalizeSplitFragment(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         if (element.querySelector('button, a, input, textarea, select, strong, b, em, i, svg, [contenteditable]')) return false;
