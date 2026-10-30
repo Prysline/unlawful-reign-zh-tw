@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.13
+// @version      0.3.14
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -541,11 +541,39 @@
         "Whistle Lure": "口哨誘餌",
         "Your Gang manages to attract another Shady Associate...": "你的幫派成功吸引了另一名可疑同夥……",
         "The SWAT Team raids your safehouse and supplies,": "特警隊突襲了你的安全屋與物資，",
+        // 2026-10-31：海盜、亡靈、偽裝與幫派戰爭後續固定名稱及敘述。
+        "A Pirate's Life for Me": "當海盜真快活",
+        "Addicted Clientele": "上癮的顧客群",
+        "Blood Diamonds": "血鑽石",
+        "Buy a small boat and set asail": "買艘小船，揚帆出航",
+        "Convincing Fake": "以假亂真",
+        "Easy Upsell": "輕鬆加價銷售",
+        "Hidey Hole": "隱密藏身處",
+        "Safehouse:": "安全屋：",
+        "Safehouses are thrice as common": "安全屋的出現頻率變為三倍",
+        "The Bloodlickers": "舔血者",
+        "Undead Minion": "亡靈僕從",
+        "Undead Minions": "亡靈僕從",
+        "Upper Class Streets": "上流階層街區",
+        "You hand the police your fake ID card and safely leave before he realizes.": "你把假身分證交給警察，並在他察覺前安全離開。",
+        "You sacrifice": "你獻祭了",
+        "Your petty sacrifice of": "你那微不足道的獻祭，獻上了",
+        "and the dead are pleased...": "而死者們感到滿意……",
+        "per Undead Minion": "每名亡靈僕從",
+        "simply angers the dead... nothing happens": "卻只是激怒了死者……什麼也沒發生",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // 第十一批：亡靈數量、毒品販售上限、假身分機率與持續時間類倍率共用格式。
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Undead Minions?$/i, m => /^[+-]/.test(m[1]) ? `亡靈僕從：${m[1]}` : `${m[1]} 名亡靈僕從`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+max drugs dealt to Shady Strangers$/i, m => `向可疑陌生人販售毒品的上限：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance Fake Identity is not used up$/i, m => `假身分不被消耗的機率：${m[1]}%`],
+        [/^Jewelry Store Robberies give x(\d+(?:[.,]\d+)?) Notoriety$/i, m => `珠寶店搶劫獲得的惡名 ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+money earned from Pickpocket and Shoplifting$/i, m => `扒竊及商店行竊獲得的金錢 ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Notoriety\s*\(\s*(\d+)\s+days?\s*\)$/i, m => `惡名 ×${m[1]}（${m[2]} 天）`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Stolen Goods Sell Price$/i, m => `贓物出售價格 ×${m[1]}`],
         // 亡靈、招募、幫派對手與戰鬥紀錄：保留數值、百分比及可變名稱。
         [/^([+-]\d+)\s+Undead Minions?\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => `亡靈僕從：${m[1]}（${m[2]}%）`],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Shoplift Stolen Goods chance$/i, m => `商店行竊獲得贓物的機率：${m[1]}%`],
