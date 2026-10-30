@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.8
+// @version      0.3.9
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -377,11 +377,44 @@
         "You repent for your sins. The devil gladly collects your gathered souls.": "你為自己的罪孽懺悔。魔鬼欣然收走你收集的靈魂。",
         "/ Day": "／天",
         "per Member": "每名成員",
+    // 2026-10-31：幫派、塗鴉、裝備與犯罪效果（有變動數字的文案改由 DYNAMIC 處理）。
+        "Artistic Flair": "藝術天賦",
+        "Better Artist": "更出色的藝術家",
+        "Buy some seeds and pick up gardening": "買些種子，開始從事園藝",
+        "Does not remove Criminal Status": "不會移除罪犯狀態",
+        "Double Money gained from Store Robbery": "商店搶劫獲得的金錢加倍",
+        "Double Notoriety gained from Store Robbery": "商店搶劫獲得的惡名加倍",
+        "Doubles Graffiti Notoriety Reward": "塗鴉獲得的惡名獎勵加倍",
+        "Filled Cash Registers": "裝滿現金的收銀機",
+        "Gang Full": "幫派已滿",
+        "Gang is full": "幫派人數已滿",
+        "Knee Pads": "護膝",
+        "Magical Beans": "魔法豆",
+        "Morally Malleable": "道德觀容易動搖",
+        "Perfect for sliding over counters and diving behind cover with a full bag": "非常適合帶著滿滿一袋物品滑過櫃檯，並撲到掩體後方",
+        "Recruitment": "招募",
+        "Sagging Jeans": "低腰垮褲",
+        "Sinful Desire": "罪惡慾望",
+        "The Devil:": "魔鬼：",
+        "Too cool for belts": "帥到不需要皮帶",
+        "Upgrade your Gang to raise the member cap": "升級你的幫派以提高成員上限",
+        "Wanted Posters": "通緝海報",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // 幫派、搶劫、賄賂與犯罪效果：數值、等級或倍率改變時仍可重用。
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Bribe Level$/i, m => `賄賂等級：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Money Synergy$/i, m => `金錢協同增益：${m[1]}%`],
+        [/^([+-]\d+)\s+Gang Members needed and ([+-]\d+)\s+Notoriety from Robbery$/i, m => `搶劫所需幫派成員 ${m[1]}，搶劫獲得的惡名 ${m[2]}`],
+        [/^Additional\s+([+-]\d+(?:[.,]\d+)?)%\s+Money while sinner$/i, m => `處於罪人狀態時，金錢額外 ${m[1]}%`],
+        [/^Gang\s+Lv\.\s*(\d+)$/i, m => `幫派等級 ${m[1]}`],
+        [/^Store Robbery\s*\(\s*(\d+)\s*\)$/i, m => `商店搶劫（${m[1]}）`],
+        [/^Reduce Graffiti Crime penalty and max penalty by\s+(\d+)$/i, m => `將塗鴉的犯罪懲罰及懲罰上限降低 ${m[1]}`],
+        [/^You need a minimum of\s+(\d+)\s+Gang Members$/i, m => `你至少需要 ${m[1]} 名幫派成員`],
+        [/^You upgraded your Gang to Level\s+(\d+)$/i, m => `你將幫派升級到了等級 ${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Money From Robbery$/i, m => `搶劫獲得的金錢 ×${m[1]}`],
         // 第八批：幫派成員、生命值與成員上限。統一處理所有數值。
         [/^([+-]\s*\d+(?:[.,]\d+)?)\s+HP Regen$/i, m => `生命值恢復：${m[1].replace(/\s+/g, '')}`],
         [/^([+-]\s*\d+)\s+Max Members$/i, m => `成員上限：${m[1].replace(/\s+/g, '')}`],
@@ -453,6 +486,8 @@
     // 尚不能確定其文字節點切分方式，不拆開翻譯，以免破壞介面詞序。
     const NONTRANSLATABLE = [
         /^[+-]?\$\d+(?:[.,]\d+)?[kKmMbBtT]?$/, // 單純價格，不要將金額縮寫 K 當成英文
+        /^Purchased (?:Upgrade|Equipment) ['"][^'"]+$/i, // 購買通知的前段殘句；合併處理完整節點
+        /^(?:Pocketer|gy)['"]!$/i, // 已觀察到的購買通知末段殘句
         /^conveyor_belt$/i,
         /^groups$/i, // 圖示識別字
         /^moving$/i, // 圖示識別字
@@ -563,6 +598,41 @@
         }
     }
 
+    // 遊戲有時將購買通知拆成多個文字節點（例如 Sinner / - / gy）。
+    // 僅在整個元素的內容恰好是單一購買通知時合併翻譯，避免碰觸按鈕或遊戲元件。
+    function translateGroupedPurchase(element) {
+        if (!(element instanceof Element) || skipElement(element)) return false;
+        const original = element.textContent;
+        if (!original || original.length > 240 || !original.includes('Purchased')) return false;
+        if (element.querySelector('button, a, input, textarea, select, [contenteditable]')) return false;
+        const normalized = original.replace(/\s+/g, ' ').trim();
+        if (!/^Purchased (?:Upgrade|Equipment) (['"])[^'"]+\1!$/i.test(normalized)) return false;
+        const tree = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        let node;
+        while ((node = tree.nextNode())) {
+            if (node.nodeValue.trim()) {
+                if (skipElement(node.parentElement) || usesIconFont(node.parentElement)) return false;
+                nodes.push(node);
+                if (nodes.length > 12) return false;
+            }
+        }
+        if (nodes.length < 2) return false;
+        const translated = lookup(normalized);
+        if (translated === null || translated === normalized) return false;
+        nodes[0].nodeValue = translated;
+        for (const rest of nodes.slice(1)) rest.nodeValue = '';
+        return true;
+    }
+
+    // 文字節點單獨更新時，父元素可能才包含完整通知。
+    function translateGroupedPurchaseInAncestors(element) {
+        for (let depth = 0; element && depth < 4; depth++, element = element.parentElement) {
+            if (translateGroupedPurchase(element)) return true;
+        }
+        return false;
+    }
+
     function translateText(node) {
         if (!node || node.nodeType !== Node.TEXT_NODE || skipElement(node.parentElement) || usesIconFont(node.parentElement)) return;
         const translated = translateString(node.nodeValue);
@@ -587,20 +657,25 @@
     function scan(root) {
         if (!root) return;
         if (root.nodeType === Node.TEXT_NODE) {
-            translateText(root);
+            if (!translateGroupedPurchaseInAncestors(root.parentElement)) translateText(root);
             return;
         }
         if (root.nodeType !== Node.ELEMENT_NODE && root.nodeType !== Node.DOCUMENT_NODE) return;
         if (root.nodeType === Node.ELEMENT_NODE) {
             if (skipElement(root)) return;
+            translateGroupedPurchaseInAncestors(root);
             translateAttributes(root);
         }
 
         const iterator = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
         let node;
         while ((node = iterator.nextNode())) {
-            if (node.nodeType === Node.TEXT_NODE) translateText(node);
-            else translateAttributes(node);
+            if (node.nodeType === Node.TEXT_NODE) {
+                translateText(node);
+            } else {
+                translateGroupedPurchase(node);
+                translateAttributes(node);
+            }
         }
     }
 
