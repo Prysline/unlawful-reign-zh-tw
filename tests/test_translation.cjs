@@ -124,4 +124,40 @@ assert.equal(labelText.nodeValue, '設定');
 assert.equal(api.lookup("Purchased Upgrade 'Sinner"), "Purchased Upgrade 'Sinner");
 assert.equal(api.lookup("gy'!"), "gy'!");
 assert.equal(store.ur_zh_tw_untranslated['Previously Seen'], '');
+const expansionCases = {
+    '(+3.75 Souls per Gang Member (+9.25 Total) per Sacrifice/Cultist Training Ground)': '（每座邪教徒訓練場每次獻祭，每名幫派成員獲得 +3.75 靈魂（總計 +9.25））',
+    '(-9 Not. per day/Cultist Training Ground)': '（每座邪教徒訓練場每天的惡名：-9）',
+    '+13 Souls per Gang Member (+28 Total) per Sacrifice': '每次獻祭每名幫派成員獲得 +13 靈魂（總計 +28）',
+    '+12 Altar': '祭壇：+12',
+    '+9 Cultist Training Ground': '邪教徒訓練場：+9',
+    '+25% Chance for bonus Drugs on harvest': '收成時獲得額外毒品的機率：+25%',
+    '+9 Stolen Jewels from Raid Grave': '盜墓獲得的贓珠寶：+9',
+    '+9 Stolen Jewel from Jewelry Store Heists': '珠寶店劫案獲得的贓珠寶：+9',
+    '-5 Not. per day': '每天的惡名：-5',
+    '99/150 HP': '生命值：99/150',
+    '42 Days': '42 天',
+    'A SWAT Team will try raid you if your criminality is at least 25': '如果你的犯罪程度至少為 25，特警隊將嘗試突襲你',
+    'Dry, slowing down growth by 25%': '乾燥，使生長速度減慢 25%',
+    'Growth: 17.5%': '生長進度：17.5%',
+    'Wetness: 85%': '濕潤度：85%',
+    'Sell Stolen Jewels for x2.5 more': '以 ×2.5 的價格出售偷來的珠寶',
+    'Too high Criminal Status (Max 10)': '罪犯狀態過高（上限 10）',
+    'Win and gain +80% global notoriety. Lose and lose all notoriety and gang members.': '獲勝並獲得 +80% 全域惡名。失敗則失去所有惡名與幫派成員。',
+    'x3 Money gained from Store Robbery': '商店搶劫獲得的金錢 ×3',
+    '(Sickle)': '（鐮刀）',
+    '(Sow)': '（播種）',
+    '(Water)': '（澆水）',
+    'The Cemetery:': '墓園：',
+    'Drug': '毒品',
+    'Fertilizer': '肥料'
+};
+for (const [original, expected] of Object.entries(expansionCases)) {
+    assert.equal(api.translateString(original), expected, original);
+}
+const chinesePurchase = '已購買升級「「Ebonics（非裔美國英語）」音樂光碟」！';
+assert.equal(api.translateString(chinesePurchase), chinesePurchase);
+assert.equal(store.ur_zh_tw_untranslated[chinesePurchase], undefined);
+assert.equal(api.lookup('gun'), 'gun');
+assert.equal(store.ur_zh_tw_untranslated['Previously Seen'], '');
+
 console.log('全部通過：' + Object.keys(examples).length + ' 個翻譯案例、拆分通知、圖示及儲存回歸測試。');
