@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.9
+// @version      0.3.10
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -399,11 +399,90 @@
         "Too cool for belts": "帥到不需要皮帶",
         "Upgrade your Gang to raise the member cap": "升級你的幫派以提高成員上限",
         "Wanted Posters": "通緝海報",
+        // 2026-10-31：園藝、墓園、幫派戰爭與邪教後續內容。原文 ominious 疑似拼字錯誤，仍保留原鍵名。
+        "A sturdy lamp cap for digging where others were too respectful to look": "一頂堅固的帶燈帽子，適合在其他人因為心存敬意而不願挖掘的地方動土",
+        "Able to deal drugs to Shady Strangers for a markup": "能夠以加價後的價格向可疑的陌生人販售毒品",
+        "Able to trade your Gang Members for your freedom": "能夠用你的幫派成員交換自由",
+        "An ominious vibe permeates the air": "不祥的氣息瀰漫在空氣中",
+        "Armory": "軍械庫",
+        "Awaiting": "等待中",
+        "Backroom Safe": "後室保險箱",
+        "Blood Imbued Dagger": "浸染鮮血的匕首",
+        "Cooldown": "冷卻時間",
+        "Damage": "傷害",
+        "Deployment": "部署",
+        "Double plant growth speed": "植物生長速度加倍",
+        "Drug": "毒品",
+        "Drugs": "毒品",
+        "Empty": "空",
+        "Expand Garden": "擴建花園",
+        "Farmer Overalls": "農夫吊帶褲",
+        "Fertilizer": "肥料",
+        "Gang passively recruits new members": "幫派會被動招募新成員",
+        "Getting down and dirty with Mother Earth": "親手接觸泥土，與大地母親親密接觸",
+        "Greenhouse": "溫室",
+        "HP": "生命值",
+        "Identity Theft": "身分盜用",
+        "Local Dealer": "當地毒販",
+        "Members": "成員",
+        "Miners Cap": "礦工帽",
+        "Nefarious Campaign Ad": "邪惡的競選廣告",
+        "Nomadic Wraps": "遊牧裹布",
+        "Pay Respects": "致意",
+        "Pay respects base souls get + Sinner amount": "致意獲得的基礎靈魂 + 罪人數值",
+        "Pistols": "手槍",
+        "Plants stay wet for twice as long": "植物維持濕潤的時間延長至兩倍",
+        "Raid Grave": "盜墓",
+        "Ready": "已就緒",
+        "Regen": "恢復",
+        "Shiny Splendor": "耀眼光彩",
+        "Sickle": "鐮刀",
+        "Snitch": "告密者",
+        "Soul Chest": "靈魂寶箱",
+        "Sow": "播種",
+        "Start Gang War": "發動幫派戰爭",
+        "Submachine Guns": "衝鋒槍",
+        "Talk with Strangers to build a Fake Identity, used to escape from the Police": "與陌生人交談以建立假身分，用來逃避警方追捕",
+        "The Cemetery": "墓園",
+        "The Cemetery:": "墓園：",
+        "The Iron Ravens": "鐵鴉",
+        "Travel-worn wraps that pull more meaning, and more souls, from guilty rituals": "旅途磨損的裹布，能從充滿罪孽的儀式中汲取更多意義與靈魂",
+        "Unholy Help": "邪惡援助",
+        "Unlocked Display Case": "未上鎖的展示櫃",
+        "Water": "澆水",
+        "Watering Can": "澆水壺",
+        "Weeds": "雜草",
+        "You and your squad rob the store,": "你和你的隊伍搶劫了商店，",
+        "You can use your souls to try awaken the dead at a Cemetery": "你可以在墓園使用靈魂，嘗試喚醒死者",
+        "You pay your respects.": "你表達了敬意。",
+        "You rob the grave and steal": "你盜掘墳墓，並偷走",
+        "You slip some money into the cop's pockets and walk away...": "你悄悄把一些錢塞進警察的口袋，然後離開……",
+        "Your Gang": "你的幫派",
+        "actions equipped": "已裝備的行動",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // 2026-10-31：可變動的靈魂、祭壇、園藝、墓園、生命值、犯罪門檻及幫派戰爭。
+        [/^\(([+-]\d+(?:[.,]\d+)?) Souls per Gang Member \(([+-]\d+(?:[.,]\d+)?) Total\) per Sacrifice\/Cultist Training Ground\)$/i, m => `（每座邪教徒訓練場每次獻祭，每名幫派成員獲得 ${m[1]} 靈魂（總計 ${m[2]}））`],
+        [/^\(([+-]\d+(?:[.,]\d+)?) Not\. per day\/Cultist Training Ground\)$/i, m => `（每座邪教徒訓練場每天的惡名：${m[1]}）`],
+        [/^\((Sickle|Sow|Water)\)$/i, m => `（${translateItemName(m[1])}）`],
+        [/^([+-]\d+(?:[.,]\d+)?) Souls per Gang Member \(([+-]\d+(?:[.,]\d+)?) Total\) per Sacrifice$/i, m => `每次獻祭每名幫派成員獲得 ${m[1]} 靈魂（總計 ${m[2]}）`],
+        [/^([+-]\d+)\s+(Altar|Cultist Training Ground)$/i, m => `${m[2] === "Altar" ? "祭壇" : "邪教徒訓練場"}：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)% Chance for bonus Drugs on harvest$/i, m => `收成時獲得額外毒品的機率：${m[1]}%`],
+        [/^([+-]\d+) Stolen Jewels? from Raid Grave$/i, m => `盜墓獲得的贓珠寶：${m[1]}`],
+        [/^([+-]\d+) Stolen Jewels? from Jewelry Store Heists$/i, m => `珠寶店劫案獲得的贓珠寶：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?) Not\. per day$/i, m => `每天的惡名：${m[1]}`],
+        [/^(\d+)\/(\d+) HP$/i, m => `生命值：${m[1]}/${m[2]}`],
+        [/^(\d+) Days?$/i, m => `${m[1]} 天`],
+        [/^A SWAT Team will try raid you if your criminality is at least (\d+)$/i, m => `如果你的犯罪程度至少為 ${m[1]}，特警隊將嘗試突襲你`],
+        [/^Dry, slowing down growth by (\d+(?:[.,]\d+)?)%$/i, m => `乾燥，使生長速度減慢 ${m[1]}%`],
+        [/^(Growth|Wetness):\s*(\d+(?:[.,]\d+)?)%$/i, m => `${m[1].toLowerCase() === "growth" ? "生長進度" : "濕潤度"}：${m[2]}%`],
+        [/^Sell Stolen Jewels for x(\d+(?:[.,]\d+)?) more$/i, m => `以 ×${m[1]} 的價格出售偷來的珠寶`],
+        [/^Too high Criminal Status \(Max (\d+)\)$/i, m => `罪犯狀態過高（上限 ${m[1]}）`],
+        [/^Win and gain ([+-]\d+(?:[.,]\d+)?)% global notoriety\. Lose and lose all notoriety and gang members\.$/i, m => `獲勝並獲得 ${m[1]}% 全域惡名。失敗則失去所有惡名與幫派成員。`],
+        [/^x(\d+(?:[.,]\d+)?) Money gained from Store Robbery$/i, m => `商店搶劫獲得的金錢 ×${m[1]}`],
         // 舊詞庫中的變動數值文案；「2 For 1 Sale」等道具固有名稱不拆成數值規則。
         [/^([+-])(\d+(?:[.,]\d+)?)%\s+chance to get Stolen Goods when Shoplifting$/i, m => `商店行竊時獲得贓物的機率${m[1] === '+' ? '增加' : '減少'} ${m[2]}%`],
         [/^Lose\s+(\d+(?:[.,]\d+)?)%\s+of your money$/i, m => `失去你 ${m[1]}% 的金錢`],
@@ -472,7 +551,7 @@
         [/^Try Recruit\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\)$/i, m => `嘗試招募（${m[1]}%）`],
         [/^x(\d+(?:[.,]\d+)?)\s+Mugging Reward$/i, m => `搶劫獎勵 ×${m[1]}`],
         [/^Shoplift\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\)$/i, m => `商店行竊（${m[1]}%）`],
-        [/^已購買(升級|裝備)「([^」]+)」！$/u, m => `已購買${m[1]}「${translateItemName(m[2])}」！`],
+        [/^已購買(升級|裝備)「(.+)」！$/u, m => `已購買${m[1]}「${translateItemName(m[2])}」！`],
         [/^([+-]?\d+(?:[,.]\d+)*)\s+Not\.$/i, m => `惡名：${m[1]}`],
         [/^\[D(\d+)\s+Y(\d+)\](:?)$/i, m => `［第 ${m[1]} 天／第 ${m[2]} 年］${m[3] ? '：' : ''}`],
         [/^\(Max:\s*([\d,.]+)\)$/i, m => `（上限：${m[1]}）`],
@@ -498,6 +577,7 @@
         /^conveyor_belt$/i,
         /^groups$/i, // 圖示識別字
         /^moving$/i, // 圖示識別字
+        /^gun$/i, // 疑似圖示識別字，避免像 settings 一樣被誤翻譯
         /^diamond$/i, // Material Symbols 圖示名稱，不應翻譯成文字
         /^x\d+(?:[.,]\d+)?$/i,
         /^快捷鍵：\S+$/u,
