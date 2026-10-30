@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.14
+// @version      0.3.15
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -927,6 +927,62 @@
         return false;
     }
 
+    // 墓園獻祭的成功／失敗紀錄會混合文字與粗體數值。
+    // 只辨識一筆完整紀錄，不重排 DOM 元素，以免破壞靈魂與獎勵的粗體。
+    const SACRIFICE_LOG_PREFIX = String.raw`(?:\[D\d+\s+Y\d+\](?:\s*[:：])?|［第\s*\d+\s*天／第\s*\d+\s*年］(?:\s*[:：])?)?`;
+    const SACRIFICE_SOUL_COUNT = String.raw`(?:靈魂：\s*[\d,.]+|[\d,.]+\s*(?:Souls?|個靈魂))`;
+    const SACRIFICE_SUCCESS = new RegExp(
+        String.raw`^${SACRIFICE_LOG_PREFIX}\s*(?:You sacrifice|你獻祭了)\s*${SACRIFICE_SOUL_COUNT}\s*(?:and the dead are pleased(?:\.\.\.|…)|而死者們感到滿意…+|，死者們感到滿意…+)\s*[+＋]?\s*\d+\s*(?:Undead Minions?|名亡靈僕從|亡靈僕從)$`, 'i'
+    );
+    const SACRIFICE_FAILURE = new RegExp(
+        String.raw`^${SACRIFICE_LOG_PREFIX}\s*(?:Your petty sacrifice of|你那微不足道的獻祭，獻上了)\s*${SACRIFICE_SOUL_COUNT}\s*(?:simply angers the dead(?:\.\.\.|…)\s*nothing happens|卻只是激怒了死者……什麼也沒發生)[.!。]?$`, 'i'
+    );
+
+    function normalizeSacrificeLog(element) {
+        if (!(element instanceof Element) || skipElement(element)) return false;
+        const original = element.textContent;
+        if (!original || original.length > 320) return false;
+        const normalized = original.replace(/\s+/g, ' ').trim();
+        if (!SACRIFICE_SUCCESS.test(normalized) && !SACRIFICE_FAILURE.test(normalized)) return false;
+        if (element.querySelector('button, a, input, textarea, select, [contenteditable]')) return false;
+        const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        let node;
+        while ((node = walker.nextNode())) {
+            if (node.nodeValue.trim()) {
+                if (skipElement(node.parentElement) || usesIconFont(node.parentElement)) return false;
+                nodes.push(node);
+                if (nodes.length > 24) return false;
+            }
+        }
+        let changed = false;
+        for (const item of nodes) {
+            const before = item.nodeValue;
+            let after = before
+                .replace(/Your petty sacrifice of/gi, '你那微不足道的獻祭，獻上了')
+                .replace(/You sacrifice/gi, '你獻祭了')
+                .replace(/(?:靈魂：\s*([\d,.]+)|([\d,.]+)\s*Souls?)/gi,
+                    (_match, zhNumber, enNumber) => `${zhNumber || enNumber} 個靈魂`)
+                .replace(/\s*(?:and the dead are pleased(?:\.\.\.|…)|而死者們感到滿意…+)/gi,
+                    '，死者們感到滿意……')
+                .replace(/\s*(?:simply angers the dead(?:\.\.\.|…)\s*nothing happens|卻只是激怒了死者……什麼也沒發生)/gi,
+                    '，卻只是激怒了死者……什麼也沒發生')
+                .replace(/([\d,.]+)\s+Undead Minions?/gi, (_match, count) => `${count} 名亡靈僕從`);
+            if (after !== before) {
+                item.nodeValue = after;
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    function normalizeSacrificeLogInAncestors(element) {
+        for (let depth = 0; element && depth < 5; depth++, element = element.parentElement) {
+            if (normalizeSacrificeLog(element)) return true;
+        }
+        return false;
+    }
+
     function translateText(node) {
         if (!node || node.nodeType !== Node.TEXT_NODE || skipElement(node.parentElement) || usesIconFont(node.parentElement)) return;
         const translated = translateString(node.nodeValue);
@@ -951,6 +1007,7 @@
     function scan(root) {
         if (!root) return;
         if (root.nodeType === Node.TEXT_NODE) {
+            normalizeSacrificeLogInAncestors(root.parentElement);
             normalizeSwatRaidLogInAncestors(root.parentElement);
             if (!translateGroupedPurchaseInAncestors(root.parentElement)) translateText(root);
             return;
@@ -958,6 +1015,7 @@
         if (root.nodeType !== Node.ELEMENT_NODE && root.nodeType !== Node.DOCUMENT_NODE) return;
         if (root.nodeType === Node.ELEMENT_NODE) {
             if (skipElement(root)) return;
+            normalizeSacrificeLogInAncestors(root);
             normalizeSwatRaidLogInAncestors(root);
             translateGroupedPurchaseInAncestors(root);
             translateAttributes(root);
@@ -969,6 +1027,7 @@
             if (node.nodeType === Node.TEXT_NODE) {
                 translateText(node);
             } else {
+                normalizeSacrificeLog(node);
                 normalizeSwatRaidLog(node);
                 translateGroupedPurchase(node);
                 translateAttributes(node);
