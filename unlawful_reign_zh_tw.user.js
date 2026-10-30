@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.10
+// @version      0.3.11
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -459,11 +459,49 @@
         "You slip some money into the cop's pockets and walk away...": "你悄悄把一些錢塞進警察的口袋，然後離開……",
         "Your Gang": "你的幫派",
         "actions equipped": "已裝備的行動",
+        // 2026-10-31：賭場、裝備、幫派戰爭與園藝等固定文字。
+        "Aces Up your Sleeves": "袖藏王牌",
+        "Be able to visit the Casino": "能夠造訪賭場",
+        "Bejeweled Jeans": "鑲寶石的牛仔褲",
+        "Bulletproof Vest": "防彈背心",
+        "Deal Drugs": "販售毒品",
+        "Have a low chance of finding a Safe House to hide out in": "有小機率找到可用來藏身的安全屋",
+        "Heavy, ugly, and exactly the kind of thing you want when bullets start flying": "又重又醜，而在子彈橫飛時，你想要的正是這種東西",
+        "Not affected by Rituals": "不受儀式影響",
+        "Persuasive Recruiting": "說服式招募",
+        "Pesticide": "農藥",
+        "Ritual Boons": "儀式恩賜",
+        "Safe House": "安全屋",
+        "Selective Breeding": "選擇性育種",
+        "Small Shack": "小棚屋",
+        "Start War": "發動戰爭",
+        "Superior Spraycans": "高級噴漆罐",
+        "Target Practice": "射擊練習",
+        "Temperature Control": "溫度控制",
+        "Undermine": "暗中破壞",
+        "Weeds (The bad kind) are half as likely to grow": "雜草（有害的那種）生長的機率減半",
+        "While not a criminal, undermine the police for Notoriety": "在非罪犯狀態時，暗中破壞警方的行動以獲得惡名",
+        "You have active boons": "你有已啟用的恩賜",
+        "Your graffiti is so beautiful, it is no longer considered a crime": "你的塗鴉美得不再被視為犯罪",
+        "days remaining": "剩餘天數",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // 2026-10-31：數量、持續天數、幫派戰爭、惡名單位縮寫與農作物的倍率。
+        [/^([+-]\d+(?:[.,]\d+)?)\s+(Pistols|Submachine Guns)$/i, m => `${translateItemName(m[2])}：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance for x(\d+(?:[.,]\d+)?) Drugs on harvest$/i, m => `收成時獲得 ${m[2]} 倍毒品的機率：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Max Drugs$/i, m => `毒品持有上限：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Drugs?$/i, m => `毒品：${m[1]}`],
+        [/^([+-]?\d+(?:[.,]\d+)?[KMBT])\s+Not\.$/i, m => `惡名：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Gang War Damage Taken$/i, m => `幫派戰爭承受的傷害：${m[1]}%`],
+        [/^Go to war with (['"])(.+?)\1\. Win to gain ([+-]\d+(?:[.,]\d+)?)% Global Notoriety\. If your Gang falls, you lose ALL of your Notoriety and Gang Members\.$/i, m => `與「${translateItemName(m[2])}」開戰。勝利可獲得 ${m[3]}% 全域惡名。如果你的幫派戰敗，你將失去所有惡名與幫派成員。`],
+        [/^You give up (\d+) Gang Members in return for your freedom$/i, m => `你交出了 ${m[1]} 名幫派成員，以換取自由`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Greenhouse growth speed$/i, m => `溫室生長速度 ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Gang War attack damage$/i, m => `幫派戰爭攻擊傷害 ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Money \(\s*(\d+)\s+days?\s*\)$/i, m => `金錢 ×${m[1]}（${m[2]} 天）`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Notoriety when not a criminal$/i, m => `非罪犯狀態時的惡名 ×${m[1]}`],
         // 2026-10-31：可變動的靈魂、祭壇、園藝、墓園、生命值、犯罪門檻及幫派戰爭。
         [/^\(([+-]\d+(?:[.,]\d+)?) Souls per Gang Member \(([+-]\d+(?:[.,]\d+)?) Total\) per Sacrifice\/Cultist Training Ground\)$/i, m => `（每座邪教徒訓練場每次獻祭，每名幫派成員獲得 ${m[1]} 靈魂（總計 ${m[2]}））`],
         [/^\(([+-]\d+(?:[.,]\d+)?) Not\. per day\/Cultist Training Ground\)$/i, m => `（每座邪教徒訓練場每天的惡名：${m[1]}）`],
@@ -574,6 +612,7 @@
         /^[+-]?\$\d+(?:[.,]\d+)?[kKmMbBtT]?$/, // 單純價格，不要將金額縮寫 K 當成英文
         /^Purchased (?:Upgrade|Equipment) ['"][^'"]+$/i, // 購買通知的前段殘句；合併處理完整節點
         /^(?:Pocketer|gy)['"]!$/i, // 已觀察到的購買通知末段殘句
+        /^惡名：[+-]?\d+(?:[.,]\d+)?[KMBT]$/i, // 數量縮寫保留英文單位，避免重複收集
         /^conveyor_belt$/i,
         /^groups$/i, // 圖示識別字
         /^moving$/i, // 圖示識別字
