@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.11
+// @version      0.3.12
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -484,11 +484,58 @@
         "You have active boons": "你有已啟用的恩賜",
         "Your graffiti is so beautiful, it is no longer considered a crime": "你的塗鴉美得不再被視為犯罪",
         "days remaining": "剩餘天數",
+        // 2026-10-31：武裝搶劫、邪教擴建與偽造身分等後續內容。
+        "(Harvestable)": "（可收成）",
+        "+ Unlock New Rune": "＋解鎖新符文",
+        "+ Unlock New Structures": "＋解鎖新建築",
+        "Basic Hitmen": "基礎殺手",
+        "Battle Actions": "戰鬥行動",
+        "Blood Pool": "血池",
+        "Build Fake Identity": "建立假身分",
+        "Consumes Souls daily": "每日消耗靈魂",
+        "Dirty Ambush": "卑劣伏擊",
+        "Does not remove Criminal status": "不會移除罪犯狀態",
+        "Double Fake Identity build speed": "建立假身分的速度加倍",
+        "Drive By": "駕車掃射",
+        "Efficient Looting": "高效率搜刮",
+        "Engaged": "交戰中",
+        "Facial hair - Nature's disguise kit": "鬍鬚，大自然的偽裝工具組",
+        "Fake Identity": "假身分",
+        "Fake Mustache": "假鬍子",
+        "Harvested your garden plants...": "你收成了花園裡的植物……",
+        "Increases Ritual Duration": "增加儀式持續時間",
+        "Increases Ritual Power": "增加儀式威力",
+        "Infernal Reputation": "地獄聲望",
+        "Laminator": "護貝機",
+        "Mildly Notorious": "略有惡名",
+        "Minimal Proof": "最少的證明文件",
+        "News Headlines": "新聞標題",
+        "Shrine": "神龕",
+        "Squad Shootout": "小隊槍戰",
+        "Use Fake Identity": "使用假身分",
+        "You deal your home": "你以高價販售自家",
+        "You learn a little more about the stranger's life to build a fake profile...": "你進一步了解這名陌生人的生活，以建立虛假的個人資料……",
+        "grown drugs for a hefty markup.": "種植的毒品。",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // 2026-10-31：武裝搶劫需求、武器數量、偽造身分、傷害、邪教建築及升級等動態格式。
+        [/^Armed Robbery\s*\(\s*(\d+)\s+G\.M\.?\s*,\s*(\d+)\s+([^()]+?)\s*\)$/i, m => `持械搶劫（${m[1]} 名幫派成員、${m[2]} 把${translateItemName(m[3].trim())}）`],
+        [/^You need a minimum of\s+(\d+)\s+Gang Members and\s+(\d+)\s+(.+)$/i, m => `你至少需要 ${m[1]} 名幫派成員與 ${m[2]} 把${translateItemName(m[3].trim())}`],
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Fake Identity$/i, m => `假身分：${m[1]}`],
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Drugs?$/i, m => `毒品：${m[1]}`],
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Dmg$/i, m => `傷害：${m[1]}`],
+        [/^([+-]\d+)\s+Stolen Jewels? from Jewelry Store Armed Robbery$/i, m => `珠寶店持械搶劫獲得的贓珠寶：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Notoriety if criminal status is at least\s+(\d+)$/i, m => `罪犯狀態至少為 ${m[2]} 時，惡名：${m[1]}%`],
+        [/^Cult Lv\.\s*(\d+)$/i, m => `邪教等級 ${m[1]}`],
+        [/^Your Cult grows to Level\s+(\d+)$/i, m => `你的邪教升至等級 ${m[1]}`],
+        [/^Not ready, refunds\s+(\d+(?:[.,]\d+)?)% of seed cost$/i, m => `尚未準備好，退還種子成本的 ${m[1]}%`],
+        [/^Reduce Store Robbery crime and max crime Penalty by\s+(\d+)$/i, m => `將商店搶劫的犯罪懲罰及懲罰上限降低 ${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Build Fake Identity Speed$/i, m => `建立假身分的速度 ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Notoriety from Store Robberies and Jewelry Store Armed Robberies$/i, m => `商店搶劫與珠寶店持械搶劫獲得的惡名 ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Notoriety Rewards$/i, m => `惡名獎勵 ×${m[1]}`],
         // 2026-10-31：數量、持續天數、幫派戰爭、惡名單位縮寫與農作物的倍率。
         [/^([+-]\d+(?:[.,]\d+)?)\s+(Pistols|Submachine Guns)$/i, m => `${translateItemName(m[2])}：${m[1]}`],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance for x(\d+(?:[.,]\d+)?) Drugs on harvest$/i, m => `收成時獲得 ${m[2]} 倍毒品的機率：${m[1]}%`],
@@ -562,7 +609,7 @@
         [/^([+-]\d+)\s+Sinner penalty when Sacrificing$/i, m => `獻祭時的罪人懲罰：${m[1]}`],
         [/^([+-]?\d+(?:[.,]\d+)*)\s+Souls$/i, m => `靈魂：${m[1]}`],
         [/^(\d+(?:[.,]\d+)?)%\s+chance of getting busted$/i, m => `被逮捕的機率：${m[1]}%`],
-        [/^(Activate|Deactivate)\s+(\d+|all)\s+(Altar|Cultist Training Ground)$/i, m => `${m[1].toLowerCase() === "activate" ? "啟用" : "停用"}${m[2].toLowerCase() === "all" ? "全部" : ` ${m[2]} 座`}${m[3].toLowerCase() === "altar" ? "祭壇" : "邪教徒訓練場"}`],
+        [/^(Activate|Deactivate)\s+(\d+|all)\s+(Altar|Cultist Training Ground|Blood Pool|Shrine)$/i, m => `${m[1].toLowerCase() === "activate" ? "啟用" : "停用"}${m[2].toLowerCase() === "all" ? "全部" : ` ${m[2]} 座`}${({altar: "祭壇", "cultist training ground": "邪教徒訓練場", "blood pool": "血池", shrine: "神龕"})[m[3].toLowerCase()]}`],
         [/^Heist\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\)$/i, m => `劫案（${m[1]}%）`],
         [/^Plan Heist\s*\(\s*(\d+)\s*\/\s*(\d+)\s*\)$/i, m => `策劃劫案（${m[1]}/${m[2]}）`],
         [/^Sinner:\s*([+-]?\d+(?:[.,]\d+)?)$/i, m => `罪人：${m[1]}`],
