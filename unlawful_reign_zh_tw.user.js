@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.7
+// @version      0.4.8
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,17 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.8：寵物、重生、博物館與契約片段固定詞條。
+        "Be Reborn": "重生",
+        "Current companion": "目前的夥伴",
+        "Dog": "狗",
+        "Personalized Collar": "客製化項圈",
+        "Pet": "寵物",
+        "The Museum": "博物館",
+        "Visit the Museum to view ancient Artifacts": "前往博物館查看古代文物",
+        "Your heist goes awry and you get caught!": "你的劫案出了差錯，你被逮住了！",
+        "more pact and be reborn.": "項額外契約並重生。",
+
         // v0.4.6：永久解鎖項目、月相、星座、古物與海洋庇護所的功能說明。
         "Bond with a sea companion that helps you lead the oceans and eventually the world": "與一位海洋夥伴建立羈絆，牠將幫助你統領海洋，最終統領世界",
         "Knowledge you gain is retained by passing it down through the generations and decades": "你獲得的知識會透過代代相傳，在數十年間持續保留下來",
@@ -960,9 +971,16 @@
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.4.8：寵物經驗值、契約、全域加成及累積進度的變動值。
+        [/^(\d+(?:[.,]\d+)?[KMBT]?)\s*\/\s*(\d+(?:[.,]\d+)?[KMBT]?)\s+EXP$/i, m => m[1] + '/' + m[2] + ' 經驗值'],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Global Money and Notoriety$/i, m => '全域金錢與惡名：' + m[1] + '%'],
+        [/^(\d+)\s+pacts?\s+earned$/i, m => '已獲得 ' + m[1] + ' 項契約'],
+        [/^([A-Za-z][A-Za-z' -]{0,64})\s+reached level\s+(\d+)!$/i, m => translateItemName(m[1].trim()) + '升至等級 ' + m[2] + '！'],
+        [/^Pact Bonus:\s*([+-]\d+(?:[.,]\d+)?)%\s+Money\s*&\s*Notoriety$/i, m => '契約加成：金錢與惡名 ' + m[1] + '%'],
+        [/^x(\d+(?:[.,]\d+)?)\s+pet EXP gain speed$/i, m => '寵物經驗值獲得速度 ×' + m[1]],
         // v0.4.5：員工數量、契約數量與研究完成通知。
         [/^([+-]\d+(?:[.,]\d+)?)\s+Employees?$/i, m => '員工：' + m[1]],
-        [/^Select\s+(\d+)\s+more pacts(?:\s+and be reborn\.)?$/i, m => '再選擇 ' + m[1] + ' 項契約' + (/and be reborn\.$/i.test(m[0]) ? '並重生。' : '')],
+        [/^Select\s+(\d+)\s+more pacts?(?:\s+and be reborn\.)?$/i, m => '再選擇 ' + m[1] + ' 項契約' + (/and be reborn\.$/i.test(m[0]) ? '並重生。' : '')],
         [/^Your researches have finished researching\s+(['"])([^'"]{1,100})\1!$/i, m => '你的研究已完成「' + translateItemName(m[2]) + '」項目的研究！'],
         // v0.4.3：公司研究、員工、原作、邪教與稅率的變動格式。
         [/^\(\s*([+-]\d+(?:[.,]\d+)?)\s+R\.P\.?\s*\/\s*Employee\s*\)$/i, m => '（' + m[1] + ' 研究點數／員工）'],
@@ -1255,10 +1273,16 @@
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
         {
+            // 支援 Spend 後接的可變契約數，保留數字的粗體節點。
+            pattern:/^Spend\s+(\d+)\s+more pacts? and be reborn\.$/i,
+            render:m=>'花費 ' + m[1] + ' 項額外契約並重生。',
+            terms:()=>[[/^Spend\s+/i,'花費 '],[/\s+more pacts? and be reborn\.$/i,' 項額外契約並重生。']]
+        },
+        {
             // 契約數可能在強調節點中，維持數字與原節點不變。
-            pattern:/^Select\s+(\d+)\s+more pacts and be reborn\.$/i,
+            pattern:/^Select\s+(\d+)\s+more pacts? and be reborn\.$/i,
             render:m=>'再選擇 ' + m[1] + ' 項契約並重生。',
-            terms:()=>[[/^Select\s+/i,'再選擇 '],[/\s+more pacts and be reborn\.$/i,' 項契約並重生。']]
+            terms:()=>[[/^Select\s+/i,'再選擇 '],[/\s+more pacts? and be reborn\.$/i,' 項契約並重生。']]
         },
         {
             // 研究名稱可能跨文字節點，保留名稱所在標記。
@@ -1330,6 +1354,7 @@
     ];
 
     const NONTRANSLATABLE = [
+        /^\$\d+(?:[.,]\d+)?[KMBT]?\s*\/\s*\$\d+(?:[.,]\d+)?[KMBT]?$/i, // 純金額進度，保留數值與單位，無需翻譯
         /^[+-]?₵\d+(?:[.,]\d+)?[KMBT]?$/i, // 純金額值，不翻譯或當成待翻譯詞彙
         /^杜布隆金幣：[+-]?\d+(?:[.,]\d+)?[KMBT]$/i, // 已翻譯的金幣縮寫
         /^\d+(?:[.,]\d+)?[KMBT]$/i, // 單純數量縮寫（例如 1.1K），不是英文詞彙
@@ -1607,7 +1632,7 @@
 
     // 小範圍跨節點文字片段：只合併整個元素恰好符合已知句子片段的情況。
     // 不處理包含粗體、互動控制或圖示的元素，避免破壞數值及原始顯示格式。
-    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to|Your crew regroups and reloads, ready to reboard the enemy ship!|You finish replicating a masterpiece\.\.\.|You take your time to forge emaculate fake documents\.\.\.|You stage a vial display of what you and your crew are capable of\.\.\.|The power of|more pacts and be reborn\.|seduces a new Follower to join your cult!|You load|You offer|The Navy Ship rams against your ship, dealing|and in return an Undead Minion is promised to work for you|\d+(?:[.,]\d+)?\s+Cannonballs?\s+onto your ship for|\d+(?:[.,]\d+)?\s+(?:Pistols|Submachine Guns)\s+for)$/i;
+    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to|Your crew regroups and reloads, ready to reboard the enemy ship!|You finish replicating a masterpiece\.\.\.|You take your time to forge emaculate fake documents\.\.\.|You stage a vial display of what you and your crew are capable of\.\.\.|The power of|more pacts? and be reborn\.|seduces a new Follower to join your cult!|You load|You offer|The Navy Ship rams against your ship, dealing|and in return an Undead Minion is promised to work for you|\d+(?:[.,]\d+)?\s+Cannonballs?\s+onto your ship for|\d+(?:[.,]\d+)?\s+(?:Pistols|Submachine Guns)\s+for)$/i;
     function normalizeSplitFragment(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         if (element.querySelector('button, a, input, textarea, select, strong, b, em, i, svg, [contenteditable]')) return false;
@@ -1742,7 +1767,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts|Your researches have finished researching)/i.test(full)) return false;
+        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts|Spend\s+\d+\s+more pacts|Your researches have finished researching)/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
