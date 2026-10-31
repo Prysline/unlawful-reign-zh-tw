@@ -98,7 +98,7 @@ const expected={
     'Next Milestone at':'下一個里程碑在',
     'Respectably Notorious':'頗有惡名',
     'The power of':'……的力量',
-    'You stage a vial display of what you and your crew are capable of...':'你上演了一場「vial（小瓶）」展示，展現你與船員的能耐……（原文異常）',
+    'You stage a vial display of what you and your crew are capable of...':'你與船員上演了一場令人不寒而慄的表演，展現了你們的能耐……',
     'seduces a new Follower to join your cult!':'誘惑一名新追隨者加入你的邪教！'
 };
 assert.equal(Object.keys(batch).length,20);
