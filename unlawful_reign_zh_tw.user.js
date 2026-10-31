@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.23
+// @version      0.3.24
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -789,11 +789,42 @@
         "Superman's Glasses": "超人的眼鏡",
         "Windy": "多風",
         "You parlay with the Navy Captain, bribing him to let you pass without conflict...": "你與海軍艦長交涉，賄賂他讓你不經衝突便能通過……",
+        // v0.3.24：新增詞彙與事件片段。
+        "Art Gallery": "美術館",
+        "Artistry": "藝術",
+        "Aspire to be more cultured and visit the Art Gallery": "渴望增進文化涵養，前往美術館參觀",
+        "Double Stolen Jewels sell price": "偷來的珠寶出售價格加倍",
+        "Every day on the run sharpens your timing, and your take, a little more": "每一天的逃亡都讓你更善於掌握時機，也讓收穫稍微增加",
+        "Exquisite Clarity": "絕妙的清晰感",
+        "Fake Accent": "假口音",
+        "Gain Notoriety per day while sailing": "航行期間每日獲得惡名",
+        "Pirate’s Shanties": "海盜船歌",
+        "Pistol Circus": "手槍馬戲團",
+        "Political Art": "政治藝術",
+        "Secret Agent Watch": "特務手錶",
+        "Select Actions": "選擇行動",
+        "Skull Hilted Swords": "骷髏柄劍",
+        "Submachine Slaughter": "衝鋒槍屠戮",
+        "The Navy Ship rams against your ship, dealing": "海軍艦艇撞上你的船，造成",
+        "You and your gang go guns blazing into the Casino!": "你與幫派成員火力全開地衝進賭場！",
+        "You load": "你裝載",
+        "You offer": "你提供",
+        "Your ship was destroyed and crewmates killed while you drift back to the Safe Haven": "你的船遭到摧毀，船員也被殺害，而你漂流回避風港",
+        "and in return an Undead Minion is promised to work for you": "而作為回報，承諾會有一名亡靈僕從為你效力",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.3.24：技能加成與獻祭的可變數值。
+        [/^\+\s*(Gambling|Graffiti|Shoplift)\s+boosted by\s*([+-]\d+(?:[.,]\d+)?)%\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s*Per Lvl\s*\)$/i, m => '＋' + ({gambling:'賭博',graffiti:'塗鴉',shoplift:'商店行竊'})[m[1].toLowerCase()] + '加成 ' + m[2] + '%（每級 ' + m[3] + '%）'],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Combo to Money while staying a criminal$/i, m => '維持罪犯狀態時的金錢連續加成：' + m[1] + '%'],
+        [/^(\d+(?:[.,]\d+)?)\s+Cannonballs?\s+onto your ship for$/i, m => m[1] + ' 發砲彈到你的船上，花費'],
+        [/^(\d+(?:[.,]\d+)?)\s+(Pistols|Submachine Guns)\s+for$/i, m => m[1] + ' 把' + translateItemName(m[2]) + '以換取'],
+        [/^Loses\s+([+-]?\d+(?:[.,]\d+)?)\s+Souls per Sacrifice$/i, m => '每次獻祭失去 ' + m[1] + ' 個靈魂'],
+        [/^Saves\s+\$([\d,.]+)\s+per day$/i, m => '每天節省 $' + m[1]],
+        [/^Unlock new Gang War attack using (Pistols|Submachine Guns)$/i, m => '解鎖使用' + translateItemName(m[1]) + '的新幫派戰爭攻擊招式'],
+        [/^x(\d+(?:[.,]\d+)?)\s+Graffiti Notoriety Reward$/i, m => '塗鴉惡名獎勵 ×' + m[1]],
         // v0.3.23：專精、賭場搶劫需求、販售加成與倍率的可變規則。
         [/^\+\s*Sell prices boosted by\s*([+-]\d+(?:[.,]\d+)?)%\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s*Per Lvl\s*\)$/i, m=>`＋出售價格加成 ${m[1]}%（每級 ${m[2]}%）`],
         [/^([+-]\d+(?:[.,]\d+)?)\s+(Finance|Stealth|Artistry|Brutality)\s+EXP$/i, m=>`${({finance:"財務",stealth:"潛行",artistry:"藝術",brutality:"蠻力"})[m[2].toLowerCase()]}經驗值：${m[1]}`],
@@ -990,7 +1021,7 @@
         [/^([+-]\d+)\s+Sinner penalty when Sacrificing$/i, m => `獻祭時的罪人懲罰：${m[1]}`],
         [/^([+-]?\d+(?:[.,]\d+)*)\s+Souls$/i, m => `靈魂：${m[1]}`],
         [/^(\d+(?:[.,]\d+)?)%\s+chance of getting busted$/i, m => `被逮捕的機率：${m[1]}%`],
-        [/^(Activate|Deactivate)\s+(\d+|all)\s+(Altar|Cultist Training Ground|Blood Pool|Shrine)$/i, m => `${m[1].toLowerCase() === "activate" ? "啟用" : "停用"}${m[2].toLowerCase() === "all" ? "全部" : ` ${m[2]} 座`}${({altar: "祭壇", "cultist training ground": "邪教徒訓練場", "blood pool": "血池", shrine: "神龕"})[m[3].toLowerCase()]}`],
+        [/^(Activate|Deactivate|Activates|Deactivates)\s+(\d+|all)\s+(Altar|Cultist Training Ground|Blood Pool|Shrine)$/i, m => `${m[1].toLowerCase().startsWith("activate") ? "啟用" : "停用"}${m[2].toLowerCase() === "all" ? "全部" : ` ${m[2]} 座`}${({altar: "祭壇", "cultist training ground": "邪教徒訓練場", "blood pool": "血池", shrine: "神龕"})[m[3].toLowerCase()]}`],
         [/^Heist\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\)$/i, m => `劫案（${m[1]}%）`],
         [/^Plan Heist\s*\(\s*(\d+)\s*\/\s*(\d+)\s*\)$/i, m => `策劃劫案（${m[1]}/${m[2]}）`],
         [/^Sinner:\s*([+-]?\d+(?:[.,]\d+)?)$/i, m => `罪人：${m[1]}`],
@@ -1036,7 +1067,38 @@
     // 匯出時出現的兩筆殘句：
     // "Purchased Upgrade 'Experienced Pick"、"Pocketer'!"
     // 尚不能確定其文字節點切分方式，不拆開翻譯，以免破壞介面詞序。
+
+    // 整句與 DOM 拆句共用同一套辨識與輸出。
+    const COMPOSITE_EVENT_RULES = [
+        {
+            pattern:/^You load\s+(\d+(?:[.,]\d+)?)\s+Cannonballs?\s+onto your ship for\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Doubloons?$/i,
+            render:m=>'你裝載 '+m[1]+' 發砲彈到你的船上，花費 '+m[2]+' 枚杜布隆金幣',
+            terms:()=>[[/You load/i,'你裝載'],[/Cannonballs?\s+onto your ship for/i,'發砲彈到你的船上，花費'],[/Doubloons?/i,'枚杜布隆金幣']]
+        },
+        {
+            pattern:/^You offer\s+(\d+(?:[.,]\d+)?)\s+(Pistols|Submachine Guns)\s+for\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Doubloons?$/i,
+            render:m=>'你提供 '+m[1]+' 把'+translateItemName(m[2])+'以換取 '+m[3]+' 枚杜布隆金幣',
+            terms:m=>[[/You offer/i,'你提供'],[/(?:Pistols|Submachine Guns)\s+for/i,'把'+translateItemName(m[2])+'以換取'],[/Doubloons?/i,'枚杜布隆金幣']]
+        },
+        {
+            pattern:/^You offer\s+(\d+(?:[.,]\d+)?)\s+Souls?\s+and in return an Undead Minion is promised to work for you$/i,
+            render:m=>'你提供 '+m[1]+' 個靈魂，而作為回報，承諾會有一名亡靈僕從為你效力',
+            terms:()=>[[/You offer/i,'你提供'],[/Souls?/i,'個靈魂'],[/and in return an Undead Minion is promised to work for you/i,'而作為回報，承諾會有一名亡靈僕從為你效力']]
+        },
+        {
+            pattern:/^The Navy Ship rams against your ship,\s*dealing\s+([+-]?\d+(?:[.,]\d+)?)\s+DMG$/i,
+            render:m=>'海軍艦艇撞上你的船，造成 '+m[1]+' 點傷害',
+            terms:()=>[[/The Navy Ship rams against your ship,\s*dealing/i,'海軍艦艇撞上你的船，造成'],[/\bDMG\b/i,'點傷害']]
+        },
+        {
+            pattern:/^You spend\s+(\d+(?:[.,]\d+)?[KMBT]?)\s+Doubloons?\s+to hire a new crewmate on board$/i,
+            render:m=>'你花費 '+m[1]+' 枚杜布隆金幣，雇用一名新船員登船',
+            terms:()=>[[/You spend/i,'你花費'],[/Doubloons?\s+to hire a new crewmate on board/i,'枚杜布隆金幣，雇用一名新船員登船']]
+        }
+    ];
+
     const NONTRANSLATABLE = [
+        /^杜布隆金幣：[+-]?\d+(?:[.,]\d+)?[KMBT]$/i, // 已翻譯的金幣縮寫
         /^\d+(?:[.,]\d+)?[KMBT]$/i, // 單純數量縮寫（例如 1.1K），不是英文詞彙
         /^[+-]?\$\d+(?:[.,]\d+)?[kKmMbBtT]?$/, // 單純價格，不要將金額縮寫 K 當成英文
         /^Purchased (?:Upgrade|Equipment) ['"][^'"]+$/i, // 購買通知的前段殘句；合併處理完整節點
@@ -1080,6 +1142,10 @@
         }
         if (Object.prototype.hasOwnProperty.call(BUILTIN, text)) {
             return BUILTIN[text];
+        }
+        for (const item of COMPOSITE_EVENT_RULES) {
+            const match=text.match(item.pattern);
+            if(match)return item.render(match);
         }
         for (const [pattern, formatter] of DYNAMIC) {
             const match = text.match(pattern);
@@ -1301,7 +1367,7 @@
 
     // 小範圍跨節點文字片段：只合併整個元素恰好符合已知句子片段的情況。
     // 不處理包含粗體、互動控制或圖示的元素，避免破壞數值及原始顯示格式。
-    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to|Your crew regroups and reloads, ready to reboard the enemy ship!)$/i;
+    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to|Your crew regroups and reloads, ready to reboard the enemy ship!|You load|You offer|The Navy Ship rams against your ship, dealing|and in return an Undead Minion is promised to work for you|\d+(?:[.,]\d+)?\s+Cannonballs?\s+onto your ship for|\d+(?:[.,]\d+)?\s+(?:Pistols|Submachine Guns)\s+for)$/i;
     function normalizeSplitFragment(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         if (element.querySelector('button, a, input, textarea, select, strong, b, em, i, svg, [contenteditable]')) return false;
@@ -1430,6 +1496,51 @@
         return false;
     }
 
+
+    // 只有整句確實符合事件格式時，才跨 DOM 節點替換固定字詞，保留粗體數值。
+    const COMPOSITE_DATE_PREFIX = /^(?:\s*(?:\[D\d+\s+Y\d+\]|［第[^］]+］)\s*[:：]?\s*)/u;
+    function normalizeCompositeEvent(element) {
+        if (!(element instanceof Element) || skipElement(element)) return false;
+        const full=element.textContent||'';
+        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend)/i.test(full)) return false;
+        const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
+        const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
+        if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
+        const walk=document.createTreeWalker(element,NodeFilter.SHOW_TEXT);
+        const nodes=[];let node;
+        while((node=walk.nextNode())){
+            if(skipElement(node.parentElement)||usesIconFont(node.parentElement))return false;
+            nodes.push(node);if(nodes.length>24)return false;
+        }
+        if(nodes.length<2||nodes.map(n=>n.nodeValue).join('')!==full)return false;
+        let cursor=full.indexOf(line);const edits=[];
+        for(const [regex,replacement] of rule.terms(line.match(rule.pattern))){
+            const found=full.slice(cursor).match(regex);
+            if(!found)return false;
+            const start=cursor+found.index;
+            edits.push({start,end:start+found[0].length,replacement});
+            cursor=start+found[0].length;
+        }
+        for(const edit of edits.reverse()){
+            let pos=0,inserted=false;
+            for(const item of nodes){
+                const begin=pos;pos+=item.nodeValue.length;
+                if(pos<=edit.start||begin>=edit.end)continue;
+                const from=Math.max(0,edit.start-begin);
+                const to=Math.min(item.nodeValue.length,edit.end-begin);
+                item.nodeValue=item.nodeValue.slice(0,from)+(inserted?'':edit.replacement)+item.nodeValue.slice(to);
+                inserted=true;
+            }
+        }
+        return true;
+    }
+    function normalizeCompositeEventInAncestors(element) {
+        for(let depth=0;element&&depth<5;depth++,element=element.parentElement){
+            if(normalizeCompositeEvent(element))return true;
+        }
+        return false;
+    }
+
     function translateText(node) {
         if (!node || node.nodeType !== Node.TEXT_NODE || skipElement(node.parentElement) || usesIconFont(node.parentElement)) return;
         const translated = translateString(node.nodeValue);
@@ -1455,6 +1566,7 @@
         if (!root) return;
         if (root.nodeType === Node.TEXT_NODE) {
             normalizeBattleDamageLogInAncestors(root.parentElement);
+            normalizeCompositeEventInAncestors(root.parentElement);
             normalizeVesselTradeConnectorInAncestors(root.parentElement);
             normalizeSplitFragmentInAncestors(root.parentElement);
             normalizeSacrificeLogInAncestors(root.parentElement);
@@ -1466,6 +1578,7 @@
         if (root.nodeType === Node.ELEMENT_NODE) {
             if (skipElement(root)) return;
             normalizeBattleDamageLogInAncestors(root);
+            normalizeCompositeEventInAncestors(root);
             normalizeVesselTradeConnectorInAncestors(root);
             normalizeSplitFragmentInAncestors(root);
             normalizeSacrificeLogInAncestors(root);
@@ -1481,6 +1594,7 @@
                 translateText(node);
             } else {
                 normalizeBattleDamageLog(node);
+                normalizeCompositeEvent(node);
                 normalizeVesselTradeConnector(node);
                 normalizeSplitFragment(node);
                 normalizeSacrificeLog(node);
