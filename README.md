@@ -14,7 +14,7 @@
 
 腳本包含 `@updateURL`、`@downloadURL` 與 `@version`。Tampermonkey 將按照其設定檢查遠端版本；當 GitHub 上的版本號較高時，即可取得更新。GitHub 有新的提交，不代表會立即自動安裝。
 
-每次更新使用者腳本時，請將 `@version` 增加，例如從 `0.3.18` 改成 `0.3.19`，並提交此檔案至 `main` 分支。
+每次更新使用者腳本時，請將 `@version` 增加，例如從 `0.3.19` 改成 `0.3.20`，並提交此檔案至 `main` 分支。
 
 此前從聊天附件安裝的腳本，需**首次手動安裝這份 GitHub 版本**，之後才能利用上述更新網址。
 
@@ -30,7 +30,7 @@ Tampermonkey 選單提供：
 
 ## 專案狀態
 
-* 目前版本：`0.3.19`
+* 目前版本：`0.3.20`
 * 版本狀態：測試版，尚未完成全面遊玩驗證。
 * 適用網站：`https://unlawfulreign.netlify.app/`
 * 原有 `@name` 與 `@namespace` 維持不變，盡量延續既有安裝識別與儲存鍵名。
@@ -107,3 +107,11 @@ Tampermonkey 選單提供：
 * 新增船員數量、招募機率、寶藏發現機率、商船買賣數量與航海獎勵倍率等 5 條動態規則；另外擴充 3 條原有的珠寶店劫案規則，支援單複數與不同搶劫類型。
 * 商船交易可在保留粗體物品與金幣數值的情況下，將句子中的 `for` 改為「換取」。沒有確認交易上下文時，保留 `for` 原文，避免全域誤翻譯。
 * 原始資料與測試分別位於 `tests/fixtures/batch_v0319.json` 和 `tests/test_v0319.cjs`。可執行 `node tests/test_v0319.cjs`。
+
+
+### v0.3.20 補充
+
+* 修正 `+ Unlocks Followers`、`+ Unlocks New Rune` 漏譯：既有「解鎖新裝備／儀式／符文／建築」共用規則現可同時辨識 `Unlock`、`Unlocks`，並視原文是否包含 `New` 決定譯文。
+* 保留舊版 `+ Unlock New Equipment` 等既有翻譯；賭博成功機率擴充 `Chance of success` 句型，挖寶機率以共用數值規則翻譯。
+* 補充 11 筆與藝術品、偽造文件、荒島、園丁及亡靈供品相關的固定詞彙。
+* 原始 15 筆 JSON 收錄於 `tests/fixtures/batch_v0320.json`，新增測試檔 `tests/test_v0320.cjs`，可執行 `node tests/test_v0320.cjs`。
