@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.1
+// @version      0.4.2
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -849,11 +849,50 @@
         "The power of": "……的力量",
         "You stage a vial display of what you and your crew are capable of...": "你上演了一場「vial（小瓶）」展示，展現你與船員的能耐……（原文異常）",
         "seduces a new Follower to join your cult!": "誘惑一名新追隨者加入你的邪教！",
+        // v0.4.2：公司、走私、航海及文件偽造翻譯。emaculate 為原文異常，未推測其詞意。
+        "Art Classes": "藝術課程",
+        "Business License": "營業執照",
+        "Bustling Harbor": "繁忙的港口",
+        "Can smuggle max": "每次最多可走私",
+        "Clean Money": "乾淨的錢",
+        "Drugs at a time": "份毒品",
+        "Forge Documents": "偽造文件",
+        "Fortified Ram": "加固撞角",
+        "Gang Pamphlets": "幫派宣傳冊",
+        "Launder Money": "洗錢",
+        "Lightning Reload": "閃電裝填",
+        "Money Shower": "金錢雨",
+        "Official Stamps": "官方印章",
+        "Pearl Necklaces": "珍珠項鍊",
+        "Pill Box": "藥盒",
+        "Purchase a business license and start your own Corporation": "購買營業執照並創立自己的公司",
+        "Ram": "撞角",
+        "Replica Artwork": "藝術品仿作",
+        "Rum Signing Bonus": "朗姆酒簽約獎金",
+        "See where your ship is heading and be able to change course": "查看船隻航行方向，並能夠改變航線",
+        "Smuggle Drugs": "走私毒品",
+        "Smuggling": "走私",
+        "Spyglass": "望遠鏡",
+        "Tower of Chips": "籌碼塔",
+        "You finish replicating a masterpiece...": "你完成了一件傑作的仿製……",
+        "You gamble": "你賭上",
+        "You smuggle your": "你走私了你的",
+        "You take your time to forge emaculate fake documents...": "你花時間偽造 emaculate（原文異常，無法確認）假文件……",
+        "at the port and set off again, earning you": "在港口，隨後再次啟航，獲得",
+        "but manage to win back": "但設法贏回",
+        "/ Day)": "／天）",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.4.2：仿作、假身分、藝術經驗與走私／航海能力的動態格式。
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Art EXP from Studying Paintings$/i, m => '研究畫作獲得的藝術經驗值：' + m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Fake Identity from Forging Documents$/i, m => '偽造文件獲得的假身分：' + m[1]],
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Replica Artworks?$/i, m => /^[+-]/.test(m[1]) ? '藝術品仿作：' + m[1] : m[1] + ' 件藝術品仿作'],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Attack Cooldowns?$/i, m => '攻擊冷卻時間：' + m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+Ram Damage$/i, m => '撞角傷害 ×' + m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+Amount money laundered$/i, m => '洗錢金額 ×' + m[1]],
         // v0.4.1：追隨者與藝術品仿製速度的可變數值。
         [/^\+\s*(\?+)\s*\(\s*Unlocked at\s+(\d+(?:[.,]\d+)?)\s+Followers?\s*\)$/i, m => '＋' + m[1] + '（達到 ' + m[2] + ' 名追隨者時解鎖）'],
         [/^\+\s*Replicate Artwork Speed\s+([+-]\d+(?:[.,]\d+)?)\s*\(\s*([+-]\d+(?:[.,]\d+)?)\s+Per Lvl\s*\)$/i, m => '＋藝術品仿製速度 ' + m[1] + '（每級 ' + m[2] + '）'],
@@ -868,7 +907,7 @@
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance of success if you have a Replica Artwork to swap with the original$/i, m => '若有藝術品仿作可與原作交換，成功機率：' + m[1] + '%'],
         [/^(\d+)\s*\/\s*(\d+)\s+selected$/i, m => '已選擇 ' + m[1] + '/' + m[2]],
         [/^Reduce Deal Drugs crime and max crime penalty by\s+(\d+)$/i, m => '將販售毒品的犯罪懲罰及懲罰上限降低 ' + m[1]],
-        [/^Regrouping\s*\(\s*(\d+)\s+Days?\s+Left\s*\)$/i, m => '重新集結中（剩餘 ' + m[1] + ' 天）'],
+        [/^(Regrouping|Reloading)\s*\(\s*(\d+)\s+Days?\s+Left\s*\)$/i, m => (m[1].toLowerCase()==='reloading'?'重新裝填中（剩餘 ':'重新集結中（剩餘 ') + m[2] + ' 天）'],
         [/^x(\d+(?:[.,]\d+)?)\s+Money from raiding graves$/i, m => '盜墓獲得的金錢 ×' + m[1]],
         // v0.3.24：技能加成與獻祭的可變數值。
         [/^\+\s*(Gambling|Graffiti|Shoplift|Store Robberies)\s+boosted by\s*([+-]\d+(?:[.,]\d+)?)%\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s*Per Lvl\s*\)$/i, m => '＋' + ({gambling:'賭博',graffiti:'塗鴉',shoplift:'商店行竊','store robberies':'商店搶劫'})[m[1].toLowerCase()] + '加成 ' + m[2] + '%（每級 ' + m[3] + '%）'],
@@ -932,7 +971,7 @@
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance to recruit Shady Strangers when not a criminal$/i, m => `非罪犯狀態時招募可疑陌生人的機率：${m[1]}%`],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+(Ship Speed|HP|Sailing Speed|Supplies Find Chance)$/i, m => `${({'ship speed': '船隻速度', hp: '生命值', 'sailing speed': '航行速度', 'supplies find chance': '找到補給品的機率'})[m[2].toLowerCase()]}：${m[1]}%`],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+during Foggy Weather$/i, m => `起霧天氣時：${m[1]}%`],
-        [/^([+-]\d+(?:[.,]\d+)?)\s+Ship HP per day while docked at the Safe Haven$/i, m => `停靠在避風港時，每日船隻生命值 ${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Ship HP per day while docked at (?:the )?(?:Safe Haven|haven)$/i, m => `停靠在避風港時，每日船隻生命值 ${m[1]}`],
         [/^([+-]?\d+(?:[.,]\d+)?)\s+Doubloons?$/i, m => `${/^[+-]/.test(m[1]) ? '杜布隆金幣：' + m[1] : m[1] + ' 枚杜布隆金幣'}`],
         [/^([+-]?\d+(?:[.,]\d+)?)\s+Supplies$/i, m => `${/^[+-]/.test(m[1]) ? '補給品：' + m[1] : m[1] + ' 份補給品'}`],
         [/^([+-]\d+(?:[.,]\d+)?)\s+Fake Identity\s*\(\s*(\d+(?:[.,]\d+)?)% Chance not Used\s*\)$/i, m => `假身分：${m[1]}（${m[2]}% 機率不消耗）`],
@@ -941,7 +980,7 @@
         [/^Flee\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => `逃離（${m[1]}%）`],
         [/^Recruit Crewmate\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => `招募船員（${m[1]}%）`],
         [/^Gain\s+([+-]\d+(?:[.,]\d+)?)% more when you gamble and win than when you lose$/i, m => `賭博獲勝時比落敗時多獲得 ${m[1]}%`],
-        [/^x(\d+(?:[.,]\d+)?)\s+(Pirating Damage|Notoriety from Undermining the Police|Pickpocket and Shoplifting Rewards|Amount you gamble|Gang Passive Money Income)$/i, m => `${({'pirating damage':'海盜活動傷害','notoriety from undermining the police':'暗中破壞警方行動獲得的惡名','pickpocket and shoplifting rewards':'扒竊與商店行竊獎勵','amount you gamble':'賭注金額','gang passive money income':'幫派被動金錢收入'})[m[2].toLowerCase()]} ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+(Pirating Damage|Notoriety from Undermining the Police|Pickpocket and Shoplifting Rewards|Amount you (?:can )?gamble|Gang Passive Money Income)$/i, m => `${({'pirating damage':'海盜活動傷害','notoriety from undermining the police':'暗中破壞警方行動獲得的惡名','pickpocket and shoplifting rewards':'扒竊與商店行竊獎勵','amount you gamble':'賭注金額','amount you can gamble':'賭注金額','gang passive money income':'幫派被動金錢收入'})[m[2].toLowerCase()]} ×${m[1]}`],
         // v0.3.16：可變動數值、賭博倍率、每日消耗及戰鬥訊息前綴。
         [/^(['"])(.+?)\1\s+deal$/i, m => `「${translateItemName(m[2])}」造成`],
         [/^\(([+-]\d+(?:[.,]\d+)?)%\s+Ritual (Duration\/Shrine|Power\/Blood Pool)\)$/i, m => `（每座${m[2].toLowerCase().startsWith('duration') ? '神龕的儀式持續時間' : '血池的儀式威力'}：${m[1]}%）`],
@@ -1159,6 +1198,16 @@
             pattern:/^The power of\s+(.{1,100}?)\s+seduces a new Follower to join your cult!$/i,
             render:m=>'「' + translateItemName(m[1]) + '」的力量吸引了一名新追隨者加入你的邪教！',
             terms:m=>[[/The power of\s+/i,'「'],[/^.{1,100}?(?=\s+seduces a new Follower to join your cult!$)/i,translateItemName(m[1])],[/\s+seduces a new Follower to join your cult!$/i,'」的力量吸引了一名新追隨者加入你的邪教！']]
+        },
+        {
+            pattern:/^Can smuggle max\s+(\d+(?:[.,]\d+)?)\s+Drugs at a time$/i,
+            render:m=>'每次最多可走私 ' + m[1] + ' 份毒品',
+            terms:()=>[[/Can smuggle max\s+/i,'每次最多可走私 '],[/\s+Drugs at a time$/i,' 份毒品']]
+        },
+        {
+            pattern:/^You gamble\s+([$₵]?\d+(?:[.,]\d+)?[KMBT]?)\s+but manage to win back\s+([$₵]?\d+(?:[.,]\d+)?[KMBT]?)$/i,
+            render:m=>'你賭上 ' + m[1] + '，但設法贏回 ' + m[2],
+            terms:()=>[[/You gamble\s+/i,'你賭上 '],[/\s+but manage to win back\s+/i,'，但設法贏回 ']]
         },
     ];
 
@@ -1439,7 +1488,7 @@
 
     // 小範圍跨節點文字片段：只合併整個元素恰好符合已知句子片段的情況。
     // 不處理包含粗體、互動控制或圖示的元素，避免破壞數值及原始顯示格式。
-    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to|Your crew regroups and reloads, ready to reboard the enemy ship!|You stage a vial display of what you and your crew are capable of\.\.\.|The power of|seduces a new Follower to join your cult!|You load|You offer|The Navy Ship rams against your ship, dealing|and in return an Undead Minion is promised to work for you|\d+(?:[.,]\d+)?\s+Cannonballs?\s+onto your ship for|\d+(?:[.,]\d+)?\s+(?:Pistols|Submachine Guns)\s+for)$/i;
+    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to|Your crew regroups and reloads, ready to reboard the enemy ship!|You finish replicating a masterpiece\.\.\.|You take your time to forge emaculate fake documents\.\.\.|You stage a vial display of what you and your crew are capable of\.\.\.|The power of|seduces a new Follower to join your cult!|You load|You offer|The Navy Ship rams against your ship, dealing|and in return an Undead Minion is promised to work for you|\d+(?:[.,]\d+)?\s+Cannonballs?\s+onto your ship for|\d+(?:[.,]\d+)?\s+(?:Pistols|Submachine Guns)\s+for)$/i;
     function normalizeSplitFragment(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         if (element.querySelector('button, a, input, textarea, select, strong, b, em, i, svg, [contenteditable]')) return false;
@@ -1574,7 +1623,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of)/i.test(full)) return false;
+        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble)/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
