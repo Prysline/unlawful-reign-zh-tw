@@ -121,7 +121,7 @@ const expected = {
     'Reduce Jewelry Store Robbery crime and max crime Penalty by 1': '將珠寶店搶劫的犯罪懲罰及懲罰上限降低 1',
     'Reduce Store Robbery crime and max crime Penalty by 2': '將商店搶劫的犯罪懲罰及懲罰上限降低 2',
     'x1.4 Ship Speed': '船隻速度 ×1.4',
-    'x1.5 Doubloons from Navy Ship': '海軍艦艇獲得的杜布隆金幣 ×1.5',
+    'x1.5 Doubloons from Navy Ship': '從海軍艦艇獲得的杜布隆金幣 ×1.5',
     'x1.5 Plunder Reward': '掠奪獎勵 ×1.5',
     'x2 Flee chance during Foggy Weather': '霧天的逃跑機率 ×2',
     'x2 Terrorize Reward': '恐嚇獎勵 ×2',
