@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.21
+// @version      0.3.22
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -735,11 +735,74 @@
         "Holy Slippers": "神聖拖鞋",
         "Spiked Peg Legs": "帶刺木製義腿",
         "Step into God's light": "踏入神的光芒",
+        // v0.3.22：海戰、藝術專精與藝術品仿製的固定名稱及已知句子片段。
+        "Arise": "甦醒",
+        "Board": "登船",
+        "Boutique Bounty": "精品店獎勵",
+        "Business 101": "商業入門",
+        "Buy Max": "購買最大數量",
+        "Cannonballs": "砲彈",
+        "Cannons": "大砲",
+        "Casino Robbery": "賭場搶劫",
+        "Combo Deals": "組合優惠",
+        "Disciplined greaves that reward every quiet step with sharper technique": "這副講求紀律的護脛，讓每一步悄然無聲的步伐都能換來更精湛的技巧",
+        "Double Barrel": "雙管",
+        "EXP": "經驗值",
+        "Expertise": "專精",
+        "Fire Cannons": "開砲",
+        "Greek Inspiration": "希臘式靈感",
+        "Hone your creativity and gain Artistry expertise": "磨練你的創造力，獲得藝術專精",
+        "Inner Beast": "內在野獸",
+        "Larger Chests": "更大的寶箱",
+        "Lvl.": "等級",
+        "Rabbits Foot": "兔腳護符",
+        "Removed unripe drug plant, refunded": "已移除未成熟的毒品作物，退還",
+        "Rich Skeletons": "富有的骷髏",
+        "Rob the Casino with your gang": "與你的幫派一起搶劫賭場",
+        "Seafaring Artists": "航海藝術家",
+        "Shinobi Greaves": "忍者護脛",
+        "Shot Locker": "砲彈庫",
+        "Start studying Store operations and gain Finance expertise": "開始研究商店營運，獲得財務專精",
+        "Stealth": "潛行",
+        "Trading vessels can sometimes sell or buy Replica Artworks": "商船有時會出售或收購藝術品仿作",
+        "Unlock your inner brute and gain Brutality Expertise": "釋放內在的蠻力，獲得蠻力專精",
+        "Valuable Invaluables": "有價的無價之物",
+        "You continue your work replicating the masterpiece...": "你繼續仿製那件傑作……",
+        "You destroy the opposing Navy Ship and manage to scavenge": "你摧毀了敵方海軍艦艇，並成功搜刮到",
+        "You fire your cannons at the Navy Ship, dealing": "你向海軍艦艇開砲，造成",
+        "You rally your scallywag crewmates and ready them to fight!": "你召集那群海盜船員，讓他們做好戰鬥準備！",
+        "You spend": "你花費了",
+        "Your cannons are reloaded, ready to fire at will!": "大砲已重新裝填完畢，可以隨時開火！",
+        "Your crew regroups and reloads, ready to re": "你的船員重新集結並裝填彈藥，準備再次",
+        "Your crew regroups and reloads, ready to reboard the enemy ship!": "你的船員重新集結並裝填彈藥，準備再次登上敵船！",
+        "Your crew swings on board the Navy Ship, dealing": "你的船員盪上了海軍艦艇，造成",
+        "board the enemy ship!": "登上敵船！",
+        "to repair": "以修復",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.3.22：經驗值、砲彈、船隻修復、仿製進度與海戰獎勵的數值模板。
+        [/^\+\s*(\?+)\s*\(Unlocked at Lvl\.\s*(\d+)\)$/i, m=>`＋${m[1]}（等級 ${m[2]} 解鎖）`],
+        [/^\+\s*Pickpocket boosted by\s*([+-]\d+(?:[.,]\d+)?)%\s*\(([+-]\d+(?:[.,]\d+)?)%\s*Per Lvl\)$/i, m=>`＋扒竊加成 ${m[1]}%（每級 ${m[2]}%）`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+EXP$/i, m=>`經驗值：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance of finding Stolen Jewels when Raiding Graves$/i, m=>`盜墓時找到贓珠寶的機率：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Ship HP$/i, m=>`船隻生命值：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Max Cannonballs?$/i, m=>`砲彈上限：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Cannonballs?$/i, m=>`砲彈：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Progress Replicating Artwork$/i, m=>`藝術品仿製進度：${m[1]}`],
+        [/^\/\s*(\d+(?:[.,]\d+)?)\s+Cannonballs?$/i, m=>`／${m[1]} 發砲彈`],
+        [/^(\d+(?:[.,]\d+)?)\s+HP to your ship$/i, m=>`船隻的 ${m[1]} 點生命值`],
+        [/^(\d+)\s*\/\s*(\d+)\s+Cannonballs?\s+left$/i, m=>`剩餘砲彈：${m[1]}/${m[2]}`],
+        [/^Buy\s+(\d+)$/i, m=>`購買 ${m[1]}`],
+        [/^Cannons have a\s+(\d+(?:[.,]\d+)?)%\s+chance of x(\d+(?:[.,]\d+)?) Damage$/i, m=>`大砲有 ${m[1]}% 機率造成 ${m[2]} 倍傷害`],
+        [/^Deal\s+(\d+(?:[.,]\d+)?)\s+DMG$/i, m=>`造成 ${m[1]} 點傷害`],
+        [/^Mugging gives\s+([+-]\d+(?:[.,]\d+)?)\s+Stolen Goods$/i, m=>`搶劫獲得 ${m[1]} 件贓物`],
+        [/^Replicate Artwork\s*\(\s*(\d+)\s*\/\s*(\d+)\s*\)$/i, m=>`仿製藝術品（${m[1]}/${m[2]}）`],
+        [/^Takes\s+(\d+(?:[.,]\d+)?)\s+days?\s+to\s+(regroup|reload)$/i, m=>`${m[2].toLowerCase()==='regroup'?'重新集結':'重新裝填'}需要 ${m[1]} 天`],
+        [/^x(\d+(?:[.,]\d+)?)\s+(Stealth EXP|Doubloons from Treasure|Store Robbery Money reward)$/i, m=>`${({'stealth exp':'潛行經驗值','doubloons from treasure':'從寶藏獲得的杜布隆金幣','store robbery money reward':'商店搶劫金錢獎勵'})[m[2].toLowerCase()]} ×${m[1]}`],
+        [/^([+-]?\d+(?:[.,]\d+)?[KMBT])\s+Doubloons?$/i, m=>`杜布隆金幣：${m[1]}`],
         // v0.3.21：船員上限數值與正負號共用規則。
         [/^([+-]?\d+(?:[.,]\d+)?)\s+Max Crewmates$/i, m => `船員上限：${m[1]}`],
         // v0.3.20：挖寶機率不綁定特定百分比。
@@ -783,7 +846,7 @@
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Ritual Duration$/i, m => `儀式持續時間：${m[1]}%`],
         [/^([+-]\d+(?:[.,]\d+)?)\s+Max bribe level$/i, m => `賄賂等級上限：${m[1]}`],
         [/^([+-]\d+(?:[.,]\d+)?)\s+Max Drugs Capacity$/i, m => `毒品容量上限：${m[1]}`],
-        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance (?:to win|of success) when gambling$/i, m => `賭博獲勝機率：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+(?:Chance (?:to win|of success) when gambling|Success chance gambling)$/i, m => `賭博獲勝機率：${m[1]}%`],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Notoriety$/i, m => `惡名：${m[1]}%`],
         [/^([+-]\d+(?:[.,]\d+)?)\s+Souls per day$/i, m => `每日靈魂：${m[1]}`],
         [/^([+-]\d+(?:[.,]\d+)?)\s+Gang War attack base cooldown$/i, m => `幫派戰爭攻擊的基礎冷卻時間：${m[1]}`],
@@ -902,7 +965,7 @@
         [/^([+-]\d+)\s+Stolen Jewels(?:\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\))?$/i, m => `偷來的珠寶：${m[1]}${m[2] !== undefined ? `（${m[2]}%）` : ""}`],
         [/^([+-]?\d+)\s+Stolen Jewels(?:\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\))?$/i, m => `偷來的珠寶：${m[1]}${m[2] !== undefined ? `（${m[2]}%）` : ""}`],
         [/^([+-]\d+)\s+Jewelry Heist Planning Progress$/i, m => `珠寶劫案策劃進度：${m[1]}`],
-        [/^([+-]\d+)\s+progress$/i, m => `進度：${m[1]}`],
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+progress$/i, m => `進度：${m[1]}`],
         [/^-\$([\d,.]+)\s+per day$/i, m => `每日金錢：-$${m[1]}`],
         [/^([+-]\d+)\s+Sinner penalty when Sacrificing$/i, m => `獻祭時的罪人懲罰：${m[1]}`],
         [/^([+-]?\d+(?:[.,]\d+)*)\s+Souls$/i, m => `靈魂：${m[1]}`],
@@ -1218,7 +1281,7 @@
 
     // 小範圍跨節點文字片段：只合併整個元素恰好符合已知句子片段的情況。
     // 不處理包含粗體、互動控制或圖示的元素，避免破壞數值及原始顯示格式。
-    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to)$/i;
+    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to|Your crew regroups and reloads, ready to reboard the enemy ship!)$/i;
     function normalizeSplitFragment(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         if (element.querySelector('button, a, input, textarea, select, strong, b, em, i, svg, [contenteditable]')) return false;
