@@ -1083,7 +1083,7 @@
         {
             pattern:/^You offer\s+(\d+(?:[.,]\d+)?)\s+Souls?\s+and in return an Undead Minion is promised to work for you$/i,
             render:m=>'你提供 '+m[1]+' 個靈魂，而作為回報，承諾會有一名亡靈僕從為你效力',
-            terms:()=>[[/You offer/i,'你提供'],[/Souls?/i,'個靈魂'],[/and in return an Undead Minion is promised to work for you/i,'而作為回報，承諾會有一名亡靈僕從為你效力']]
+            terms:()=>[[/You offer/i,'你提供'],[/Souls?\s+/i,'個靈魂，'],[/and in return an Undead Minion is promised to work for you/i,'而作為回報，承諾會有一名亡靈僕從為你效力']]
         },
         {
             pattern:/^The Navy Ship rams against your ship,\s*dealing\s+([+-]?\d+(?:[.,]\d+)?)\s+DMG$/i,
