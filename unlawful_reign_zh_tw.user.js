@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.15
+// @version      0.4.16
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,30 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.16：博物館、公司研究、航海升級及古物相關介面。
+        "(Approach closer)": "（靠近一點）",
+        "All on Red": "全押紅色",
+        "All the stolen splendor": "所有偷來的華美之物",
+        "Art of the Deal": "交易的藝術",
+        "Basic Lab": "基礎實驗室",
+        "Business Diploma": "商業文憑",
+        "Business School": "商學院",
+        "Change Course": "改變航向",
+        "Curate Exhibit": "策劃展覽",
+        "Early Workforce": "早期勞動力",
+        "Fake Posture": "偽裝姿態",
+        "Guarantees meeting The Devil": "保證能見到魔鬼",
+        "Hockey Mask": "曲棍球面具",
+        "Infernal Summons": "地獄召喚",
+        "Longer Scope": "更遠的觀測距離",
+        "Mental Math": "心算",
+        "Museum": "博物館",
+        "Part-Time Archaeologist": "兼職考古學家",
+        "Providing:": "提供：",
+        "Say My Name": "說出我的名字",
+        "Storage Shed": "儲物棚",
+        "Tax Relief": "稅務減免",
+        "You've planned out as much as you can for this heist": "你已經為這次劫案完成了所有能做的策劃",
         // v0.4.15：航海建築、寵物介面與幫派名稱。
         "Blackwater Market": "黑水市場",
         "Coinmaster's Den": "錢幣大師的巢穴",
@@ -1014,6 +1038,20 @@
     });
 
     const DYNAMIC = [
+        // v0.4.16：以同一套可變數值格式涵蓋研究、古物、博物館策劃與部門加成。
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Finance EXP from Studying Operations$/i, m => '研究營運獲得的財務經驗值：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Random Artifact Pieces?$/i, m => '隨機古物碎片：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Not\.\s+Per Artifact Level$/i, m => '每級古物獲得的惡名：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Max Stolen Goods$/i, m => '贓物持有上限：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Museum Plan Heist Speed$/i, m => '博物館劫案策劃速度：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance Fake Identity not used up$/i, m => '假身分不被消耗的機率：'+m[1]+'%'],
+        [/^Decipher Map\s*\(\s*(\d+(?:[.,]\d+)?)\s*\/\s*(\d+(?:[.,]\d+)?)\s*\)$/i, m => '解讀地圖（'+m[1]+'/'+m[2]+'）'],
+        [/^Spyglass can see\s+(\d+(?:[.,]\d+)?)\s+Nautical Miles further$/i, m => '望遠鏡的觀測距離增加 '+m[1]+' 海里'],
+        [/^x(\d+(?:[.,]\d+)?)\s+Sales Department Clean Money$/i, m => '銷售部門的合法金錢 ×'+m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+All Notoriety Rewards$/i, m => '所有惡名獎勵 ×'+m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+Casino Robbery Reward$/i, m => '賭場搶劫獎勵 ×'+m[1]],
+        // 舊版僅譯出研究通知的外層時，重新翻譯引號中的研究名稱。
+        [/^你的研究已完成「([^「」]{1,100})」項目的研究！$/u, m => '你的研究已完成「'+translateItemName(m[1])+'」項目的研究！'],
         // v0.4.15：以建築名稱共用數值、每日消耗與收益加成格式。
         [/^([+-]\d+(?:[.,]\d+)?)%\s+(Doubloons|Money)$/i, m => (m[2].toLowerCase()==='doubloons'?'杜布隆金幣':'金錢')+'加成：'+m[1]+'%'],
         [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+(Blackwater Market|Coinmaster's Den)$/i, m => translateItemName(m[2])+'：'+m[1]],
@@ -1476,6 +1514,9 @@
     ];
 
     const NONTRANSLATABLE = [
+        // v0.4.16：中文生命值與補給品後方的 K/M/B/T 是單位，不是待翻譯英文。
+        /^生命值：[+-]?\d+(?:[.,]\d+)?[KMBT]?\s*\/\s*[+-]?\d+(?:[.,]\d+)?[KMBT]?$/iu,
+        /^補給品：[+-]?\d+(?:[.,]\d+)?[KMBT]?$/iu,
         // v0.4.15：已中文化的經驗值數字仍含 K/M/B/T，不能重新列為未翻譯英文。
         /^\d+(?:[.,]\d+)?[KMBT]?\s*\/\s*\d+(?:[.,]\d+)?[KMBT]?\s+經驗值$/iu,
         /^\$\d+(?:[.,]\d+)?[KMBT]?\s*\/\s*\$\d+(?:[.,]\d+)?[KMBT]?$/i, // 純金額進度，保留數值與單位，無需翻譯
