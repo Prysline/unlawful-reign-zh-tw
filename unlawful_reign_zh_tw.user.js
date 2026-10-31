@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.3
+// @version      0.4.4
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -832,7 +832,7 @@
         "You and your crew plunder the feeble passenger boat, earning you": "你與船員掠奪了那艘不堪一擊的客船，獲得",
         "You take your time studying every brush stroke and detail": "你仔細研究每一道筆觸與細節",
         // v0.4.1：追隨者、邪教、鑰匙與能力事件固定譯文。
-        // 原文異常：vial display 可能為筆誤，未確認，不自行替換成 vile。
+        // 原文 vial display 疑似將 vile 誤拼為 vial；依此假設翻譯，原文比對鍵維持不變。
         "Follower": "追隨者",
         "Followers": "追隨者",
         "Cult Follower": "邪教追隨者",
@@ -847,7 +847,7 @@
         "Next Milestone at": "下一個里程碑在",
         "Respectably Notorious": "頗有惡名",
         "The power of": "……的力量",
-        "You stage a vial display of what you and your crew are capable of...": "你上演了一場「vial（小瓶）」展示，展現你與船員的能耐……（原文異常）",
+        "You stage a vial display of what you and your crew are capable of...": "你與船員上演了一場令人不寒而慄的表演，展現了你們的能耐……",
         "seduces a new Follower to join your cult!": "誘惑一名新追隨者加入你的邪教！",
         // v0.4.2：公司、走私、航海及文件偽造翻譯。emaculate 為原文異常，未推測其詞意。
         "Art Classes": "藝術課程",
