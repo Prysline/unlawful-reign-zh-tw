@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.22
+// @version      0.3.23
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -778,11 +778,31 @@
         "Your crew swings on board the Navy Ship, dealing": "你的船員盪上了海軍艦艇，造成",
         "board the enemy ship!": "登上敵船！",
         "to repair": "以修復",
+        // v0.3.23：財務專精、賭場裝備與海軍交涉的固定譯文。
+        "Ace of Guns": "槍械王牌",
+        "Clean Gambling": "乾淨的賭博",
+        "Finance": "財務",
+        "Gang Armory": "幫派軍械庫",
+        "Launder your dirty money into clean money at the Casino": "在賭場將黑錢洗成乾淨的錢",
+        "Marked Cards": "做過記號的牌",
+        "Study Operations": "研究營運",
+        "Superman's Glasses": "超人的眼鏡",
+        "Windy": "多風",
+        "You parlay with the Navy Captain, bribing him to let you pass without conflict...": "你與海軍艦長交涉，賄賂他讓你不經衝突便能通過……",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.3.23：專精、賭場搶劫需求、販售加成與倍率的可變規則。
+        [/^\+\s*Sell prices boosted by\s*([+-]\d+(?:[.,]\d+)?)%\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s*Per Lvl\s*\)$/i, m=>`＋出售價格加成 ${m[1]}%（每級 ${m[2]}%）`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+(Finance|Stealth|Artistry|Brutality)\s+EXP$/i, m=>`${({finance:"財務",stealth:"潛行",artistry:"藝術",brutality:"蠻力"})[m[2].toLowerCase()]}經驗值：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Money when you gamble and win than lose$/i, m=>`賭博獲勝時相較落敗，多獲得 ${m[1]}% 金錢`],
+        [/^(Finance|Stealth|Artistry|Brutality)\s+Lv\.\s*(\d+)$/i, m=>`${({finance:"財務",stealth:"潛行",artistry:"藝術",brutality:"蠻力"})[m[1].toLowerCase()]}專精等級 ${m[2]}`],
+        [/^Rob Casino\s*\(\s*(\d+)\s+G\.M\.?\s*,\s*(\d+)\s+(S\.M\.G\.?|Pistols?|Submachine Guns?)\s*\)$/i, m=>`搶劫賭場（${m[1]} 名幫派成員、${m[2]} 把${translateItemName(/^(?:S\.M\.G\.?|Submachine Guns?)$/i.test(m[3])?'Submachine Guns':'Pistols')}）`],
+        [/^Your (['"])(Finance|Stealth|Artistry|Brutality)\1 Expertise increases to Level\s+(\d+)!$/i, m=>`你的「${({finance:"財務",stealth:"潛行",artistry:"藝術",brutality:"蠻力"})[m[2].toLowerCase()]}」專精提升至等級 ${m[3]}！`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Money earned from Casino Robbery$/i, m=>`賭場搶劫獲得的金錢 ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+Max (Pistols|Submachine Guns) and (Pistols|Submachine Guns)$/i, m=>`${translateItemName(m[2])}與${translateItemName(m[3])}上限 ×${m[1]}`],
         // v0.3.22：經驗值、砲彈、船隻修復、仿製進度與海戰獎勵的數值模板。
         [/^\+\s*(\?+)\s*\(Unlocked at Lvl\.\s*(\d+)\)$/i, m=>`＋${m[1]}（等級 ${m[2]} 解鎖）`],
         [/^\+\s*Pickpocket boosted by\s*([+-]\d+(?:[.,]\d+)?)%\s*\(([+-]\d+(?:[.,]\d+)?)%\s*Per Lvl\)$/i, m=>`＋扒竊加成 ${m[1]}%（每級 ${m[2]}%）`],
