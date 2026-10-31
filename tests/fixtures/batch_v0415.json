@@ -1,0 +1,219 @@
+{
+  "translations": {
+    "( -10 Doubloons per day/Blackwater Market)": "",
+    "( -10 Doubloons per day/Coinmaster's Den)": "",
+    "(+20% Doubloons/Blackwater Market)": "",
+    "(+20% Money/Coinmaster's Den)": "",
+    "+0% Doubloons": "",
+    "+0% Money": "",
+    "+1 Blackwater Market": "",
+    "+1 Coinmaster's Den": "",
+    "+12% Fake Identity Speed and conservation": "",
+    "+14% Fake Identity Speed and conservation": "",
+    "+15% Graffiti and Shady Stranger Talk Notoriety": "",
+    "+16% Fake Identity Speed and conservation": "",
+    "-0 Doubloons per day": "",
+    "-1K Supplies": "",
+    "1K/1K HP": "",
+    "35/2.1K 經驗值": "",
+    "40/2.1K 經驗值": "",
+    "44/2.1K 經驗值": "",
+    "50/2.1K 經驗值": "",
+    "51/2.1K 經驗值": "",
+    "52/2.1K 經驗值": "",
+    "53/2.1K 經驗值": "",
+    "54/2.1K 經驗值": "",
+    "55/2.1K 經驗值": "",
+    "59/2.1K 經驗值": "",
+    "62/2.1K 經驗值": "",
+    "63/2.1K 經驗值": "",
+    "68/2.1K 經驗值": "",
+    "70/2.1K 經驗值": "",
+    "73/2.1K 經驗值": "",
+    "75/2.1K 經驗值": "",
+    "76/2.1K 經驗值": "",
+    "79/2.1K 經驗值": "",
+    "81/2.1K 經驗值": "",
+    "Blackwater Market": "",
+    "Coinmaster's Den": "",
+    "Costs Doubloons Daily": "",
+    "Expand": "",
+    "Increases Doubloons Gain": "",
+    "Increases Money Gain": "",
+    "Komodo Dragon": "",
+    "Owned Pets": "",
+    "Python": "",
+    "Python升至等級 2！": "",
+    "Python升至等級 3！": "",
+    "Readjusting (4 Days Left)": "",
+    "The Crimson Ravagers": "",
+    "You purchase the exotic pet 'Python' for": ""
+  },
+  "contexts": [
+    {
+      "fragments": [
+        "(6)",
+        " The Crimson Ravagers "
+      ],
+      "fullText": "(6) The Crimson Ravagers",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+0% Doubloons",
+        "(+20% Doubloons/Blackwater Market)",
+        "-0 Doubloons per day",
+        "( -10 Doubloons per day/Blackwater Market)"
+      ],
+      "fullText": "+0% Doubloons(+20% Doubloons/Blackwater Market)-0 Doubloons per day( -10 Doubloons per day/Blackwater Market)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+0% Money",
+        "(+20% Money/Coinmaster's Den)",
+        "-0 Doubloons per day",
+        "( -10 Doubloons per day/Coinmaster's Den)"
+      ],
+      "fullText": "+0% Money(+20% Money/Coinmaster's Den)-0 Doubloons per day( -10 Doubloons per day/Coinmaster's Den)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+1 Blackwater Market",
+        "-200 Supplies",
+        "-200 Doubloons"
+      ],
+      "fullText": "+1 Blackwater Market-200 Supplies-200 Doubloons",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+1 Coinmaster's Den",
+        "-250 Supplies",
+        "-150 Doubloons"
+      ],
+      "fullText": "+1 Coinmaster's Den-250 Supplies-150 Doubloons",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Blackwater Market",
+        "0/0"
+      ],
+      "fullText": "Blackwater Market0/0",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Blackwater Market",
+        "0/0",
+        " Increases Doubloons Gain ",
+        " Costs Doubloons Daily "
+      ],
+      "fullText": "Blackwater Market0/0 Increases Doubloons Gain  Costs Doubloons Daily",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Coinmaster's Den",
+        "0/0"
+      ],
+      "fullText": "Coinmaster's Den0/0",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Coinmaster's Den",
+        "0/0",
+        " Increases Money Gain ",
+        " Costs Doubloons Daily "
+      ],
+      "fullText": "Coinmaster's Den0/0 Increases Money Gain  Costs Doubloons Daily",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Deal 40 DMG",
+        "Readjusting (4 Days Left)"
+      ],
+      "fullText": "Deal 40 DMGReadjusting (4 Days Left)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Expand ",
+        "Driftport"
+      ],
+      "fullText": "Expand Driftport",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Expand ",
+        "Driftport",
+        " -1K Supplies "
+      ],
+      "fullText": "Expand Driftport -1K Supplies",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Health",
+        " 1K/1K HP "
+      ],
+      "fullText": "Health 1K/1K HP",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Python ",
+        " Current companion "
+      ],
+      "fullText": "Python  Current companion",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Python ",
+        " Current companion ",
+        " Level ",
+        "2",
+        " 33/35 EXP ",
+        " +14% Fake Identity Speed and conservation "
+      ],
+      "fullText": "Python  Current companion  Level 2 33/35 EXP  +14% Fake Identity Speed and conservation",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Python",
+        " Level ",
+        "1"
+      ],
+      "fullText": "Python Level 1",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Python",
+        " Level ",
+        "1",
+        "+12% Fake Identity Speed and conservation"
+      ],
+      "fullText": "Python Level 1+12% Fake Identity Speed and conservation",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "[D19 Y18]: ",
+        "You purchase the exotic pet 'Python' for ",
+        "-",
+        "$1K"
+      ],
+      "fullText": "You purchase the exotic pet 'Python' for -$1K",
+      "datePrefix": "[D19 Y18]:",
+      "complete": false
+    }
+  ]
+}
