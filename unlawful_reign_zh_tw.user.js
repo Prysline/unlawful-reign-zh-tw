@@ -2022,7 +2022,7 @@
             const source = sourceTextNodes.get(node)?.original ?? node.nodeValue ?? '';
             if (!isUntranslatedSource(source)) return;
             const info = findContextForNode(node);
-            if (!info || seen.has(info.fullText)) return;
+            if (!info || seen.has(info.fullText) || !isUntranslatedSource(info.fullText)) return;
             seen.add(info.fullText);
             if (recordEventContext(info)) dirty = true;
         });
@@ -2129,8 +2129,7 @@
         );
         const contexts = Object.values(untranslatedContexts).filter(ctx =>
             ctx && typeof ctx.fullText === 'string' && Array.isArray(ctx.fragments)
-            && (ctx.fragments.some(isUntranslatedSource)
-                || isUntranslatedSource(ctx.fullText))
+            && isUntranslatedSource(ctx.fullText)
         ).sort((a, b) => a.fullText.localeCompare(b.fullText));
         downloadJson('Unlawful_Reign_待翻譯文字.json', {translations, contexts});
         alert('已匯出 ' + Object.keys(translations).length + ' 條待翻譯片段、'
@@ -2177,7 +2176,9 @@
         if (!confirm('確定要清除已收集的待翻譯文字嗎？這不會刪除自訂翻譯詞庫或遊戲存檔。')) return;
         for (const key of Object.keys(unseen)) delete unseen[key];
         GM_setValue('ur_zh_tw_untranslated', {});
-        alert('已清除待翻譯文字清單。');
+        for (const key of Object.keys(untranslatedContexts)) delete untranslatedContexts[key];
+        GM_setValue('ur_zh_tw_contexts', {});
+        alert('已清除待翻譯文字與上下文紀錄。');
     });
 
     window.addEventListener('pagehide', saveUntranslatedNow);
