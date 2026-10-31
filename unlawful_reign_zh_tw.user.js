@@ -1960,7 +1960,7 @@
             if (length > MAX_CONTEXT_LENGTH || fragments.length >= 32) invalid = true;
             if (!invalid) fragments.push(value);
         }, 36);
-        return invalid || fragments.length < 2 ? null : fragments;
+        return invalid || !fragments.length ? null : fragments;
     }
     // 不執行翻譯的 render()，以免在收集階段意外修改待翻譯清單。
     function isUntranslatedSource(value) {
@@ -1990,7 +1990,7 @@
                 if (content) return {fragments, fullText: content, datePrefix: prefix.trim(), complete: /[.!?。！？]\s*$/u.test(content)};
             }
             // 沒有可確定的事件標記時，只當作上下文片段，不能冒充完整句。
-            if (!fallback && full.length <= 320 && !dates.length && /[A-Za-z]/.test(full)) {
+            if (!fallback && fragments.length > 1 && full.length <= 320 && !dates.length && /[A-Za-z]/.test(full)) {
                 fallback = {fragments, fullText: full.trim(), complete: false};
             }
         }
