@@ -1292,9 +1292,10 @@
     // 只更改 for 自己的文字節點，保留物品、金幣與粗體數值。
     function normalizeVesselTradeConnector(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
-        if (element.querySelector('button, a, input, textarea, select, [contenteditable]')) return false;
+        // 多數元素與商船交易無關，先以文字快速過濾，再執行 DOM 子樹查詢。
         const combined = (element.textContent || '').replace(/\s+/g, ' ').trim();
         if (combined.length > 320 || !/^(?:(?:\[D\d+\s+Y\d+\]|［第[^］]+］)\s*[:：]?\s*)?(?:You trade with the vessel,\s*selling|你與商船交易，出售)/i.test(combined)) return false;
+        if (element.querySelector('button, a, input, textarea, select, [contenteditable]')) return false;
         const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
         const nodes = [];
         let node;
