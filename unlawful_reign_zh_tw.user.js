@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.17
+// @version      0.3.18
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -665,11 +665,42 @@
         "Your crew spots and recovers some floating supplies drifting out at sea...": "你的船員發現並打撈起一些漂浮在海上的補給品……",
         "Your sails unfurl and you catch the breeze, setting off towards the horizon...": "你展開船帆，乘著微風朝地平線啟航……",
         "day remaining": "天剩餘",
+        // v0.3.18：船艦裝備、靈魂與航海升級固定詞彙。
+        "Available Upgrades": "可用的升級項目",
+        "Be able to fly false colors to get past Navy Ships": "能夠懸掛假旗幟以避開海軍艦艇",
+        "Captured Flag": "繳獲的旗幟",
+        "Crew Carnage": "船員屠戮",
+        "Crow's Nest": "桅頂瞭望台",
+        "High Quality Rope": "高品質繩索",
+        "Install a Wooden Ram to the front of your ship": "在你的船首安裝木製撞角",
+        "Install rusted Cannons to your ship": "在你的船上安裝生鏽的大砲",
+        "New Sails": "新船帆",
+        "No effects": "沒有效果",
+        "Offer Unholy Oblation": "獻上邪惡祭品",
+        "Rusted Harpoons": "生鏽的魚叉",
+        "Second Hand Cannons": "二手大砲",
+        "Sharpened Cutlasses": "磨利的彎刀",
+        "Skeletal Overtime": "骸骨加班",
+        "Soul Discount": "靈魂折扣",
+        "Spot Shipwrecks in the ocean": "發現海上的沉船",
+        "Sunny": "晴朗",
+        "Unlock Harpoons": "解鎖魚叉",
+        "Wooden Ram": "木製撞角",
+        "You offer your Undead Minions so to hold more Souls of the dead...": "你獻出亡靈僕從，以容納更多死者的靈魂……",
+        "You turn your ship around and sail back to the Safe Haven": "你調轉船頭，駛回避風港",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.3.18：生命值上限、登船傷害、靈魂上限與倍率使用共用規則。
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Ship Max HP$/i, m=>`船隻生命值上限：${m[1]}`],
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Boarding DMG per crewmate$/i, m=>`每名船員的登船作戰傷害：${m[1]}`],
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Base Boarding DMG$/i, m=>`登船作戰基礎傷害：${m[1]}`],
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Max Souls$/i, m=>`靈魂上限：${m[1]}`],
+        [/^Increase Ship speed by x(\d+(?:[.,]\d+)?)$/i, m=>`船隻速度提高至 ×${m[1]}`],
+        [/^Rituals cost ([+-]?\d+(?:[.,]\d+)?)% of your total Souls$/i, m=>`儀式消耗你總靈魂的 ${m[1]}%`],
+        [/^Undead Minions provide x(\d+(?:[.,]\d+)?) Souls$/i, m=>`亡靈僕從提供的靈魂 ×${m[1]}`],
         // v0.3.17：航海／船員／金幣／補給／天氣及賭博數值皆使用變動格式。
         [/^([+-]\d+(?:[.,]\d+)?)\s+Crewmates?\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => `船員：${m[1]}（${m[2]}%）`],
         [/^([+-]?\d+)\s*\/\s*(\d+)\s+Crewmates?$/i, m => `船員：${m[1]} / ${m[2]}`],
