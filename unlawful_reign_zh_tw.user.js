@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.18
+// @version      0.3.19
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -688,11 +688,46 @@
         "Wooden Ram": "木製撞角",
         "You offer your Undead Minions so to hold more Souls of the dead...": "你獻出亡靈僕從，以容納更多死者的靈魂……",
         "You turn your ship around and sail back to the Safe Haven": "你調轉船頭，駛回避風港",
+        // v0.3.19：港口交易、海盜升級、園丁與裝備固定譯文。
+        "25 Karat Gold": "25K 黃金",
+        "Able to smuggle drugs at ports": "能夠在港口走私毒品",
+        "Acquired Blueprints": "取得的藍圖",
+        "Days": "天",
+        "Decently Notorious": "小有惡名",
+        "Delayed Alarms": "延遲警報",
+        "Ghost Ship": "幽靈船",
+        "Health Packs": "醫療包",
+        "Ignore the Trading Vessel and continue with your voyage": "無視商船，繼續航程",
+        "Keep Sailing": "繼續航行",
+        "Lightweight Cargo": "輕量化貨物",
+        "Pirate Flag": "海盜旗",
+        "Resets to": "重設為",
+        "Sailor's Spoils": "水手的戰利品",
+        "Sharper Swords": "更鋒利的劍",
+        "Smuggler's Cove": "走私者海灣",
+        "Teak Planks": "柚木板材",
+        "Tidy Poop Deck": "整潔的艉樓甲板",
+        "Titanium Shovel": "鈦製鏟子",
+        "Tractor": "拖拉機",
+        "Trading Vessel": "商船",
+        "Use Healthpacks to heal during a Gang War": "在幫派戰爭中使用醫療包恢復生命值",
+        "Waters plants in": "距離為植物澆水還有",
+        "You give a rousing speech about the freedom and joys of piracy...": "你慷慨激昂地演說，述說海盜生活的自由與樂趣……",
+        "You hand the police your fake ID card and he hands it back before you safely leave.": "你把假身分證交給警察，他將證件還給你，你便安全離開。",
+        "You meet an amiable Trading Vessel with business to conduct": "你遇到一艘友善的商船，可以進行交易",
+        "You trade with the vessel, selling": "你與商船交易，出售",
+        "Your Gardener helps with sowing your seeds": "你的園丁協助你播種",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.3.19：船員數量、招募機率、商船買賣數量與海盜倍率。
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Crewmates?$/i, m=>/^[+-]/.test(m[1])?`船員：${m[1]}`:`${m[1]} 名船員`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Recruit chance$/i, m=>`招募機率：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance of finding treasure$/i, m=>`發現寶藏的機率：${m[1]}%`],
+        [/^(Buy|Sell)\s+x(\d+(?:[.,]\d+)?)\s+(Stolen Jewels|Stolen Goods|Pistols)$/i, m=>`${m[1].toLowerCase()==='buy'?'購買':'出售'} ×${m[2]} ${translateItemName(m[3])}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+(Ship Speed|Doubloons from Navy Ship|Plunder Reward|Flee chance during Foggy Weather|Terrorize Reward)$/i, m=>`${({'ship speed':'船隻速度','doubloons from navy ship':'海軍艦艇獲得的杜布隆金幣','plunder reward':'掠奪獎勵','flee chance during foggy weather':'霧天的逃跑機率','terrorize reward':'恐嚇獎勵'})[m[2].toLowerCase()]} ×${m[1]}`],
         // v0.3.18：生命值上限、登船傷害、靈魂上限與倍率使用共用規則。
         [/^([+-]?\d+(?:[.,]\d+)?)\s+Ship Max HP$/i, m=>`船隻生命值上限：${m[1]}`],
         [/^([+-]?\d+(?:[.,]\d+)?)\s+Boarding DMG per crewmate$/i, m=>`每名船員的登船作戰傷害：${m[1]}`],
@@ -773,7 +808,7 @@
         [/^Cult Lv\.\s*(\d+)$/i, m => `邪教等級 ${m[1]}`],
         [/^Your Cult grows to Level\s+(\d+)$/i, m => `你的邪教升至等級 ${m[1]}`],
         [/^Not ready, refunds\s+(\d+(?:[.,]\d+)?)% of seed cost$/i, m => `尚未準備好，退還種子成本的 ${m[1]}%`],
-        [/^Reduce Store Robbery crime and max crime Penalty by\s+(\d+)$/i, m => `將商店搶劫的犯罪懲罰及懲罰上限降低 ${m[1]}`],
+        [/^Reduce (Jewelry )?Store Robbery crime and max crime Penalty by\s+(\d+)$/i, m => `將${m[1] ? '珠寶店' : '商店'}搶劫的犯罪懲罰及懲罰上限降低 ${m[2]}`],
         [/^x(\d+(?:[.,]\d+)?)\s+Build Fake Identity Speed$/i, m => `建立假身分的速度 ×${m[1]}`],
         [/^x(\d+(?:[.,]\d+)?)\s+Notoriety from Store Robberies and Jewelry Store Armed Robberies$/i, m => `商店搶劫與珠寶店持械搶劫獲得的惡名 ×${m[1]}`],
         [/^x(\d+(?:[.,]\d+)?)\s+Notoriety Rewards$/i, m => `惡名獎勵 ×${m[1]}`],
@@ -798,7 +833,7 @@
         [/^([+-]\d+)\s+(Altar|Cultist Training Ground|Shrine|Blood Pool)$/i, m => `${({altar: "祭壇", "cultist training ground": "邪教徒訓練場", shrine: "神龕", "blood pool": "血池"})[m[2].toLowerCase()]}：${m[1]}`],
         [/^([+-]\d+(?:[.,]\d+)?)% Chance for bonus Drugs on harvest$/i, m => `收成時獲得額外毒品的機率：${m[1]}%`],
         [/^([+-]\d+) Stolen Jewels? from Raid Grave$/i, m => `盜墓獲得的贓珠寶：${m[1]}`],
-        [/^([+-]\d+) Stolen Jewels? from Jewelry Store Heists$/i, m => `珠寶店劫案獲得的贓珠寶：${m[1]}`],
+        [/^([+-]\d+) Stolen Jewels? from Jewelry Store Heists?$/i, m => `珠寶店劫案獲得的贓珠寶：${m[1]}`],
         [/^([+-]\d+(?:[.,]\d+)?) Not\. per day$/i, m => `每天的惡名：${m[1]}`],
         [/^(\d+)\/(\d+) HP$/i, m => `生命值：${m[1]}/${m[2]}`],
         [/^(\d+) Days?$/i, m => `${m[1]} 天`],
@@ -834,7 +869,7 @@
         [/^([+-]?\s*\d+(?:[.,]\d+)?)\s+Gang Members?$/i, m => `${m[1].replace(/\s+/g, '')} 名幫派成員`],
         // 第七批：新增動態百分比與劫案策劃加成。
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Money while sinner$/i, m => `處於罪人狀態時，金錢：${m[1]}%`],
-        [/^([+-]\d+)\s+Jewelry Store Heist Plan Speed$/i, m => `珠寶店劫案策劃速度：${m[1]}`],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Jewelry(?: Store)? Heist Plan Speed$/i, m => `珠寶店劫案策劃速度：${m[1]}`],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Ritual Power$/i, m => `儀式威力：${m[1]}%`],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Pickpocket Jewels chance$/i, m => `扒竊珠寶的機率：${m[1]}%`],
         // 第六批：邪教、獻祭、劫案進度與可變化的數值。
@@ -902,6 +937,7 @@
         /^Purchased (?:Upgrade|Equipment) ['"][^'"]+$/i, // 購買通知的前段殘句；合併處理完整節點
         /^(?:Pocketer|gy)['"]!$/i, // 已觀察到的購買通知末段殘句
         /^惡名：[+-]?\d+(?:[.,]\d+)?[KMBT]$/i, // 數量縮寫保留英文單位，避免重複收集
+        /^for$/i, // 只在已確認的商船交易上下文轉換成「換取」
         /^conveyor_belt$/i,
         /^groups$/i, // 圖示識別字
         /^moving$/i, // 圖示識別字
@@ -1160,7 +1196,7 @@
 
     // 小範圍跨節點文字片段：只合併整個元素恰好符合已知句子片段的情況。
     // 不處理包含粗體、互動控制或圖示的元素，避免破壞數值及原始顯示格式。
-    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining)$/i;
+    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to)$/i;
     function normalizeSplitFragment(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         if (element.querySelector('button, a, input, textarea, select, strong, b, em, i, svg, [contenteditable]')) return false;
@@ -1251,6 +1287,43 @@
         return false;
     }
 
+
+    // 商船交易紀錄中的 for 需搭配前後資源數量判斷；不可當作一般英文詞彙全域翻譯。
+    // 只更改 for 自己的文字節點，保留物品、金幣與粗體數值。
+    function normalizeVesselTradeConnector(element) {
+        if (!(element instanceof Element) || skipElement(element)) return false;
+        if (element.querySelector('button, a, input, textarea, select, [contenteditable]')) return false;
+        const combined = (element.textContent || '').replace(/\s+/g, ' ').trim();
+        if (combined.length > 320 || !/^(?:(?:\[D\d+\s+Y\d+\]|［第[^］]+］)\s*[:：]?\s*)?(?:You trade with the vessel,\s*selling|你與商船交易，出售)/i.test(combined)) return false;
+        const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        let node;
+        while ((node = walker.nextNode())) {
+            if (skipElement(node.parentElement) || usesIconFont(node.parentElement)) return false;
+            nodes.push(node);
+            if (nodes.length > 24) return false;
+        }
+        let before = '';
+        for (let i = 0; i < nodes.length; i++) {
+            const original = nodes[i].nodeValue;
+            if (/^\s*for\s*$/i.test(original)
+                && /(?:You trade with the vessel,\s*selling|你與商船交易，出售)/i.test(before)
+                && nodes.slice(i + 1).some(item => item.nodeValue.trim())) {
+                nodes[i].nodeValue = original.replace(/for/i, '換取');
+                return true;
+            }
+            before += original;
+        }
+        return false;
+    }
+
+    function normalizeVesselTradeConnectorInAncestors(element) {
+        for (let depth = 0; element && depth < 5; depth++, element = element.parentElement) {
+            if (normalizeVesselTradeConnector(element)) return true;
+        }
+        return false;
+    }
+
     function translateText(node) {
         if (!node || node.nodeType !== Node.TEXT_NODE || skipElement(node.parentElement) || usesIconFont(node.parentElement)) return;
         const translated = translateString(node.nodeValue);
@@ -1276,6 +1349,7 @@
         if (!root) return;
         if (root.nodeType === Node.TEXT_NODE) {
             normalizeBattleDamageLogInAncestors(root.parentElement);
+            normalizeVesselTradeConnectorInAncestors(root.parentElement);
             normalizeSplitFragmentInAncestors(root.parentElement);
             normalizeSacrificeLogInAncestors(root.parentElement);
             normalizeSwatRaidLogInAncestors(root.parentElement);
@@ -1286,6 +1360,7 @@
         if (root.nodeType === Node.ELEMENT_NODE) {
             if (skipElement(root)) return;
             normalizeBattleDamageLogInAncestors(root);
+            normalizeVesselTradeConnectorInAncestors(root);
             normalizeSplitFragmentInAncestors(root);
             normalizeSacrificeLogInAncestors(root);
             normalizeSwatRaidLogInAncestors(root);
@@ -1300,6 +1375,7 @@
                 translateText(node);
             } else {
                 normalizeBattleDamageLog(node);
+                normalizeVesselTradeConnector(node);
                 normalizeSplitFragment(node);
                 normalizeSacrificeLog(node);
                 normalizeSwatRaidLog(node);
