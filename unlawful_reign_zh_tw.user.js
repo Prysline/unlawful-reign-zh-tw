@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.6
+// @version      0.4.7
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,14 +20,14 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
-        // v0.4.6：永久解鎖項目、月相、生肖、古物與海洋庇護所的功能說明。
+        // v0.4.6：永久解鎖項目、月相、星座、古物與海洋庇護所的功能說明。
         "Bond with a sea companion that helps you lead the oceans and eventually the world": "與一位海洋夥伴建立羈絆，牠將幫助你統領海洋，最終統領世界",
         "Knowledge you gain is retained by passing it down through the generations and decades": "你獲得的知識會透過代代相傳，在數十年間持續保留下來",
         "Permanently unlock Belt, Shoulders, and Earring equipment slots for future runs": "永久解鎖腰帶、肩部和耳環裝備欄位，供往後的遊玩輪次使用",
         "Raise an ancient sanctuary from the deep, sacrifice Doubloons to empower it, and receive the sea's blessing while sailing": "將一座古老的庇護所從深海升起，獻祭杜布隆金幣以增強它的力量，並在航行時獲得大海的祝福",
         "Restore the Black Market Bounty Board and turn completed contracts into lasting notoriety": "修復黑市懸賞公告欄，並將已完成的契約轉化為持久的惡名",
         "The moon waxes and wanes through eight phases, twisting the city's encounters with light and shadow": "月亮經歷八個月相的盈虧變化，以光與影改變城市中的遭遇",
-        "Twelve zodiac years cycle across time, each twisting your cult in a different way": "十二個生肖年隨時間循環，每一年都以不同方式改變你的邪教",
+        "Twelve zodiac years cycle across time, each twisting your cult in a different way": "十二星座隨著年份輪替，每一年都以不同方式改變你的邪教",
         "Unlock a primordial Monolith whose powers grow the more money you sacrifice to it": "解鎖一座原始巨石碑，你向它獻祭的金錢越多，它的力量就越強",
         "Unseal ancient Artifacts, permanently reveal The Museum upgrade, and preserve completed relics through rebirth": "解除古代古物的封印，永久顯示「博物館」升級項目，並在重生後保留已完成的遺物",
 
@@ -53,7 +53,7 @@
         "The next requirement has been met.": "下一項條件已達成。",
         "Toggle menu": "切換選單",
         "Your cultish talks scare rather than persuade the Shady Stranger": "你帶有邪教色彩的言談沒能說服那名可疑陌生人，反而嚇壞了對方",
-        "Zodiacs": "十二生肖",
+        "Zodiacs": "十二星座",
         "more pacts and be reborn.": "項額外契約並重生。",
 
 
