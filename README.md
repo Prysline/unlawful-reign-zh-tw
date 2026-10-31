@@ -14,7 +14,7 @@
 
 腳本包含 `@updateURL`、`@downloadURL` 與 `@version`。Tampermonkey 將按照其設定檢查遠端版本；當 GitHub 上的版本號較高時，即可取得更新。GitHub 有新的提交，不代表會立即自動安裝。
 
-每次更新使用者腳本時，請將 `@version` 增加，例如從 `0.4.0` 改成 `0.4.1`，並提交此檔案至 `main` 分支。
+每次更新使用者腳本時，請將 `@version` 增加，例如從 `0.4.1` 改成 `0.4.2`，並提交此檔案至 `main` 分支。
 
 此前從聊天附件安裝的腳本，需**首次手動安裝這份 GitHub 版本**，之後才能利用上述更新網址。
 
@@ -30,7 +30,7 @@ Tampermonkey 選單提供：
 
 ## 專案狀態
 
-* 目前版本：`0.4.1`
+* 目前版本：`0.4.2`
 * 版本狀態：測試版，尚未完成全面遊玩驗證。
 * 適用網站：`https://unlawfulreign.netlify.app/`
 * 原有 `@name` 與 `@namespace` 維持不變，盡量延續既有安裝識別與儲存鍵名。
@@ -166,3 +166,13 @@ Tampermonkey 選單提供：
 * 將 `The power of [名稱] seduces a new Follower to join your cult!` 納入既有的完整句／跨節點共用事件機制，對名稱進行詞庫翻譯，保留日期與粗體等原有 DOM 結構。
 * 原文 `vial display` 的詞意不明，保留 `vial` 並在譯文註記「原文異常」，不將其擅自改成另一個英文詞。
 * 本批 20 筆來源：`tests/fixtures/batch_v0401.json`，測試：`tests/test_v0401.cjs`。可執行 `node tests/test_v0401.cjs`。
+
+
+### v0.4.2 補充
+
+* 整合 43 筆待翻譯文字：31 筆固定詞彙／已知句子片段，6 條新動態規則涵蓋藝術經驗、假身分、藝術品仿作數量、攻擊冷卻、撞角傷害及洗錢金額；另擴充 3 條既有規則。
+* 既有避風港船隻生命值規則現支援 `haven` 變體，重新集結倒數也涵蓋 `Reloading`；賭注倍率同時接受 `Amount you gamble` 和 `Amount you can Gamble`。
+* 走私容量、賭博贏回金額及港口走私事件採完整句與跨節點共用規則，保留原始粗體數字、日期及互動元素。
+* 純金額 `-₵5K` 保留原文，不視為應翻譯的文字。
+* `emaculate` 為無法確認的原文用字，保留原詞並標示原文異常，不擅自修正。
+* 原始 43 筆 JSON 存放於 `tests/fixtures/batch_v0402.json`，測試檔為 `tests/test_v0402.cjs`，可執行 `node tests/test_v0402.cjs`。
