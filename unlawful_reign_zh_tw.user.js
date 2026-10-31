@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.10
+// @version      0.4.11
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,9 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.11：尋寶事件的獨立片段，完整句與混合翻譯節點共用規則。
+        "You strike a burried treasure chest, containing": "你挖到一個埋藏的寶箱，裡面有",
+
         // v0.4.10：存檔提示及海軍艦艇交戰片段。
         "Save exported to unlawful_reign_save.txt.": "存檔已匯出至 unlawful_reign_save.txt。",
         "The Navy Ship fires their cannons, dealing": "海軍艦艇開砲，造成",
@@ -997,6 +1000,8 @@
     });
 
     const DYNAMIC = [
+        // v0.4.11：尋寶通知中可能單獨出現的金幣數量片段。
+        [/^(\+?\d+(?:[.,]\d+)?)\s+Doubloons and$/i, m => m[1] + ' 枚杜布隆金幣及'],
         // v0.4.10：重新適應所需天數，保留可變數值。
         [/^Takes\s+(\d+)\s+days?\s+to readjust$/i, m => '需要 ' + m[1] + ' 天重新適應'],
         // v0.4.9：百分比加成及活動結束倒數。
@@ -1303,6 +1308,25 @@
 
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
+        {
+            // v0.4.11：同時涵蓋整句、原始跨節點文字及珠寶數值先被獨立翻譯的混合句。
+            // 原始拼字 burried 不更改，以維持遊戲事件比對。
+            pattern:/^(?:You strike a burried treasure chest, containing|你挖到一個埋藏的寶箱，裡面有)\s+(\+?\d+(?:[.,]\d+)?)\s+(?:Doubloons and|枚杜布隆金幣及)\s+(\+(?:\d+(?:[.,]\d+)?\s+Stolen Jewels|偷來的珠寶：\d+(?:[.,]\d+)?))!$/i,
+            render:m=>'你挖到一個埋藏的寶箱，裡面有 '+m[1]+' 枚杜布隆金幣及 '+(m[2].includes('偷來的珠寶：')? '+'+m[2].split('：')[1]:m[2].replace(/\s+Stolen Jewels$/i,''))+' 件偷來的珠寶！',
+            terms:m=>{
+                const edits=[];
+                if(/^You strike/i.test(m[0]))edits.push([/^You strike a burried treasure chest, containing\s+/i,'你挖到一個埋藏的寶箱，裡面有 ']);
+                if(/Doubloons and/i.test(m[0]))edits.push([/\s+Doubloons and\s+/i,' 枚杜布隆金幣及 ']);
+                if(/偷來的珠寶：/.test(m[0])) {
+                    edits.push([/偷來的珠寶：/,'']);
+                    edits.push([/!$/,' 件偷來的珠寶！']);
+                } else {
+                    edits.push([/\s+Stolen Jewels(?=!$)/i,' 件偷來的珠寶']);
+                    edits.push([/!$/,'！']);
+                }
+                return edits;
+            }
+        },
         {
             // 數值若位於粗體節點，保留原有 DOM 與百分比。
             pattern:/^([+-]\d+(?:[.,]\d+)?)%\s+(Mugging, Robbery, and Casino Robbery Money|Pickpocket and Shoplift Money|Research Speed|Sell Prices|Global Money)$/i,
@@ -1687,7 +1711,7 @@
 
     // 小範圍跨節點文字片段：只合併整個元素恰好符合已知句子片段的情況。
     // 不處理包含粗體、互動控制或圖示的元素，避免破壞數值及原始顯示格式。
-    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to|Your crew regroups and reloads, ready to reboard the enemy ship!|You finish replicating a masterpiece\.\.\.|You take your time to forge emaculate fake documents\.\.\.|You stage a vial display of what you and your crew are capable of\.\.\.|The power of|more pacts? and be reborn\.|seduces a new Follower to join your cult!|You load|You offer|The Navy Ship rams against your ship, dealing|and in return an Undead Minion is promised to work for you|\d+(?:[.,]\d+)?\s+Cannonballs?\s+onto your ship for|\d+(?:[.,]\d+)?\s+(?:Pistols|Submachine Guns)\s+for)$/i;
+    const SPLIT_FRAGMENT = /^(?:You strike a burried treasure chest, containing|\+?\d+(?:[.,]\d+)?\s+Doubloons and|['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to|Your crew regroups and reloads, ready to reboard the enemy ship!|You finish replicating a masterpiece\.\.\.|You take your time to forge emaculate fake documents\.\.\.|You stage a vial display of what you and your crew are capable of\.\.\.|The power of|more pacts? and be reborn\.|seduces a new Follower to join your cult!|You load|You offer|The Navy Ship rams against your ship, dealing|and in return an Undead Minion is promised to work for you|\d+(?:[.,]\d+)?\s+Cannonballs?\s+onto your ship for|\d+(?:[.,]\d+)?\s+(?:Pistols|Submachine Guns)\s+for)$/i;
     function normalizeSplitFragment(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         if (element.querySelector('button, a, input, textarea, select, strong, b, em, i, svg, [contenteditable]')) return false;
@@ -1822,7 +1846,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
+        if(full.length>400 || !/(?:You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
