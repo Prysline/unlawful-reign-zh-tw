@@ -73,7 +73,7 @@ const expected={
   "Toggle menu": "切換選單",
   "Your cultish talks scare rather than persuade the Shady Stranger": "你帶有邪教色彩的言談沒能說服那名可疑陌生人，反而嚇壞了對方",
   "Your researches have finished researching 'Initial Hire'!": "你的研究已完成「初次雇用」項目的研究！",
-  "Zodiacs": "十二生肖",
+  "Zodiacs": "十二星座",
   "more pacts and be reborn.": "項額外契約並重生。"
 };
 assert.equal(Object.keys(batch).length,27);
