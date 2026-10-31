@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.11
+// @version      0.4.12
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -1908,6 +1908,146 @@
         }
     }
 
+
+    // v0.4.12：在翻譯之前保存原始文字節點。rendered 是腳本最後寫出的值，
+    // 可用來區分遊戲更改了文字，還是腳本剛把原文改成中文。
+    const sourceTextNodes = new WeakMap();
+    const untranslatedContexts = getObject('ur_zh_tw_contexts');
+    const MAX_CONTEXTS = 800;
+    const MAX_CONTEXT_LENGTH = 600;
+    const LOG_DATE_PREFIX = /^\s*(?:\[D\d+\s+Y\d+\]|［第\s*\d+\s*天\s*／\s*第\s*\d+\s*年］)\s*[:：]?\s*/u;
+    const LOG_DATE_OCCURRENCE = /(?:\[D\d+\s+Y\d+\]|［第\s*\d+\s*天\s*／\s*第\s*\d+\s*年］)/gu;
+    const UNSAFE_CONTEXT_CHILDREN = 'button, a, input, textarea, select, svg, [contenteditable]';
+    function forEachSourceText(root, callback, limit = 5000) {
+        if (!root) return;
+        if (root.nodeType === Node.TEXT_NODE) {
+            if (!skipElement(root.parentElement) && !usesIconFont(root.parentElement)) callback(root);
+            return;
+        }
+        if (root.nodeType !== Node.ELEMENT_NODE && root.nodeType !== Node.DOCUMENT_NODE) return;
+        if (root.nodeType === Node.ELEMENT_NODE && skipElement(root)) return;
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        let node, count = 0;
+        while ((node = walker.nextNode()) && count++ < limit) {
+            if (!skipElement(node.parentElement) && !usesIconFont(node.parentElement)) callback(node);
+        }
+    }
+    function snapshotOriginalText(root) {
+        forEachSourceText(root, node => {
+            const actual = node.nodeValue || '';
+            const saved = sourceTextNodes.get(node);
+            if (!saved) sourceTextNodes.set(node, {original: actual, rendered: actual});
+            else if (actual !== saved.rendered) {
+                saved.original = actual;
+                saved.rendered = actual;
+            }
+        });
+    }
+    function markRenderedText(root) {
+        forEachSourceText(root, node => {
+            const saved = sourceTextNodes.get(node);
+            if (saved) saved.rendered = node.nodeValue || '';
+        });
+    }
+    function originalFragments(element) {
+        if (element.querySelector(UNSAFE_CONTEXT_CHILDREN)) return null;
+        const fragments = [];
+        let length = 0;
+        let invalid = false;
+        forEachSourceText(element, node => {
+            const value = sourceTextNodes.get(node)?.original ?? node.nodeValue ?? '';
+            length += value.length;
+            if (length > MAX_CONTEXT_LENGTH || fragments.length >= 32) invalid = true;
+            if (!invalid) fragments.push(value);
+        }, 36);
+        return invalid || fragments.length < 2 ? null : fragments;
+    }
+    // 不執行翻譯的 render()，以免在收集階段意外修改待翻譯清單。
+    function isUntranslatedSource(value) {
+        const text = value.trim();
+        if (text.length < 2 || !/[A-Za-z]/.test(text)) return false;
+        if (NONTRANSLATABLE.some(re => re.test(text))) return false;
+        if (translatedBuiltin.has(text) || translatedCustom.has(text)) return false;
+        if (Object.hasOwn ? Object.hasOwn(custom, text) : Object.prototype.hasOwnProperty.call(custom, text)) return false;
+        if (Object.prototype.hasOwnProperty.call(BUILTIN, text)) return false;
+        if (COMPOSITE_EVENT_RULES.some(item => item.pattern.test(text))) return false;
+        if (DYNAMIC.some(([re]) => re.test(text))) return false;
+        const label = text.match(/^([^:：]+)[:：]$/u);
+        if (label && !isUntranslatedSource(label[1])) return false;
+        return true;
+    }
+    function findContextForNode(node) {
+        let element = node.parentElement, fallback = null;
+        for (let depth = 0; element && depth < 8 && element !== document.body; depth++, element = element.parentElement) {
+            if (skipElement(element)) break;
+            const fragments = originalFragments(element);
+            if (!fragments) continue;
+            const full = fragments.join('');
+            const dates = full.match(LOG_DATE_OCCURRENCE) || [];
+            if (LOG_DATE_PREFIX.test(full) && dates.length === 1) {
+                const prefix = full.match(LOG_DATE_PREFIX)[0];
+                const content = full.slice(prefix.length).trim();
+                if (content) return {fragments, fullText: content, datePrefix: prefix.trim(), complete: /[.!?。！？]\s*$/u.test(content)};
+            }
+            // 沒有可確定的事件標記時，只當作上下文片段，不能冒充完整句。
+            if (!fallback && full.length <= 320 && !dates.length && /[A-Za-z]/.test(full)) {
+                fallback = {fragments, fullText: full.trim(), complete: false};
+            }
+        }
+        return fallback;
+    }
+    function contextKey(fullText) {
+        return fullText.toLowerCase().replace(/[+-]?\d[\d,.]*(?:[KMBT])?/gi, '#').replace(/\s+/g, ' ').trim();
+    }
+    function recordEventContext(context) {
+        if (!context || !context.fullText || context.fullText.length > MAX_CONTEXT_LENGTH) return false;
+        const key = contextKey(context.fullText);
+        const existing = untranslatedContexts[key];
+        if (existing) {
+            // 同一種動態事件只保留一筆範例，允許不完整的快照更新為完整句。
+            if (existing.complete || !context.complete && context.fullText.length <= existing.fullText.length) return false;
+        } else if (Object.keys(untranslatedContexts).length >= MAX_CONTEXTS) return false;
+        // 如果遊戲逐步填入同一段訊息，較長的新紀錄可取代先前的殘句。
+        for (const [oldKey, old] of Object.entries(untranslatedContexts)) {
+            if (oldKey !== key && !old.complete && context.fullText.startsWith(old.fullText)
+                && context.fullText.length > old.fullText.length) delete untranslatedContexts[oldKey];
+        }
+        untranslatedContexts[key] = context;
+        return true;
+    }
+    function collectOriginalContexts(root) {
+        let dirty = false;
+        const seen = new Set();
+        forEachSourceText(root, node => {
+            const source = sourceTextNodes.get(node)?.original ?? node.nodeValue ?? '';
+            if (!isUntranslatedSource(source)) return;
+            const info = findContextForNode(node);
+            if (!info || seen.has(info.fullText)) return;
+            seen.add(info.fullText);
+            if (recordEventContext(info)) dirty = true;
+        });
+        if (dirty) GM_setValue('ur_zh_tw_contexts', untranslatedContexts);
+    }
+    function sourceCaptureScope(root) {
+        if (!root || root === document.body) return root;
+        let element = root.nodeType === Node.TEXT_NODE ? root.parentElement : root;
+        if (!element || element.nodeType !== Node.ELEMENT_NODE) return root;
+        let scope = element;
+        for (let depth = 0; depth < 7 && scope.parentElement && scope.parentElement !== document.body; depth++) {
+            const parent = scope.parentElement;
+            if ((parent.textContent || '').length > MAX_CONTEXT_LENGTH || skipElement(parent)) break;
+            scope = parent;
+        }
+        return scope;
+    }
+    function scanWithOriginalCapture(root) {
+        const scope = sourceCaptureScope(root);
+        snapshotOriginalText(scope);
+        collectOriginalContexts(scope);
+        scan(root);
+        markRenderedText(scope);
+    }
+
     function scan(root) {
         if (!root) return;
         if (root.nodeType === Node.TEXT_NODE) {
@@ -1960,7 +2100,13 @@
             translationScheduled = false;
             const nodes = Array.from(pending);
             pending.clear();
-            for (const item of nodes) scan(item);
+            // 翻譯本身也會改寫文字節點；暫停監看以免將中文當成新原文。
+            observer.disconnect();
+            try {
+                for (const item of nodes) scanWithOriginalCapture(item);
+            } finally {
+                observer.observe(document.body, OBSERVER_OPTIONS);
+            }
         });
     }
 
@@ -1978,11 +2124,17 @@
 
     function exportUntranslated() {
         // 只匯出還未經自訂或內建字典翻譯的字串。
-        const data = Object.fromEntries(
+        const translations = Object.fromEntries(
             Object.keys(unseen).filter(key => lookup(key) === null).sort().map(key => [key, ''])
         );
-        downloadJson('Unlawful_Reign_待翻譯文字.json', data);
-        alert(`已匯出 ${Object.keys(data).length} 條尚未翻譯的文字。\n填入對應的繁體中文後，可以透過「匯入中文化詞庫」載入。`);
+        const contexts = Object.values(untranslatedContexts).filter(ctx =>
+            ctx && typeof ctx.fullText === 'string' && Array.isArray(ctx.fragments)
+            && (ctx.fragments.some(isUntranslatedSource)
+                || isUntranslatedSource(ctx.fullText))
+        ).sort((a, b) => a.fullText.localeCompare(b.fullText));
+        downloadJson('Unlawful_Reign_待翻譯文字.json', {translations, contexts});
+        alert('已匯出 ' + Object.keys(translations).length + ' 條待翻譯片段、'
+            + contexts.length + ' 筆完整句或上下文範例。');
     }
 
     function importTranslations() {
@@ -2030,6 +2182,13 @@
 
     window.addEventListener('pagehide', saveUntranslatedNow);
 
+    const OBSERVER_OPTIONS = {
+        childList: true,
+        subtree: true,
+        characterData: true,
+        attributes: true,
+        attributeFilter: ['title', 'placeholder', 'aria-label', 'alt', 'value']
+    };
     const observer = new MutationObserver(mutations => {
         for (const change of mutations) {
             if (change.type === 'characterData') {
@@ -2044,14 +2203,8 @@
 
     function start() {
         if (!document.body) return;
-        scan(document.body);
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true,
-            characterData: true,
-            attributes: true,
-            attributeFilter: ['title', 'placeholder', 'aria-label', 'alt', 'value']
-        });
+        scanWithOriginalCapture(document.body);
+        observer.observe(document.body, OBSERVER_OPTIONS);
     }
 
     if (document.body) start();
