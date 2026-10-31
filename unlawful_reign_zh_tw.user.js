@@ -1021,7 +1021,7 @@
         [/^([+-]\d+)\s+Sinner penalty when Sacrificing$/i, m => `獻祭時的罪人懲罰：${m[1]}`],
         [/^([+-]?\d+(?:[.,]\d+)*)\s+Souls$/i, m => `靈魂：${m[1]}`],
         [/^(\d+(?:[.,]\d+)?)%\s+chance of getting busted$/i, m => `被逮捕的機率：${m[1]}%`],
-        [/^(Activate|Deactivate|Activates|Deactivates)\s+(\d+|all)\s+(Altar|Cultist Training Ground|Blood Pool|Shrine)$/i, m => `${m[1].toLowerCase().startsWith("activate") ? "啟用" : "停用"}${m[2].toLowerCase() === "all" ? "全部" : ` ${m[2]} 座`}${({altar: "祭壇", "cultist training ground": "邪教徒訓練場", "blood pool": "血池", shrine: "神龕"})[m[3].toLowerCase()]}`],
+        [/^(Activate|Deactivate|Activates|Deactivates)\s+(\d+|all)\s+(Altars?|Cultist Training Grounds?|Blood Pools?|Shrines?)$/i, m => `${m[1].toLowerCase().startsWith("activate") ? "啟用" : "停用"}${m[2].toLowerCase() === "all" ? "全部" : ` ${m[2]} 座`}${({altar: "祭壇", "cultist training ground": "邪教徒訓練場", "blood pool": "血池", shrine: "神龕"})[m[3].toLowerCase().replace(/s$/, '')]}`],
         [/^Heist\s*\(\s*(\d+(?:[.,]\d+)?)\s*%\s*\)$/i, m => `劫案（${m[1]}%）`],
         [/^Plan Heist\s*\(\s*(\d+)\s*\/\s*(\d+)\s*\)$/i, m => `策劃劫案（${m[1]}/${m[2]}）`],
         [/^Sinner:\s*([+-]?\d+(?:[.,]\d+)?)$/i, m => `罪人：${m[1]}`],
