@@ -143,6 +143,25 @@ for(const [prefix,n,suffix,desired] of [
     assert.equal(bold.textContent,n,'應保留原始數字粗體');
     assert.equal(normalizeCompositeEvent(root),false,'不可重複處理');
 }
+// 寵物升級通知的粗體等級不得被移除。
+const petLevel=new Elem();
+text(petLevel,'Dog reached level ');
+const petLevelBold=element(petLevel,'strong');text(petLevelBold,'2');
+text(petLevel,'!');
+assert.equal(normalizeCompositeEvent(petLevel),true);
+assert.equal(petLevel.textContent,'狗升至等級 2！');
+assert.equal(petLevelBold.textContent,'2');
+assert.equal(normalizeCompositeEvent(petLevel),false);
+
+// 經驗值進度可能在數字中間被分為多個 DOM 節點。
+const expProgress=new Elem();
+text(expProgress,'16/');
+const expBold=element(expProgress,'strong');text(expBold,'45');
+text(expProgress,' EXP');
+assert.equal(normalizeCompositeEvent(expProgress),true);
+assert.equal(expProgress.textContent,'16/45 經驗值');
+assert.equal(expBold.textContent,'45');
+assert.equal(normalizeCompositeEvent(expProgress),false);
 const fragment=new Elem();
 text(fragment,'more ');
 const fragmentTail=element(fragment,'span');text(fragmentTail,'pact and be reborn.');
