@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.0
+// @version      0.4.1
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -831,11 +831,34 @@
         "Study Art": "研究藝術",
         "You and your crew plunder the feeble passenger boat, earning you": "你與船員掠奪了那艘不堪一擊的客船，獲得",
         "You take your time studying every brush stroke and detail": "你仔細研究每一道筆觸與細節",
+        // v0.4.1：追隨者、邪教、鑰匙與能力事件固定譯文。
+        // 原文異常：vial display 可能為筆誤，未確認，不自行替換成 vile。
+        "Follower": "追隨者",
+        "Followers": "追隨者",
+        "Cult Follower": "邪教追隨者",
+        "Follower Buffs": "追隨者增益效果",
+        "Gang Members provide passive notoriety": "幫派成員被動提供惡名",
+        "Gang Signs": "幫派標誌",
+        "Guru's Gaze": "導師的凝視",
+        "Heathen Seduction": "異教徒誘惑",
+        "Indoctrinate Shady Strangers into your Cult": "向可疑的陌生人灌輸教義，使他們加入你的邪教",
+        "Jeweled Key": "鑲寶石的鑰匙",
+        "Jewelry Chest": "珠寶箱",
+        "Next Milestone at": "下一個里程碑在",
+        "Respectably Notorious": "頗有惡名",
+        "The power of": "……的力量",
+        "You stage a vial display of what you and your crew are capable of...": "你上演了一場「vial（小瓶）」展示，展現你與船員的能耐……（原文異常）",
+        "seduces a new Follower to join your cult!": "誘惑一名新追隨者加入你的邪教！",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.4.1：追隨者與藝術品仿製速度的可變數值。
+        [/^\+\s*(\?+)\s*\(\s*Unlocked at\s+(\d+(?:[.,]\d+)?)\s+Followers?\s*\)$/i, m => '＋' + m[1] + '（達到 ' + m[2] + ' 名追隨者時解鎖）'],
+        [/^\+\s*Replicate Artwork Speed\s+([+-]\d+(?:[.,]\d+)?)\s*\(\s*([+-]\d+(?:[.,]\d+)?)\s+Per Lvl\s*\)$/i, m => '＋藝術品仿製速度 ' + m[1] + '（每級 ' + m[2] + '）'],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+(Cult\s+)?Followers?$/i, m => (m[2] ? '邪教追隨者：' : '追隨者：') + m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Souls from Sacrifices$/i, m => '獻祭獲得的靈魂：' + m[1] + '%'],
         // v0.4.0：美術館劫案、原作藝術品、條件加成、選擇數與重新集結倒數。
         [/^([+-]\d+(?:[.,]\d+)?)\s+Art Gallery Heist (Plan )?Speed$/i, m => '美術館劫案' + (m[2] ? '策劃' : '') + '速度：' + m[1]],
         [/^([+-]\d+(?:[.,]\d+)?)\s+Navy Ship Attack Cooldown$/i, m => '海軍艦艇攻擊冷卻時間：' + m[1]],
@@ -1130,7 +1153,13 @@
             pattern:/^You continue planning intricate heist strategies\.\.\.\s*\(\s*(\d+)\s*\/\s*(\d+)\s*\)$/i,
             render:m=>'你持續規劃精密的劫案策略……（'+m[1]+'/'+m[2]+'）',
             terms:()=>[[/You continue planning intricate heist strategies\.\.\.\s*\(/i,'你持續規劃精密的劫案策略……（'],[/\)/,'）']]
-        }
+        },
+        {
+            // 可能由不同 DOM 節點構成，中央的名稱或能力保持原節點與格式。
+            pattern:/^The power of\s+(.{1,100}?)\s+seduces a new Follower to join your cult!$/i,
+            render:m=>'「' + translateItemName(m[1]) + '」的力量吸引了一名新追隨者加入你的邪教！',
+            terms:()=>[[/The power of\s+/i,'「'],[/\s+seduces a new Follower to join your cult!$/i,'」的力量吸引了一名新追隨者加入你的邪教！']]
+        },
     ];
 
     const NONTRANSLATABLE = [
@@ -1410,7 +1439,7 @@
 
     // 小範圍跨節點文字片段：只合併整個元素恰好符合已知句子片段的情況。
     // 不處理包含粗體、互動控制或圖示的元素，避免破壞數值及原始顯示格式。
-    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to|Your crew regroups and reloads, ready to reboard the enemy ship!|You load|You offer|The Navy Ship rams against your ship, dealing|and in return an Undead Minion is promised to work for you|\d+(?:[.,]\d+)?\s+Cannonballs?\s+onto your ship for|\d+(?:[.,]\d+)?\s+(?:Pistols|Submachine Guns)\s+for)$/i;
+    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to|Your crew regroups and reloads, ready to reboard the enemy ship!|You stage a vial display of what you and your crew are capable of\.\.\.|The power of|seduces a new Follower to join your cult!|You load|You offer|The Navy Ship rams against your ship, dealing|and in return an Undead Minion is promised to work for you|\d+(?:[.,]\d+)?\s+Cannonballs?\s+onto your ship for|\d+(?:[.,]\d+)?\s+(?:Pistols|Submachine Guns)\s+for)$/i;
     function normalizeSplitFragment(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         if (element.querySelector('button, a, input, textarea, select, strong, b, em, i, svg, [contenteditable]')) return false;
@@ -1545,7 +1574,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies)/i.test(full)) return false;
+        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of)/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
