@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.14
+// @version      0.4.15
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,15 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.15：航海建築、寵物介面與幫派名稱。
+        "Blackwater Market": "黑水市場",
+        "Coinmaster's Den": "錢幣大師的巢穴",
+        "Costs Doubloons Daily": "每日消耗杜布隆金幣",
+        "Expand": "擴建",
+        "Increases Doubloons Gain": "增加杜布隆金幣收益",
+        "Increases Money Gain": "增加金錢收益",
+        "Owned Pets": "已擁有的寵物",
+        "The Crimson Ravagers": "緋紅掠奪者",
         // v0.4.14：野生動物交易中的爬行類動物。
         "Komodo Dragon": "科莫多巨蜥",
         "Python": "蟒蛇",
@@ -1005,6 +1014,15 @@
     });
 
     const DYNAMIC = [
+        // v0.4.15：以建築名稱共用數值、每日消耗與收益加成格式。
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+(Doubloons|Money)$/i, m => (m[2].toLowerCase()==='doubloons'?'杜布隆金幣':'金錢')+'加成：'+m[1]+'%'],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+(Blackwater Market|Coinmaster's Den)$/i, m => translateItemName(m[2])+'：'+m[1]],
+        [/^\(\s*([+-]\d+(?:[.,]\d+)?)%\s+(Doubloons|Money)\s*\/\s*(Blackwater Market|Coinmaster's Den)\s*\)$/i, m => '（每座'+translateItemName(m[3])+'的'+(m[2].toLowerCase()==='doubloons'?'杜布隆金幣':'金錢')+'收益：'+m[1]+'%）'],
+        [/^\(\s*([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Doubloons\s+per\s+day\s*\/\s*(Blackwater Market|Coinmaster's Den)\s*\)$/i, m => '（每座'+translateItemName(m[2])+'每天的杜布隆金幣變動：'+m[1]+'）'],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Doubloons\s+per\s+day$/i, m => '每天的杜布隆金幣變動：'+m[1]],
+        [/^Readjusting\s*\(\s*(\d+)\s+Days?\s+Left\s*\)$/i, m => '重新適應中（剩餘 '+m[1]+' 天）'],
+        [/^([A-Za-z][A-Za-z' -]{0,64})升至等級\s*(\d+)！$/u, m => translateItemName(m[1].trim())+'升至等級 '+m[2]+'！'],
+        [/^You purchase the exotic pet\s+'([^']{1,80})'\s+for$/i, m => '你購買了異國寵物「'+translateItemName(m[1])+'」，花費'],
         // v0.4.14：使用動態百分比翻譯假身分與塗鴉／可疑交談加成。
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Fake Identity Speed and conservation$/i, m => m[1] + '% 假身分建立速度與保留機率'],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Graffiti and Shady Stranger Talk Notoriety$/i, m => m[1] + '% 塗鴉及與可疑陌生人交談獲得的惡名'],
@@ -1133,7 +1151,7 @@
         [/^([+-]\d+(?:[.,]\d+)?)%\s+during Foggy Weather$/i, m => `起霧天氣時：${m[1]}%`],
         [/^([+-]\d+(?:[.,]\d+)?)\s+Ship HP per day while docked at (?:the )?(?:Safe Haven|haven)$/i, m => `停靠在避風港時，每日船隻生命值 ${m[1]}`],
         [/^([+-]?\d+(?:[.,]\d+)?)\s+Doubloons?$/i, m => `${/^[+-]/.test(m[1]) ? '杜布隆金幣：' + m[1] : m[1] + ' 枚杜布隆金幣'}`],
-        [/^([+-]?\d+(?:[.,]\d+)?)\s+Supplies$/i, m => `${/^[+-]/.test(m[1]) ? '補給品：' + m[1] : m[1] + ' 份補給品'}`],
+        [/^([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Supplies$/i, m => `${/^[+-]/.test(m[1]) ? '補給品：' + m[1] : m[1] + ' 份補給品'}`],
         [/^([+-]\d+(?:[.,]\d+)?)\s+Fake Identity\s*\(\s*(\d+(?:[.,]\d+)?)% Chance not Used\s*\)$/i, m => `假身分：${m[1]}（${m[2]}% 機率不消耗）`],
         [/^(\d+(?:[.,]\d+)?)%\s+chance of escaping the Navy Ship$/i, m => `逃離海軍艦艇的機率：${m[1]}%`],
         [/^(\d+(?:[.,]\d+)?)%\s+Chance of finding (\d+(?:[.,]\d+)?) to (\d+(?:[.,]\d+)?) Supplies per Day while Sailing$/i, m => `航行時每天有 ${m[1]}% 機率找到 ${m[2]} 至 ${m[3]} 份補給品`],
@@ -1224,7 +1242,7 @@
         [/^([+-]\d+) Stolen Jewels? from Raid Grave$/i, m => `盜墓獲得的贓珠寶：${m[1]}`],
         [/^([+-]\d+) Stolen Jewels? from Jewelry Store Heists?$/i, m => `珠寶店劫案獲得的贓珠寶：${m[1]}`],
         [/^([+-]\d+(?:[.,]\d+)?) Not\. per day$/i, m => `每天的惡名：${m[1]}`],
-        [/^(\d+)\/(\d+) HP$/i, m => `生命值：${m[1]}/${m[2]}`],
+        [/^(\d+(?:[.,]\d+)?[KMBT]?)\s*\/\s*(\d+(?:[.,]\d+)?[KMBT]?)\s+HP$/i, m => `生命值：${m[1]}/${m[2]}`],
         [/^(\d+) Days?$/i, m => `${m[1]} 天`],
         [/^A SWAT Team will try raid you if your criminality is at least (\d+)$/i, m => `如果你的犯罪程度至少為 ${m[1]}，特警隊將嘗試突襲你`],
         [/^Dry, slowing down growth by (\d+(?:[.,]\d+)?)%$/i, m => `乾燥，使生長速度減慢 ${m[1]}%`],
@@ -1323,6 +1341,16 @@
 
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
+        {
+            // v0.4.15：寵物購買通知兼容完整句與拆分的名稱、負號和價格。
+            pattern:/^You purchase the exotic pet\s+'([^']{1,80})'\s+for\s+([+-]?\$[\d,.]+[KMBT]?)\.?$/i,
+            render:m=>'你購買了異國寵物「'+translateItemName(m[1])+'」，花費 '+m[2],
+            terms:m=>[
+                [/^You purchase the exotic pet\s+'/i,'你購買了異國寵物「'],
+                [/^[^']+(?='\s+for\s+)/i,translateItemName(m[1])],
+                [/^'\s+for\s+/i,'」，花費 ']
+            ]
+        },
         {
             // v0.4.11：同時涵蓋整句、原始跨節點文字及珠寶數值先被獨立翻譯的混合句。
             // 原始拼字 burried 不更改，以維持遊戲事件比對。
@@ -1448,6 +1476,8 @@
     ];
 
     const NONTRANSLATABLE = [
+        // v0.4.15：已中文化的經驗值數字仍含 K/M/B/T，不能重新列為未翻譯英文。
+        /^\d+(?:[.,]\d+)?[KMBT]?\s*\/\s*\d+(?:[.,]\d+)?[KMBT]?\s+經驗值$/iu,
         /^\$\d+(?:[.,]\d+)?[KMBT]?\s*\/\s*\$\d+(?:[.,]\d+)?[KMBT]?$/i, // 純金額進度，保留數值與單位，無需翻譯
         /^[+-]?₵\d+(?:[.,]\d+)?[KMBT]?$/i, // 純金額值，不翻譯或當成待翻譯詞彙
         /^杜布隆金幣：[+-]?\d+(?:[.,]\d+)?[KMBT]$/i, // 已翻譯的金幣縮寫
@@ -1861,7 +1891,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
+        if(full.length>400 || !/(?:You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
