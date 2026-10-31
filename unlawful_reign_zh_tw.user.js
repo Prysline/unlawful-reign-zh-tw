@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.4
+// @version      0.4.5
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,31 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.5：威望重置、寵物、航海、邪教與存檔介面。
+        "Artifacts": "古物",
+        "Bounty Boards": "懸賞公告欄",
+        "Change your mind": "改變主意",
+        "Deal with the Devil": "與魔鬼交易",
+        "First Client": "第一位客戶",
+        "Ignoble Garb": "卑賤的裝束",
+        "Invalid save format.": "存檔格式無效。",
+        "Monolith": "巨石碑",
+        "Moon Phases": "月相",
+        "Pets": "寵物",
+        "Prestiges the player.": "使玩家進行威望重置。",
+        "Raise a loyal companion, train it over time, and discover rare exotic pet sales in the Black Market": "培養一名忠誠的夥伴，隨著時間訓練牠，並在黑市發現稀有異國寵物的販售機會",
+        "Retain EXP": "保留經驗值",
+        "SACRIFICE PROGRESS FOR POWER": "犧牲進度以換取力量",
+        "Save imported successfully.": "存檔匯入成功。",
+        "Sea Pets": "海洋寵物",
+        "Sea Sanctuary": "海洋庇護所",
+        "Spend": "花費",
+        "The next requirement has been met.": "下一項條件已達成。",
+        "Toggle menu": "切換選單",
+        "Your cultish talks scare rather than persuade the Shady Stranger": "你帶有邪教色彩的言談沒能說服那名可疑陌生人，反而嚇壞了對方",
+        "Zodiacs": "十二星座",
+        "more pacts and be reborn.": "項額外契約並重生。",
+
 
     // 2026-10-30：依照第二批玩家匯出的文字補充。
         "+10% chance to get Stolen Goods when Shoplifting": "商店行竊時獲得贓物的機率增加 10%",
@@ -924,6 +949,10 @@
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.4.5：員工數量、契約數量與研究完成通知。
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Employees?$/i, m => '員工：' + m[1]],
+        [/^Select\s+(\d+)\s+more pacts(?:\s+and be reborn\.)?$/i, m => '再選擇 ' + m[1] + ' 項契約' + (/and be reborn\.$/i.test(m[0]) ? '並重生。' : '')],
+        [/^Your researches have finished researching\s+(['"])([^'"]{1,100})\1!$/i, m => '你的研究已完成「' + translateItemName(m[2]) + '」項目的研究！'],
         // v0.4.3：公司研究、員工、原作、邪教與稅率的變動格式。
         [/^\(\s*([+-]\d+(?:[.,]\d+)?)\s+R\.P\.?\s*\/\s*Employee\s*\)$/i, m => '（' + m[1] + ' 研究點數／員工）'],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Money Rewards for every\s+(\d+(?:[.,]\d+)?)\s+Notoriety\s*\(Max\s+(\d+(?:[.,]\d+)?)%\)$/i, m => '每 ' + m[2] + ' 點惡名，金錢獎勵加成 ' + m[1] + '%（最高 ' + m[3] + '%）'],
@@ -961,7 +990,7 @@
         [/^(Regrouping|Reloading)\s*\(\s*(\d+)\s+Days?\s+Left\s*\)$/i, m => (m[1].toLowerCase()==='reloading'?'重新裝填中（剩餘 ':'重新集結中（剩餘 ') + m[2] + ' 天）'],
         [/^x(\d+(?:[.,]\d+)?)\s+Money from raiding graves$/i, m => '盜墓獲得的金錢 ×' + m[1]],
         // v0.3.24：技能加成與獻祭的可變數值。
-        [/^\+\s*(Gambling|Graffiti|Shoplift|Store Robberies)\s+boosted by\s*([+-]\d+(?:[.,]\d+)?)%\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s*Per Lvl\s*\)$/i, m => '＋' + ({gambling:'賭博',graffiti:'塗鴉',shoplift:'商店行竊','store robberies':'商店搶劫'})[m[1].toLowerCase()] + '加成 ' + m[2] + '%（每級 ' + m[3] + '%）'],
+        [/^\+\s*(Gambling|Graffiti|Shoplift|Store Robberies|Casino Robberies)\s+boosted by\s*([+-]\d+(?:[.,]\d+)?)%\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s*Per Lvl\s*\)$/i, m => '＋' + ({gambling:'賭博',graffiti:'塗鴉',shoplift:'商店行竊','store robberies':'商店搶劫','casino robberies':'賭場搶劫'})[m[1].toLowerCase()] + '加成 ' + m[2] + '%（每級 ' + m[3] + '%）'],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Combo to Money while staying a criminal$/i, m => '維持罪犯狀態時的金錢連續加成：' + m[1] + '%'],
         [/^(\d+(?:[.,]\d+)?)\s+Cannonballs?\s+onto your ship for$/i, m => m[1] + ' 發砲彈到你的船上，花費'],
         [/^(\d+(?:[.,]\d+)?)\s+(Pistols|Submachine Guns)\s+for$/i, m => m[1] + ' 把' + translateItemName(m[2]) + '以換取'],
@@ -1214,6 +1243,18 @@
 
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
+        {
+            // 契約數可能在強調節點中，維持數字與原節點不變。
+            pattern:/^Select\s+(\d+)\s+more pacts and be reborn\.$/i,
+            render:m=>'再選擇 ' + m[1] + ' 項契約並重生。',
+            terms:()=>[[/^Select\s+/i,'再選擇 '],[/\s+more pacts and be reborn\.$/i,' 項契約並重生。']]
+        },
+        {
+            // 研究名稱可能跨文字節點，保留名稱所在標記。
+            pattern:/^Your researches have finished researching\s+(['"])([^'"]{1,100})\1!$/i,
+            render:m=>'你的研究已完成「' + translateItemName(m[2]) + '」項目的研究！',
+            terms:m=>[[/^Your researches have finished researching\s+['"]/i,'你的研究已完成「'],[/^[^'"]{1,100}(?=['"]!$)/i,translateItemName(m[2])],[/['"]!$/i,'」項目的研究！']]
+        },
         {
             pattern:/^You load\s+(\d+(?:[.,]\d+)?)\s+Cannonballs?\s+onto your ship for\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Doubloons?$/i,
             render:m=>'你裝載 '+m[1]+' 發砲彈到你的船上，花費 '+m[2]+' 枚杜布隆金幣',
@@ -1555,7 +1596,7 @@
 
     // 小範圍跨節點文字片段：只合併整個元素恰好符合已知句子片段的情況。
     // 不處理包含粗體、互動控制或圖示的元素，避免破壞數值及原始顯示格式。
-    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to|Your crew regroups and reloads, ready to reboard the enemy ship!|You finish replicating a masterpiece\.\.\.|You take your time to forge emaculate fake documents\.\.\.|You stage a vial display of what you and your crew are capable of\.\.\.|The power of|seduces a new Follower to join your cult!|You load|You offer|The Navy Ship rams against your ship, dealing|and in return an Undead Minion is promised to work for you|\d+(?:[.,]\d+)?\s+Cannonballs?\s+onto your ship for|\d+(?:[.,]\d+)?\s+(?:Pistols|Submachine Guns)\s+for)$/i;
+    const SPLIT_FRAGMENT = /^(?:['"][^'"]+['"]\s+deal|to your gang|to erase some of this world's memories of your criminal misdoings|You gamble and win!|You undermine the cop's actions, earning you|Build the|Establish(?: the)?|day remaining|You trade with the vessel, selling|Waters plants in|Resets to|Your crew regroups and reloads, ready to reboard the enemy ship!|You finish replicating a masterpiece\.\.\.|You take your time to forge emaculate fake documents\.\.\.|You stage a vial display of what you and your crew are capable of\.\.\.|The power of|more pacts and be reborn\.|seduces a new Follower to join your cult!|You load|You offer|The Navy Ship rams against your ship, dealing|and in return an Undead Minion is promised to work for you|\d+(?:[.,]\d+)?\s+Cannonballs?\s+onto your ship for|\d+(?:[.,]\d+)?\s+(?:Pistols|Submachine Guns)\s+for)$/i;
     function normalizeSplitFragment(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         if (element.querySelector('button, a, input, textarea, select, strong, b, em, i, svg, [contenteditable]')) return false;
@@ -1690,7 +1731,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee)/i.test(full)) return false;
+        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts|Your researches have finished researching)/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
