@@ -1209,9 +1209,19 @@
             render:m=>'你賭上 ' + m[1] + '，但設法贏回 ' + m[2],
             terms:()=>[[/You gamble\s+/i,'你賭上 '],[/\s+but manage to win back\s+/i,'，但設法贏回 ']]
         },
+        {
+            pattern:/^You smuggle your\s+(\d+(?:[.,]\d+)?)\s+(Drugs|Stolen Goods)\s+at the port and set off again,\s*earning you\s+([$₵]?\d+(?:[.,]\d+)?[KMBT]?)(?:\s+(Money|Doubloons))?$/i,
+            render:m=>'你在港口走私了 ' + m[1] + (m[2].toLowerCase()==='drugs'?' 份毒品':' 件贓物') + '，然後再次啟航，獲得 ' + m[3] + (m[4] ? (m[4].toLowerCase()==='money'?' 金錢':' 枚杜布隆金幣') : ''),
+            terms:m=>[
+                [/You smuggle your\s+/i,'你在港口走私了 '],
+                [/\s+(?:Drugs|Stolen Goods)\s+at the port and set off again,\s*earning you\s+/i,(m[2].toLowerCase()==='drugs'?' 份毒品':' 件贓物') + '，然後再次啟航，獲得 '],
+                ...(m[4] ? [[/\s+(?:Money|Doubloons)$/i,m[4].toLowerCase()==='money'?' 金錢':' 枚杜布隆金幣']] : [])
+            ]
+        },
     ];
 
     const NONTRANSLATABLE = [
+        /^[+-]?₵\d+(?:[.,]\d+)?[KMBT]?$/i, // 純金額值，不翻譯或當成待翻譯詞彙
         /^杜布隆金幣：[+-]?\d+(?:[.,]\d+)?[KMBT]$/i, // 已翻譯的金幣縮寫
         /^\d+(?:[.,]\d+)?[KMBT]$/i, // 單純數量縮寫（例如 1.1K），不是英文詞彙
         /^[+-]?\$\d+(?:[.,]\d+)?[kKmMbBtT]?$/, // 單純價格，不要將金額縮寫 K 當成英文
@@ -1623,7 +1633,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble)/i.test(full)) return false;
+        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your)/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
