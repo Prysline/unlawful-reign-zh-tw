@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.8
+// @version      0.4.9
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,18 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.9：野生動物交易、動物名稱及航海事件。
+        "Brown Bear": "棕熊",
+        "Chimpanzee": "黑猩猩",
+        "Elephant": "大象",
+        "Exotic Wildlife Trade": "珍奇野生動物交易",
+        "Panda": "熊貓",
+        "Snow Leopard": "雪豹",
+        "Tiger": "老虎",
+        "Wildlife Trade": "野生動物交易",
+        "You have been invited to the Exotic Wildlife Trade": "你收到了珍奇野生動物交易的邀請",
+        "You try to steer your ship away from the aggressive Navy Ship, but the winds are not on your side": "你試圖駕船避開那艘具有敵意的海軍艦艇，但風向對你不利",
+
         // v0.4.8：寵物、重生、博物館與契約片段固定詞條。
         "Be Reborn": "重生",
         "Current companion": "目前的夥伴",
@@ -970,7 +982,19 @@
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
+    // v0.4.9：共用百分比加成用語，供完整句與拆分 DOM 節點使用。
+    const BONUS_LABELS_049 = Object.freeze({
+        'mugging, robbery, and casino robbery money':'行搶、搶劫及賭場搶劫的金錢收益',
+        'pickpocket and shoplift money':'扒竊及商店行竊的金錢收益',
+        'research speed':'研究速度',
+        'sell prices':'出售價格',
+        'global money':'全域金錢'
+    });
+
     const DYNAMIC = [
+        // v0.4.9：百分比加成及活動結束倒數。
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+(Mugging, Robbery, and Casino Robbery Money|Pickpocket and Shoplift Money|Research Speed|Sell Prices|Global Money)$/i, m => m[1] + '% ' + BONUS_LABELS_049[m[2].toLowerCase()]],
+        [/^Ending in\s+(\d+)\s+Days?$/i, m => '將於 ' + m[1] + ' 天後結束'],
         // v0.4.8：寵物經驗值、契約、全域加成及累積進度的變動值。
         [/^(\d+(?:[.,]\d+)?[KMBT]?)\s*\/\s*(\d+(?:[.,]\d+)?[KMBT]?)\s+EXP$/i, m => m[1] + '/' + m[2] + ' 經驗值'],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Global Money and Notoriety$/i, m => '全域金錢與惡名：' + m[1] + '%'],
@@ -1272,6 +1296,18 @@
 
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
+        {
+            // 數值若位於粗體節點，保留原有 DOM 與百分比。
+            pattern:/^([+-]\d+(?:[.,]\d+)?)%\s+(Mugging, Robbery, and Casino Robbery Money|Pickpocket and Shoplift Money|Research Speed|Sell Prices|Global Money)$/i,
+            render:m=>m[1]+'% '+BONUS_LABELS_049[m[2].toLowerCase()],
+            terms:m=>[[/\s+(?:Mugging, Robbery, and Casino Robbery Money|Pickpocket and Shoplift Money|Research Speed|Sell Prices|Global Money)$/i,' '+BONUS_LABELS_049[m[2].toLowerCase()]]]
+        },
+        {
+            // 天數及結束時間可能分散在不同文字節點。
+            pattern:/^Ending in\s+(\d+)\s+Days?$/i,
+            render:m=>'將於 '+m[1]+' 天後結束',
+            terms:()=>[[/^Ending in\s+/i,'將於 '],[/\s+Days?$/i,' 天後結束']]
+        },
         {
             // 寵物名稱及等級可能被包在不同文字節點中，保留數字的既有格式。
             pattern:/^([A-Za-z][A-Za-z' -]{0,64})\s+reached level\s+(\d+)!$/i,
@@ -1779,7 +1815,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP)/i.test(full)) return false;
+        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
