@@ -1273,6 +1273,18 @@
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
         {
+            // 寵物名稱及等級可能被包在不同文字節點中，保留數字的既有格式。
+            pattern:/^([A-Za-z][A-Za-z' -]{0,64})\s+reached level\s+(\d+)!$/i,
+            render:m=>translateItemName(m[1].trim())+'升至等級 '+m[2]+'！',
+            terms:m=>[[/^[A-Za-z][A-Za-z' -]{0,64}(?=\s+reached level\s+\d+!$)/i,translateItemName(m[1].trim())],[/\s+reached level\s+/i,'升至等級 '],[/!$/,'！']]
+        },
+        {
+            // 經驗值進度可能拆在多個文字節點；只替換 EXP，保留數值與分隔位置。
+            pattern:/^(\d+(?:[.,]\d+)?[KMBT]?)\s*\/\s*(\d+(?:[.,]\d+)?[KMBT]?)\s+EXP$/i,
+            render:m=>m[1]+'/'+m[2]+' 經驗值',
+            terms:()=>[[/\s+EXP$/i,' 經驗值']]
+        },
+        {
             // 支援 Spend 後接的可變契約數，保留數字的粗體節點。
             pattern:/^Spend\s+(\d+)\s+more pacts? and be reborn\.$/i,
             render:m=>'花費 ' + m[1] + ' 項額外契約並重生。',
@@ -1767,7 +1779,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching)/i.test(full)) return false;
+        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP)/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
