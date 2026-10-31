@@ -14,7 +14,7 @@
 
 腳本包含 `@updateURL`、`@downloadURL` 與 `@version`。Tampermonkey 將按照其設定檢查遠端版本；當 GitHub 上的版本號較高時，即可取得更新。GitHub 有新的提交，不代表會立即自動安裝。
 
-每次更新使用者腳本時，請將 `@version` 增加，例如從 `0.3.19` 改成 `0.3.20`，並提交此檔案至 `main` 分支。
+每次更新使用者腳本時，請將 `@version` 增加，例如從 `0.3.20` 改成 `0.3.21`，並提交此檔案至 `main` 分支。
 
 此前從聊天附件安裝的腳本，需**首次手動安裝這份 GitHub 版本**，之後才能利用上述更新網址。
 
@@ -30,7 +30,7 @@ Tampermonkey 選單提供：
 
 ## 專案狀態
 
-* 目前版本：`0.3.20`
+* 目前版本：`0.3.21`
 * 版本狀態：測試版，尚未完成全面遊玩驗證。
 * 適用網站：`https://unlawfulreign.netlify.app/`
 * 原有 `@name` 與 `@namespace` 維持不變，盡量延續既有安裝識別與儲存鍵名。
@@ -115,3 +115,11 @@ Tampermonkey 選單提供：
 * 保留舊版 `+ Unlock New Equipment` 等既有翻譯；賭博成功機率擴充 `Chance of success` 句型，挖寶機率以共用數值規則翻譯。
 * 補充 11 筆與藝術品、偽造文件、荒島、園丁及亡靈供品相關的固定詞彙。
 * 原始 15 筆 JSON 收錄於 `tests/fixtures/batch_v0320.json`，新增測試檔 `tests/test_v0320.cjs`，可執行 `node tests/test_v0320.cjs`。
+
+
+### v0.3.21 補充
+
+* 22 筆待翻譯文字中，15 筆由 v0.3.20 已存在的固定詞庫或動態規則處理，不重複加入。
+* 新增 `Bunk Beds`、`Expanded Quarters`、`Holy Slippers`、`Spiked Peg Legs`、`Step into God's light` 共 5 筆固定譯文。
+* 新增 `Max Crewmates` 船員上限共用格式，支援正數、負數及小數，取代為 `+3`、`+4` 各寫一條詞彙的方式。
+* 原始資料及回歸測試分別存放於 `tests/fixtures/batch_v0321.json` 與 `tests/test_v0321.cjs`，可執行 `node tests/test_v0321.cjs`。
