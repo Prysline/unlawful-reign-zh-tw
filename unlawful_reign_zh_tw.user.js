@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.9
+// @version      0.4.10
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,11 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.10：存檔提示及海軍艦艇交戰片段。
+        "Save exported to unlawful_reign_save.txt.": "存檔已匯出至 unlawful_reign_save.txt。",
+        "The Navy Ship fires their cannons, dealing": "海軍艦艇開砲，造成",
+        "Your ship rams into the side of the Navy Ship, dealing": "你的船撞向海軍艦艇的側舷，造成",
+
         // v0.4.9：野生動物交易、動物名稱及航海事件。
         "Brown Bear": "棕熊",
         "Chimpanzee": "黑猩猩",
@@ -992,6 +997,8 @@
     });
 
     const DYNAMIC = [
+        // v0.4.10：重新適應所需天數，保留可變數值。
+        [/^Takes\s+(\d+)\s+days?\s+to readjust$/i, m => '需要 ' + m[1] + ' 天重新適應'],
         // v0.4.9：百分比加成及活動結束倒數。
         [/^([+-]\d+(?:[.,]\d+)?)%\s+(Mugging, Robbery, and Casino Robbery Money|Pickpocket and Shoplift Money|Research Speed|Sell Prices|Global Money)$/i, m => m[1] + '% ' + BONUS_LABELS_049[m[2].toLowerCase()]],
         [/^Ending in\s+(\d+)\s+Days?$/i, m => '將於 ' + m[1] + ' 天後結束'],
