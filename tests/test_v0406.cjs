@@ -54,7 +54,7 @@ const expected={
   "Raise an ancient sanctuary from the deep, sacrifice Doubloons to empower it, and receive the sea's blessing while sailing": "將一座古老的庇護所從深海升起，獻祭杜布隆金幣以增強它的力量，並在航行時獲得大海的祝福",
   "Restore the Black Market Bounty Board and turn completed contracts into lasting notoriety": "修復黑市懸賞公告欄，並將已完成的契約轉化為持久的惡名",
   "The moon waxes and wanes through eight phases, twisting the city's encounters with light and shadow": "月亮經歷八個月相的盈虧變化，以光與影改變城市中的遭遇",
-  "Twelve zodiac years cycle across time, each twisting your cult in a different way": "十二個生肖年隨時間循環，每一年都以不同方式改變你的邪教",
+  "Twelve zodiac years cycle across time, each twisting your cult in a different way": "十二星座隨著年份輪替，每一年都以不同方式改變你的邪教",
   "Unlock a primordial Monolith whose powers grow the more money you sacrifice to it": "解鎖一座原始巨石碑，你向它獻祭的金錢越多，它的力量就越強",
   "Unseal ancient Artifacts, permanently reveal The Museum upgrade, and preserve completed relics through rebirth": "解除古代古物的封印，永久顯示「博物館」升級項目，並在重生後保留已完成的遺物"
 };
@@ -63,7 +63,7 @@ assert.equal(Object.keys(expected).length,9);
 for(const key of Object.keys(batch)) {
     assert.equal(translateString(key),expected[key],'本批翻譯：'+key);
 }
-assert.equal(translateString('Zodiacs'),'十二生肖','生肖年與原有詞條應一致');
+assert.equal(translateString('Zodiacs'),'十二星座','西洋十二星座符號與原有詞條應一致');
 assert.equal(translateString('Moon Phases'),'月相');
 assert.equal(translateString('Sea Sanctuary'),'海洋庇護所');
 assert.equal(translateString('Doubloons'),'杜布隆金幣');
