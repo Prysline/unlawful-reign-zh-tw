@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.19
+// @version      0.3.20
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -717,11 +717,25 @@
         "You meet an amiable Trading Vessel with business to conduct": "你遇到一艘友善的商船，可以進行交易",
         "You trade with the vessel, selling": "你與商船交易，出售",
         "Your Gardener helps with sowing your seeds": "你的園丁協助你播種",
+        // v0.3.20：藝術品偽造、荒島、園丁及新道具名稱。
+        "Create Replica Artworks in the comfort of your hideout": "在舒適的藏身處製作藝術品仿作",
+        "Deserted Island": "荒島",
+        "Document Forger": "文件偽造者",
+        "Forge documents at your safehouse": "在安全屋偽造文件",
+        "Hobby Artist": "業餘藝術家",
+        "Lucky Harvest": "幸運收成",
+        "Lucky Horseshoe": "幸運馬蹄鐵",
+        "Undead Offering": "亡靈供品",
+        "You dig and dig from sunrise to sunset with nothing to show for it...": "你從日出挖到日落，卻一無所獲……",
+        "You spot a suspicious island that you feel may be ripe with treasure": "你發現了一座可疑的島嶼，覺得那裡可能藏有豐富的寶藏",
+        "Your Gardener waters your plants for you": "你的園丁替你的植物澆水",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.3.20：挖寶機率不綁定特定百分比。
+        [/^Dig for Treasure\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => `挖掘寶藏（${m[1]}%）`],
         // v0.3.19：船員數量、招募機率、商船買賣數量與海盜倍率。
         [/^([+-]?\d+(?:[.,]\d+)?)\s+Crewmates?$/i, m=>/^[+-]/.test(m[1])?`船員：${m[1]}`:`${m[1]} 名船員`],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Recruit chance$/i, m=>`招募機率：${m[1]}%`],
@@ -757,11 +771,11 @@
         [/^\(([+-]\d+(?:[.,]\d+)?)%\s+Ritual (Duration\/Shrine|Power\/Blood Pool)\)$/i, m => `（每座${m[2].toLowerCase().startsWith('duration') ? '神龕的儀式持續時間' : '血池的儀式威力'}：${m[1]}%）`],
         [/^\(-\$([\d,.]+)\s+per day\/Blood Pool\)$/i, m => `（每座血池每日金錢：-$${m[1]}）`],
         [/^\(([+-]\d+(?:[.,]\d+)?)\s+Souls per day\/Shrine\)$/i, m => `（每座神龕每日靈魂：${m[1]}）`],
-        [/^\+\s*Unlock New (Equipment|Ritual|Rune|Structures)$/i, m => `＋解鎖新${({equipment: '裝備', ritual: '儀式', rune: '符文', structures: '建築'})[m[1].toLowerCase()]}`],
+        [/^\+\s*Unlocks?\s+(New\s+)?(Equipment|Ritual|Rune|Structures|Followers)$/i, m => `＋解鎖${m[1] ? '新' : ''}${({equipment: '裝備', ritual: '儀式', rune: '符文', structures: '建築', followers: '追隨者'})[m[2].toLowerCase()]}`],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Ritual Duration$/i, m => `儀式持續時間：${m[1]}%`],
         [/^([+-]\d+(?:[.,]\d+)?)\s+Max bribe level$/i, m => `賄賂等級上限：${m[1]}`],
         [/^([+-]\d+(?:[.,]\d+)?)\s+Max Drugs Capacity$/i, m => `毒品容量上限：${m[1]}`],
-        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance to win when gambling$/i, m => `賭博獲勝機率：${m[1]}%`],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance (?:to win|of success) when gambling$/i, m => `賭博獲勝機率：${m[1]}%`],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Notoriety$/i, m => `惡名：${m[1]}%`],
         [/^([+-]\d+(?:[.,]\d+)?)\s+Souls per day$/i, m => `每日靈魂：${m[1]}`],
         [/^([+-]\d+(?:[.,]\d+)?)\s+Gang War attack base cooldown$/i, m => `幫派戰爭攻擊的基礎冷卻時間：${m[1]}`],
