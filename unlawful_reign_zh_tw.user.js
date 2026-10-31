@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.2
+// @version      0.4.3
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -881,11 +881,62 @@
         "at the port and set off again, earning you": "在港口，隨後再次啟航，獲得",
         "but manage to win back": "但設法贏回",
         "/ Day)": "／天）",
+        // v0.4.3：公司部門、研究系統、原作及相關能力。
+        "Employees": "員工",
+        "Research Points": "研究點數",
+        "Yearly Tax Rate": "年度稅率",
+        "Next Unlock": "下一項解鎖",
+        "Producing": "生產中",
+        "Original Artwork": "原作藝術品",
+        "A ridiculous upgrade until you realize efficiency can start with a single step": "這項升級看似荒謬，直到你意識到提升效率可以從單一步驟開始",
+        "Allows you to prestige by making a deal with the devil": "讓你能透過與魔鬼交易進行威望重置",
+        "Assigned Employees": "已指派員工",
+        "Calling Card": "名片",
+        "Corporate Warehouse": "公司倉庫",
+        "Corporation": "公司",
+        "Cult Brew": "邪教秘釀",
+        "Cybernetic Toe": "機械義趾",
+        "Devil Pacts": "魔鬼契約",
+        "Experienced Criminal": "經驗豐富的罪犯",
+        "Formal Shoes": "正式皮鞋",
+        "Gain Notoriety from all successful heists": "所有成功的劫案都能獲得惡名",
+        "Inaugurate a": "成立一個",
+        "Inaugurate an": "成立一個",
+        "Initial Hire": "初次雇用",
+        "Investment Department": "投資部門",
+        "Legal Department": "法務部門",
+        "Mo' Money, Mo' Problems": "錢越多，麻煩越多",
+        "Psych 101": "心理學入門",
+        "Public Relations Department": "公關部門",
+        "Research Department": "研究部門",
+        "Researched Upgrades": "已研究的升級",
+        "Sales Department": "銷售部門",
+        "Take the train to your next destination": "搭乘火車前往下一個目的地",
+        "Train Ticket": "火車票",
+        "Unassigned)": "未指派）",
+        "Unholier Oblation": "更邪惡的祭品",
+        "Unholy Oblation": "邪惡祭品",
+        "You successfully manage to steal an Original piece with none the wiser!": "你成功偷走一件原作，卻沒有人察覺！",
+        "Your Corporation pays its yearly taxes...": "你的公司繳納了年度稅款……",
+        "/Employee)": "／員工）",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.4.3：公司研究、員工、原作、邪教與稅率的變動格式。
+        [/^\(\s*([+-]\d+(?:[.,]\d+)?)\s+R\.P\.?\s*\/\s*Employee\s*\)$/i, m => '（' + m[1] + ' 研究點數／員工）'],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Money Rewards for every\s+(\d+(?:[.,]\d+)?)\s+Notoriety\s*\(Max\s+(\d+(?:[.,]\d+)?)%\)$/i, m => '每 ' + m[2] + ' 點惡名，金錢獎勵加成 ' + m[1] + '%（最高 ' + m[3] + '%）'],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Followers?\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => '追隨者：' + m[1] + '（' + m[2] + '%）'],
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Original Artworks?$/i, m => /^[+-]/.test(m[1]) ? '原作藝術品：' + m[1] : m[1] + ' 件原作藝術品'],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+R\.P\.?$/i, m => '研究點數：' + m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance to indoctrinate shady strangers?$/i, m => '向可疑陌生人灌輸教義的機率：' + m[1] + '%'],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Yearly Tax Rate$/i, m => '年度稅率：' + m[1] + '%'],
+        [/^Try Indoctrinate\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => '嘗試灌輸教義（' + m[1] + '%）'],
+        [/^Unholy Oblation increases Max Souls by\s+([+-]\d+(?:[.,]\d+)?)$/i, m => '邪惡祭品使靈魂上限增加 ' + m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+Research Speed$/i, m => '研究速度 ×' + m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+Build Fake Identity speed when talking with Strangers$/i, m => '與陌生人交談時建立假身分的速度 ×' + m[1]],
+        [/^Inaugurate an?\s+(Investment|Legal|Public Relations|Research|Sales) Department$/i, m => '成立一個' + translateItemName(m[1] + ' Department')],
         // v0.4.2：仿作、假身分、藝術經驗與走私／航海能力的動態格式。
         [/^([+-]\d+(?:[.,]\d+)?)\s+Art EXP from Studying Paintings$/i, m => '研究畫作獲得的藝術經驗值：' + m[1]],
         [/^([+-]\d+(?:[.,]\d+)?)\s+Fake Identity from Forging Documents$/i, m => '偽造文件獲得的假身分：' + m[1]],
@@ -1217,6 +1268,12 @@
                 [/\s+(?:Drugs|Stolen Goods)\s+at the port and set off again,\s*earning you\s+/i,(m[2].toLowerCase()==='drugs'?' 份毒品':' 件贓物') + '，然後再次啟航，獲得 '],
                 ...(m[4] ? [[/\s+(?:Money|Doubloons)$/i,m[4].toLowerCase()==='money'?' 金錢':' 枚杜布隆金幣']] : [])
             ]
+        },
+        {
+            // 同時支援完整字串與「(+1 R.P」「/Employee)」拆分的文字節點。
+            pattern:/^\(\s*([+-]\d+(?:[.,]\d+)?)\s+R\.P\.?\s*\/\s*Employee\s*\)$/i,
+            render:m=>'（' + m[1] + ' 研究點數／員工）',
+            terms:()=>[[/^\(\s*/,'（'],[/\s+R\.P\.?\s*\/\s*Employee\s*\)$/i,' 研究點數／員工）']]
         },
     ];
 
@@ -1633,7 +1690,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your)/i.test(full)) return false;
+        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee)/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
