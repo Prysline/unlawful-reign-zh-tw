@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.20
+// @version      0.3.21
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -729,11 +729,19 @@
         "You dig and dig from sunrise to sunset with nothing to show for it...": "你從日出挖到日落，卻一無所獲……",
         "You spot a suspicious island that you feel may be ripe with treasure": "你發現了一座可疑的島嶼，覺得那裡可能藏有豐富的寶藏",
         "Your Gardener waters your plants for you": "你的園丁替你的植物澆水",
+        // v0.3.21：船員艙室、服飾及海盜升級名稱。
+        "Bunk Beds": "雙層床",
+        "Expanded Quarters": "擴建艙室",
+        "Holy Slippers": "神聖拖鞋",
+        "Spiked Peg Legs": "帶刺木製義腿",
+        "Step into God's light": "踏入神的光芒",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.3.21：船員上限數值與正負號共用規則。
+        [/^([+-]?\d+(?:[.,]\d+)?)\s+Max Crewmates$/i, m => `船員上限：${m[1]}`],
         // v0.3.20：挖寶機率不綁定特定百分比。
         [/^Dig for Treasure\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => `挖掘寶藏（${m[1]}%）`],
         // v0.3.19：船員數量、招募機率、商船買賣數量與海盜倍率。
