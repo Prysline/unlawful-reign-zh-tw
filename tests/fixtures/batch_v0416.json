@@ -1,0 +1,407 @@
+{
+  "translations": {
+    "(Approach closer)": "",
+    "+1 Finance EXP from Studying Operations": "",
+    "+1 Random Artifact Piece": "",
+    "+130 Not. Per Artifact Level": "",
+    "+20 Max Stolen Goods": "",
+    "+5 Museum Plan Heist Speed": "",
+    "+5% Chance Fake Identity not used up": "",
+    "All on Red": "",
+    "All the stolen splendor": "",
+    "Art of the Deal": "",
+    "Basic Lab": "",
+    "Business Diploma": "",
+    "Business School": "",
+    "Change Course": "",
+    "Curate Exhibit": "",
+    "Decipher Map (0/100)": "",
+    "Early Workforce": "",
+    "Fake Posture": "",
+    "Guarantees meeting The Devil": "",
+    "Hockey Mask": "",
+    "Infernal Summons": "",
+    "Longer Scope": "",
+    "Mental Math": "",
+    "Museum": "",
+    "Museum:": "",
+    "Part-Time Archaeologist": "",
+    "Providing:": "",
+    "Say My Name": "",
+    "Spyglass can see 50 Nautical Miles further": "",
+    "Storage Shed": "",
+    "Tax Relief": "",
+    "You've planned out as much as you can for this heist": "",
+    "x1.5 Sales Department Clean Money": "",
+    "x2 All Notoriety Rewards": "",
+    "x2 Casino Robbery Reward": "",
+    "x2 Sales Department Clean Money": "",
+    "你的研究已完成「Basic Lab」項目的研究！": "",
+    "你的研究已完成「Business Diploma」項目的研究！": "",
+    "你的研究已完成「Early Workforce」項目的研究！": "",
+    "生命值：1K/1K": "",
+    "補給品：-1K": ""
+  },
+  "contexts": [
+    {
+      "fragments": [
+        " ??? ",
+        " (Approach closer) "
+      ],
+      "fullText": "???  (Approach closer)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "(6)",
+        " The Crimson Ravagers "
+      ],
+      "fullText": "(6) The Crimson Ravagers",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+0 Not.",
+        "+130 Not. Per Artifact Level"
+      ],
+      "fullText": "+0 Not.+130 Not. Per Artifact Level",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+0% Doubloons",
+        "(+20% Doubloons/Blackwater Market)",
+        "-0 Doubloons per day",
+        "( -10 Doubloons per day/Blackwater Market)"
+      ],
+      "fullText": "+0% Doubloons(+20% Doubloons/Blackwater Market)-0 Doubloons per day( -10 Doubloons per day/Blackwater Market)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+0% Money",
+        "(+20% Money/Coinmaster's Den)",
+        "-0 Doubloons per day",
+        "( -10 Doubloons per day/Coinmaster's Den)"
+      ],
+      "fullText": "+0% Money(+20% Money/Coinmaster's Den)-0 Doubloons per day( -10 Doubloons per day/Coinmaster's Den)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+1 Blackwater Market",
+        "-200 Supplies",
+        "-200 Doubloons"
+      ],
+      "fullText": "+1 Blackwater Market-200 Supplies-200 Doubloons",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+1 Coinmaster's Den",
+        "-250 Supplies",
+        "-150 Doubloons"
+      ],
+      "fullText": "+1 Coinmaster's Den-250 Supplies-150 Doubloons",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+1 Random Artifact Piece",
+        "100% chance of getting busted",
+        "Hotkey: W"
+      ],
+      "fullText": "+1 Random Artifact Piece100% chance of getting bustedHotkey: W",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "All on Red",
+        "x2 Casino Robbery Reward"
+      ],
+      "fullText": "All on Redx2 Casino Robbery Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Art of the Deal",
+        "x2 Stolen Goods sell price"
+      ],
+      "fullText": "Art of the Dealx2 Stolen Goods sell price",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Basic Lab",
+        "x2 Research Speed"
+      ],
+      "fullText": "Basic Labx2 Research Speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Blackwater Market",
+        "0/0"
+      ],
+      "fullText": "Blackwater Market0/0",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Blackwater Market",
+        "0/0",
+        " Increases Doubloons Gain ",
+        " Costs Doubloons Daily "
+      ],
+      "fullText": "Blackwater Market0/0 Increases Doubloons Gain  Costs Doubloons Daily",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Business Diploma",
+        "x1.5 Sales Department Clean Money"
+      ],
+      "fullText": "Business Diplomax1.5 Sales Department Clean Money",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Business School",
+        "+1 Finance EXP from Studying Operations"
+      ],
+      "fullText": "Business School+1 Finance EXP from Studying Operations",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Coinmaster's Den",
+        "0/0"
+      ],
+      "fullText": "Coinmaster's Den0/0",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Coinmaster's Den",
+        "0/0",
+        " Increases Money Gain ",
+        " Costs Doubloons Daily "
+      ],
+      "fullText": "Coinmaster's Den0/0 Increases Money Gain  Costs Doubloons Daily",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Deal 40 DMG",
+        "Readjusting (4 Days Left)"
+      ],
+      "fullText": "Deal 40 DMGReadjusting (4 Days Left)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Early Workforce",
+        "+2 Employees"
+      ],
+      "fullText": "Early Workforce+2 Employees",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Expand ",
+        "Driftport"
+      ],
+      "fullText": "Expand Driftport",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Expand ",
+        "Driftport",
+        " -1K Supplies "
+      ],
+      "fullText": "Expand Driftport -1K Supplies",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Fake Posture",
+        "+5% Chance Fake Identity not used up"
+      ],
+      "fullText": "Fake Posture+5% Chance Fake Identity not used up",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "First Client",
+        "x2 Sales Department Clean Money"
+      ],
+      "fullText": "First Clientx2 Sales Department Clean Money",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Health",
+        " 1K/1K HP "
+      ],
+      "fullText": "Health 1K/1K HP",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Hockey Mask",
+        "x2 Mugging Reward"
+      ],
+      "fullText": "Hockey Maskx2 Mugging Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Infernal Summons ",
+        " Rune "
+      ],
+      "fullText": "Infernal Summons  Rune",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Longer Scope",
+        "Spyglass can see 50 Nautical Miles further"
+      ],
+      "fullText": "Longer ScopeSpyglass can see 50 Nautical Miles further",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Mental Math",
+        "x2 Counting Cards Reward"
+      ],
+      "fullText": "Mental Mathx2 Counting Cards Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Museum:",
+        "9.71%"
+      ],
+      "fullText": "Museum:9.71%",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Basic Lab"
+      ],
+      "fullText": "Next Unlock: Basic Lab",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Business Diploma"
+      ],
+      "fullText": "Next Unlock: Business Diploma",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Early Workforce"
+      ],
+      "fullText": "Next Unlock: Early Workforce",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Tax Relief"
+      ],
+      "fullText": "Next Unlock: Tax Relief",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Part-Time Archaeologist",
+        "+5 Museum Plan Heist Speed"
+      ],
+      "fullText": "Part-Time Archaeologist+5 Museum Plan Heist Speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Providing:",
+        "+0%",
+        " Global Money",
+        " (",
+        "+2%",
+        "/Employee) "
+      ],
+      "fullText": "Providing:+0% Global Money (+2%/Employee)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Python ",
+        " Current companion "
+      ],
+      "fullText": "Python  Current companion",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Python ",
+        " Current companion ",
+        " Level ",
+        "2",
+        " 33/35 EXP ",
+        " +14% Fake Identity Speed and conservation "
+      ],
+      "fullText": "Python  Current companion  Level 2 33/35 EXP  +14% Fake Identity Speed and conservation",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Python",
+        " Level ",
+        "1"
+      ],
+      "fullText": "Python Level 1",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Python",
+        " Level ",
+        "1",
+        "+12% Fake Identity Speed and conservation"
+      ],
+      "fullText": "Python Level 1+12% Fake Identity Speed and conservation",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Say My Name",
+        "x2 All Notoriety Rewards"
+      ],
+      "fullText": "Say My Namex2 All Notoriety Rewards",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Storage Shed",
+        "+20 Max Stolen Goods"
+      ],
+      "fullText": "Storage Shed+20 Max Stolen Goods",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "[D00 Y21]: ",
+        "You've planned out as much as you can for this heist"
+      ],
+      "fullText": "You've planned out as much as you can for this heist",
+      "datePrefix": "[D00 Y21]:",
+      "complete": false
+    }
+  ]
+}
