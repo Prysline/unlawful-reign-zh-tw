@@ -1158,7 +1158,7 @@
             // 可能由不同 DOM 節點構成，中央的名稱或能力保持原節點與格式。
             pattern:/^The power of\s+(.{1,100}?)\s+seduces a new Follower to join your cult!$/i,
             render:m=>'「' + translateItemName(m[1]) + '」的力量吸引了一名新追隨者加入你的邪教！',
-            terms:()=>[[/The power of\s+/i,'「'],[/\s+seduces a new Follower to join your cult!$/i,'」的力量吸引了一名新追隨者加入你的邪教！']]
+            terms:m=>[[/The power of\s+/i,'「'],[/^.{1,100}?(?=\s+seduces a new Follower to join your cult!$)/i,translateItemName(m[1])],[/\s+seduces a new Follower to join your cult!$/i,'」的力量吸引了一名新追隨者加入你的邪教！']]
         },
     ];
 
