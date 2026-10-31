@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.3.24
+// @version      0.4.0
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -811,13 +811,44 @@
         "You offer": "你提供",
         "Your ship was destroyed and crewmates killed while you drift back to the Safe Haven": "你的船遭到摧毀，船員也被殺害，而你漂流回避風港",
         "and in return an Undead Minion is promised to work for you": "而作為回報，承諾會有一名亡靈僕從為你效力",
+        // v0.4.0：補充單複數別名與美術館劫案名稱。
+        "Art Collector": "藝術品收藏家",
+        "Back to Gang War": "返回幫派戰爭",
+        "Beauty is in the eye of the buyer": "美感取決於買家",
+        "Bone Shovel": "骨製鏟子",
+        "Brutality": "蠻力",
+        "Buy Treasure Map": "購買藏寶圖",
+        "Choose the actions your crew can use once the fight starts.": "選擇戰鬥開始後船員可以使用的行動。",
+        "Health Pack": "醫療包",
+        "Hostile Delay": "敵方延遲",
+        "Loadout": "裝備配置",
+        "Local Protest": "當地抗議",
+        "Paint Palette": "調色盤",
+        "Raider’s Rampage": "掠奪者的狂暴",
+        "Royal Price": "皇家價格",
+        "Select Combat Actions": "選擇戰鬥行動",
+        "So much beauty to steal": "有這麼多美麗的東西可以偷",
+        "Study Art": "研究藝術",
+        "You and your crew plunder the feeble passenger boat, earning you": "你與船員掠奪了那艘不堪一擊的客船，獲得",
+        "You take your time studying every brush stroke and detail": "你仔細研究每一道筆觸與細節",
     });
 
     // 動態格式只寫一條規則，不把日期、數量、快捷鍵逐一加入詞庫。
     // 本區僅替換顯示文字，所有玩家數值與正負號皆保留。
     const DYNAMIC = [
+        // v0.4.0：美術館劫案、原作藝術品、條件加成、選擇數與重新集結倒數。
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Art Gallery Heist (Plan )?Speed$/i, m => '美術館劫案' + (m[2] ? '策劃' : '') + '速度：' + m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Navy Ship Attack Cooldown$/i, m => '海軍艦艇攻擊冷卻時間：' + m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Original Artwork\s*\(\s*(\d+(?:[.,]\d+)?)%\s*\)$/i, m => '原作藝術品：' + m[1] + '（' + m[2] + '%）'],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+when not a criminal$/i, m => '非罪犯狀態時：' + m[1] + '%'],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+HP$/i, m => '生命值：' + m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance of success if you have a Replica Artwork to swap with the original$/i, m => '若有藝術品仿作可與原作交換，成功機率：' + m[1] + '%'],
+        [/^(\d+)\s*\/\s*(\d+)\s+selected$/i, m => '已選擇 ' + m[1] + '/' + m[2]],
+        [/^Reduce Deal Drugs crime and max crime penalty by\s+(\d+)$/i, m => '將販售毒品的犯罪懲罰及懲罰上限降低 ' + m[1]],
+        [/^Regrouping\s*\(\s*(\d+)\s+Days?\s+Left\s*\)$/i, m => '重新集結中（剩餘 ' + m[1] + ' 天）'],
+        [/^x(\d+(?:[.,]\d+)?)\s+Money from raiding graves$/i, m => '盜墓獲得的金錢 ×' + m[1]],
         // v0.3.24：技能加成與獻祭的可變數值。
-        [/^\+\s*(Gambling|Graffiti|Shoplift)\s+boosted by\s*([+-]\d+(?:[.,]\d+)?)%\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s*Per Lvl\s*\)$/i, m => '＋' + ({gambling:'賭博',graffiti:'塗鴉',shoplift:'商店行竊'})[m[1].toLowerCase()] + '加成 ' + m[2] + '%（每級 ' + m[3] + '%）'],
+        [/^\+\s*(Gambling|Graffiti|Shoplift|Store Robberies)\s+boosted by\s*([+-]\d+(?:[.,]\d+)?)%\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s*Per Lvl\s*\)$/i, m => '＋' + ({gambling:'賭博',graffiti:'塗鴉',shoplift:'商店行竊','store robberies':'商店搶劫'})[m[1].toLowerCase()] + '加成 ' + m[2] + '%（每級 ' + m[3] + '%）'],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Combo to Money while staying a criminal$/i, m => '維持罪犯狀態時的金錢連續加成：' + m[1] + '%'],
         [/^(\d+(?:[.,]\d+)?)\s+Cannonballs?\s+onto your ship for$/i, m => m[1] + ' 發砲彈到你的船上，花費'],
         [/^(\d+(?:[.,]\d+)?)\s+(Pistols|Submachine Guns)\s+for$/i, m => m[1] + ' 把' + translateItemName(m[2]) + '以換取'],
@@ -1094,6 +1125,11 @@
             pattern:/^You spend\s+(\d+(?:[.,]\d+)?[KMBT]?)\s+Doubloons?\s+to hire a new crewmate on board$/i,
             render:m=>'你花費 '+m[1]+' 枚杜布隆金幣，雇用一名新船員登船',
             terms:()=>[[/You spend/i,'你花費'],[/Doubloons?\s+to hire a new crewmate on board/i,'枚杜布隆金幣，雇用一名新船員登船']]
+        },
+        {
+            pattern:/^You continue planning intricate heist strategies\.\.\.\s*\(\s*(\d+)\s*\/\s*(\d+)\s*\)$/i,
+            render:m=>'你持續規劃精密的劫案策略……（'+m[1]+'/'+m[2]+'）',
+            terms:()=>[[/You continue planning intricate heist strategies\.\.\.\s*\(/i,'你持續規劃精密的劫案策略……（'],[/\)/,'）']]
         }
     ];
 
@@ -1150,6 +1186,13 @@
         for (const [pattern, formatter] of DYNAMIC) {
             const match = text.match(pattern);
             if (match) return formatter(match);
+        }
+        // 當標籤只有結尾冒號不同時，沿用既有的完整詞彙翻譯。
+        const colonLabel = text.match(/^([^:：]+)[:：]$/u);
+        if (colonLabel) {
+            const base = colonLabel[1].trim();
+            const translated = lookup(base);
+            if (translated !== null && translated !== base) return translated.replace(/[:：]$/u, '') + '：';
         }
         return null;
     }
@@ -1502,7 +1545,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend)/i.test(full)) return false;
+        if(full.length>400 || !/(?:You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies)/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
