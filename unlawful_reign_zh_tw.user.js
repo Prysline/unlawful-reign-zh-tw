@@ -727,7 +727,7 @@
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Recruit chance$/i, m=>`招募機率：${m[1]}%`],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance of finding treasure$/i, m=>`發現寶藏的機率：${m[1]}%`],
         [/^(Buy|Sell)\s+x(\d+(?:[.,]\d+)?)\s+(Stolen Jewels|Stolen Goods|Pistols)$/i, m=>`${m[1].toLowerCase()==='buy'?'購買':'出售'} ×${m[2]} ${translateItemName(m[3])}`],
-        [/^x(\d+(?:[.,]\d+)?)\s+(Ship Speed|Doubloons from Navy Ship|Plunder Reward|Flee chance during Foggy Weather|Terrorize Reward)$/i, m=>`${({'ship speed':'船隻速度','doubloons from navy ship':'海軍艦艇獲得的杜布隆金幣','plunder reward':'掠奪獎勵','flee chance during foggy weather':'霧天的逃跑機率','terrorize reward':'恐嚇獎勵'})[m[2].toLowerCase()]} ×${m[1]}`],
+        [/^x(\d+(?:[.,]\d+)?)\s+(Ship Speed|Doubloons from Navy Ship|Plunder Reward|Flee chance during Foggy Weather|Terrorize Reward)$/i, m=>`${({'ship speed':'船隻速度','doubloons from navy ship':'從海軍艦艇獲得的杜布隆金幣','plunder reward':'掠奪獎勵','flee chance during foggy weather':'霧天的逃跑機率','terrorize reward':'恐嚇獎勵'})[m[2].toLowerCase()]} ×${m[1]}`],
         // v0.3.18：生命值上限、登船傷害、靈魂上限與倍率使用共用規則。
         [/^([+-]?\d+(?:[.,]\d+)?)\s+Ship Max HP$/i, m=>`船隻生命值上限：${m[1]}`],
         [/^([+-]?\d+(?:[.,]\d+)?)\s+Boarding DMG per crewmate$/i, m=>`每名船員的登船作戰傷害：${m[1]}`],
