@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.12
+// @version      0.4.13
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,8 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.13：潛行專精逃脫事件。
+        "You use your Stealth expertise to sneak away before your crimes are found out...": "你運用潛行專精，在自己的罪行被發現之前悄悄離開……",
         // v0.4.11：尋寶事件的獨立片段，完整句與混合翻譯節點共用規則。
         "You strike a burried treasure chest, containing": "你挖到一個埋藏的寶箱，裡面有",
 
@@ -1000,6 +1002,11 @@
     });
 
     const DYNAMIC = [
+        // v0.4.13：專精升級、藏寶圖、獻祭靈魂及每日惡名消耗皆保留可變數值。
+        [/^\+\s*Chance to get away with crime\s+([+-]\d+(?:[.,]\d+)?)%\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s*Per Lvl\s*\)$/i, m => '＋犯罪後逃過追究的機率 ' + m[1] + '%（每級 ' + m[2] + '%）'],
+        [/^([+-]\d+(?:[.,]\d+)?)\s+Treasure Maps?$/i, m => '藏寶圖：' + m[1]],
+        [/^Loses\s+([+-]?\d+(?:[.,]\d+)?)\s+Souls per Gang Member\s*\(\s*([+-]?\d+(?:[.,]\d+)?)\s+Total\s*\)\s+per Sacrifice$/i, m => '每次獻祭失去的靈魂：每名幫派成員 ' + m[1] + '（總計 ' + m[2] + '）'],
+        [/^Saves\s+(\d+(?:[.,]\d+)?)\s+Not\.\s+per day$/i, m => '每天節省 ' + m[1] + ' 點惡名'],
         // v0.4.11：幫派被動收入的等級加成。
         [/^\+\s*Gang Passive Income boosted by\s*([+-]\d+(?:[.,]\d+)?)%\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s*Per Lvl\s*\)$/i, m => '＋幫派被動收入增加 ' + m[1] + '%（每級 ' + m[2] + '%）'],
         // v0.4.11：尋寶通知中可能單獨出現的金幣數量片段。
