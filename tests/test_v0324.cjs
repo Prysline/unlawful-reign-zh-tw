@@ -55,7 +55,7 @@ const cases={
   '7 Cannonballs onto your ship for':'7 發砲彈到你的船上，花費',
   '13 Submachine Guns for':'13 把衝鋒槍以換取',
   'Deactivates 7 Shrines':'停用 7 座神龕',
-  'Activate 2 Altars':'Activate 2 Altars',
+  'Activate 2 Altars':'啟用 2 座祭壇',
   'Activate 2 Altar':'啟用 2 座祭壇',
   'Loses +6 Souls per Sacrifice':'每次獻祭失去 +6 個靈魂',
   'Saves $42.50 per day':'每天節省 $42.50',
