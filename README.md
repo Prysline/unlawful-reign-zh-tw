@@ -14,7 +14,7 @@
 
 腳本包含 `@updateURL`、`@downloadURL` 與 `@version`。Tampermonkey 將按照其設定檢查遠端版本；當 GitHub 上的版本號較高時，即可取得更新。GitHub 有新的提交，不代表會立即自動安裝。
 
-每次更新使用者腳本時，請將 `@version` 增加，例如從 `0.3.24` 改成 `0.4.0`，並提交此檔案至 `main` 分支。
+每次更新使用者腳本時，請將 `@version` 增加，例如從 `0.4.0` 改成 `0.4.1`，並提交此檔案至 `main` 分支。
 
 此前從聊天附件安裝的腳本，需**首次手動安裝這份 GitHub 版本**，之後才能利用上述更新網址。
 
@@ -30,7 +30,7 @@ Tampermonkey 選單提供：
 
 ## 專案狀態
 
-* 目前版本：`0.4.0`
+* 目前版本：`0.4.1`
 * 版本狀態：測試版，尚未完成全面遊玩驗證。
 * 適用網站：`https://unlawfulreign.netlify.app/`
 * 原有 `@name` 與 `@namespace` 維持不變，盡量延續既有安裝識別與儲存鍵名。
@@ -158,3 +158,11 @@ Tampermonkey 選單提供：
 * 美術館劫案進度採同一套完整句與跨 DOM 節點事件規則，保留原始進度數字、日期及粗體，不破壞互動元件。
 * 本批來源共 40 筆，原始資料：`tests/fixtures/batch_v0400.json`。新測試：`tests/test_v0400.cjs`，可執行 `node tests/test_v0400.cjs`。
 * v0.4.0 屬於翻譯引擎匹配機制的次版本更新；既有 Tampermonkey 更新網址、資料儲存鍵與自訂詞庫均維持不變。
+
+
+### v0.4.1 補充
+
+* 新增追隨者、邪教信徒、幫派標誌、導師凝視、珠寶箱與邪教相關事件等 16 筆固定翻譯，並以 4 條動態規則涵蓋追隨者解鎖門檻、邪教追隨者數量、獻祭靈魂百分比和藝術品仿製速度。
+* 將 `The power of [名稱] seduces a new Follower to join your cult!` 納入既有的完整句／跨節點共用事件機制，對名稱進行詞庫翻譯，保留日期與粗體等原有 DOM 結構。
+* 原文 `vial display` 的詞意不明，保留 `vial` 並在譯文註記「原文異常」，不將其擅自改成另一個英文詞。
+* 本批 20 筆來源：`tests/fixtures/batch_v0401.json`，測試：`tests/test_v0401.cjs`。可執行 `node tests/test_v0401.cjs`。
