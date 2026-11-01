@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.16
+// @version      0.4.17
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,10 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.17：劫案警報、策劃與海盜地圖解讀事件。
+        "The alarms go off and the police come rushing to the scene, catching you!": "警報響起，警察迅速趕到現場並抓住了你！",
+        "You continue making detailed heist preparations...": "你繼續進行詳盡的劫案準備……",
+        "You continue to decipher cryptic symbols and pirate texts...": "你繼續解讀晦澀的符號與海盜文字……",
         // v0.4.16：博物館、公司研究、航海升級及古物相關介面。
         "(Approach closer)": "（靠近一點）",
         "All on Red": "全押紅色",
@@ -1380,6 +1384,12 @@
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
         {
+            // v0.4.17：單段句子和獨立進度節點共用同一譯文，不改變進度節點。
+            pattern:/^(You continue making detailed heist preparations\.\.\.|You continue to decipher cryptic symbols and pirate texts\.\.\.)\s+(\(\s*\d+(?:[.,]\d+)?\s*\/\s*\d+(?:[.,]\d+)?\s*\))$/i,
+            render:m=>lookup(m[1])+' '+m[2],
+            terms:m=>[[/^You continue (?:making detailed heist preparations|to decipher cryptic symbols and pirate texts)\.\.\./i,lookup(m[1])]]
+        },
+        {
             // v0.4.15：寵物購買通知兼容完整句與拆分的名稱、負號和價格。
             pattern:/^You purchase the exotic pet\s+'([^']{1,80})'\s+for\s+([+-]?\$[\d,.]+[KMBT]?)\.?$/i,
             render:m=>'你購買了異國寵物「'+translateItemName(m[1])+'」，花費 '+m[2],
@@ -1514,6 +1524,8 @@
     ];
 
     const NONTRANSLATABLE = [
+        // v0.4.17：只有金額與百分比的顯示值，K 等數量縮寫不代表未翻譯英文。
+        /^[+-]?\$[\d,.]+[KMBT]?\s*\(\s*\d+(?:[.,]\d+)?%\s*\)$/i,
         // v0.4.16：中文生命值與補給品後方的 K/M/B/T 是單位，不是待翻譯英文。
         /^生命值：[+-]?\d+(?:[.,]\d+)?[KMBT]?\s*\/\s*[+-]?\d+(?:[.,]\d+)?[KMBT]?$/iu,
         /^補給品：[+-]?\d+(?:[.,]\d+)?[KMBT]?$/iu,
@@ -1932,7 +1944,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
+        if(full.length>400 || !/(?:You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
