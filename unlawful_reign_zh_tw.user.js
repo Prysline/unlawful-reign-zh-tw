@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.18
+// @version      0.4.19
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,15 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.19：博物館收藏的七種古物名稱與劫案準備通知。
+        "Arcane Tome": "奧術典籍",
+        "Charmcaster's Bauble": "魅惑術士的飾物",
+        "Eclipse Mask": "日蝕面具",
+        "Ethereal Chalice": "虛靈聖杯",
+        "Monarch's Ring": "君主之戒",
+        "Opulent Amulet": "華麗護符",
+        "Tempest Medallion": "暴風勳章",
+        "You're prepared to heist the museum's artifact collection": "你已做好洗劫博物館古物收藏的準備",
         // v0.4.18：火車、海難打撈、公司倉儲與相關升級。
         "A one-way pass to the richest carriage and the fastest exit route": "通往最富裕車廂與最快出口路線的單程通行證",
         "A wicked Train of thought": "邪惡的思緒列車",
@@ -1077,6 +1086,10 @@
     });
 
     const DYNAMIC = [
+        // v0.4.19：碎片進度保留分子、分母，古物名稱由共用詞庫翻譯。
+        [/^(\d+)\s*\/\s*(\d+)\s+pieces?\s+found$/i, m => '已找到 '+m[1]+'/'+m[2]+' 塊碎片'],
+        [/^You heist the museum's artifact collection, stealing a piece of '(.{1,100})'$/i,
+            m => '你洗劫博物館的古物收藏，偷走了一塊「'+translateItemName(m[1])+'」的碎片'],
         // v0.4.18：火車目的地沿用既有遭遇名稱翻譯，不預設只有四種目的地。
         [/^You ride the train and arrive at '([^']{1,100})'$/i, m => '你搭乘火車，抵達「' + translateItemName(m[1]) + '」'],
         [/^\(\s*([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s*\/\s*Employee\s*\)$/i, m => '（每名員工 '+m[1]+'）'],
@@ -1436,6 +1449,17 @@
 
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
+        {
+            // v0.4.19：古物名稱內可含撇號（例如 Monarch's Ring），以最末引號定位名稱結尾。
+            // 跨文字節點時僅改寫必要片段，不破壞日期與古物名稱所在節點。
+            pattern:/^You heist the museum's artifact collection, stealing a piece of '(.{1,100})'$/i,
+            render:m=>'你洗劫博物館的古物收藏，偷走了一塊「'+translateItemName(m[1])+'」的碎片',
+            terms:m=>[
+                [/^You heist the museum's artifact collection, stealing a piece of '/i,'你洗劫博物館的古物收藏，偷走了一塊「'],
+                [/^.{1,100}(?='$)/u,translateItemName(m[1])],
+                [/'$/,'」的碎片']
+            ]
+        },
         {
             // 下一批貨物的剩餘天數可能分成標籤、數字及單位。
             pattern:/^Next Shipment in\s+(\d+(?:[.,]\d+)?)\s+Days?$/i,
@@ -2049,7 +2073,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
+        if(full.length>400 || !/(?:You heist the museum's artifact collection|Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
