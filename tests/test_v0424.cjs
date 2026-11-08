@@ -62,7 +62,7 @@ const expected={
     'Cannon Barrage':'大砲齊射',
     'Critical Strike':'暴擊',
     'Harvester':'收割者',
-    'Hellish Intelect':'地獄智識（原文異常）',
+    'Hellish Intelect':'地獄智識',
     'Loses +25% Ritual Power':'儀式威力減少 +25%',
     'Loses +50% Ritual Power':'儀式威力減少 +50%',
     'Max Level Reached':'已達最高等級',
