@@ -30,7 +30,7 @@ Tampermonkey 選單提供：
 
 ## 專案狀態
 
-* 目前版本：`0.4.20`
+* 目前版本：`0.4.21`
 * 版本狀態：測試版，尚未完成全面遊玩驗證。
 * 適用網站：`https://unlawfulreign.netlify.app/`
 * 原有 `@name` 與 `@namespace` 維持不變，盡量延續既有安裝識別與儲存鍵名。
@@ -47,6 +47,14 @@ Tampermonkey 選單提供：
 * 購買裝備與升級通知可辨識拆分成多個文字節點的情況，避免重複收集殘句。
 * 可用 Node.js 執行 `node tests/test_translation.cjs` 進行翻譯格式、圖示及紀錄保存的回歸測試。
 
+
+### v0.4.21 補充
+
+* 本批 JSON 含 17 筆待翻譯詞條及 96 筆上下文，其中 1 筆已確認為完整事件。保留所有原始 `complete` 標記。
+* 新增公司資助幫派、污損藝術品、加大船槳、播種至上限、無法再播種及犯罪現場留下名片的固定文字翻譯。
+* 魚叉剩餘容量片段 `/ 2 Harpoons`、藝術品仿作購買、種植毒品數量、儀式持續時間減少及每日靈魂節省改採可變數值規則，保留數值正負號與原有單位。
+* 事件 `You leave your calling card at the scene of the crime... +4.1K Not.` 支援完整句與跨 DOM 節點翻譯，保留遊戲日期、獨立的正號、數值及粗體節點。
+* 原始資料：`tests/fixtures/batch_v0421.json`；回歸測試：`node tests/test_v0421.cjs`。
 
 ### v0.4.20 補充
 
