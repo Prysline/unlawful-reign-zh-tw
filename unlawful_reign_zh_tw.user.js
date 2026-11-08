@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.25
+// @version      0.4.26
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -36,7 +36,8 @@
         "Cannon Barrage": "大砲齊射",
         "Critical Strike": "暴擊",
         "Harvester": "收割者",
-        "Hellish Intelect": "地獄智識（原文異常）",
+        // 原始詞為 Intelect（可能是 Intellect 的誤拼）。僅在此處註記，不顯示給玩家。
+        "Hellish Intelect": "地獄智識",
         "Max Level Reached": "已達最高等級",
         "Suspicious Barrels": "可疑木桶",
         "Tampered Locks": "遭動過手腳的鎖",
@@ -1108,7 +1109,9 @@
         "You finish replicating a masterpiece...": "你完成了一件傑作的仿製……",
         "You gamble": "你賭上",
         "You smuggle your": "你走私了你的",
-        "You take your time to forge emaculate fake documents...": "你花時間偽造 emaculate（原文異常，無法確認）假文件……",
+        // emaculate 是罕見舊式動詞，在原句作形容詞不合語法；可能意指 immaculate，譯為「毫無瑕疵」。
+        // 原文保留在比對鍵，推測僅作維護註解，不輸出到遊戲介面。
+        "You take your time to forge emaculate fake documents...": "你花時間偽造毫無瑕疵的假文件……",
         "at the port and set off again, earning you": "在港口，隨後再次啟航，獲得",
         "but manage to win back": "但設法贏回",
         "/ Day)": "／天）",
