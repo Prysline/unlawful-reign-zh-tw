@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.19
+// @version      0.4.20
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,29 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.20：沉船事件、魚叉、溫室及幫派名稱。
+        "Be able to grow Narcotics. Doesn't like to grow next to other plants": "能夠種植麻醉品。不喜歡在其他植物旁生長",
+        "Criminal Intuition": "犯罪直覺",
+        "Drunkard Traders": "酒鬼商人",
+        "Flower Garden": "花園",
+        "Gain EXP from more sources": "從更多來源獲得經驗值",
+        "Harpoon Rack": "魚叉架",
+        "Harpoons": "魚叉",
+        "Herbicide": "除草劑",
+        "Internalized Vision": "內化視野",
+        "Jagged timbers tear into your hull as you pull away, dealing": "當你駛離時，尖銳的木材撕裂你的船殼，造成",
+        "Leave the wreck to the sea": "把殘骸留給大海",
+        "Persistent": "持之以恆",
+        "Sail Past": "駛過",
+        "Salvage Wreckage": "打撈殘骸",
+        "Shadowy Whispers": "暗影低語",
+        "Shipwreck": "沉船",
+        "Stops Weeds (The bad kind) from growing in your greenhouse": "防止雜草（有害的那種）在你的溫室中生長",
+        "Street Tribute": "街頭貢金",
+        "The Patient Torments": "耐心折磨者",
+        "The Street Knights": "街頭騎士團",
+        "Your crew picks through the wreckage and hauls aboard": "你的船員翻找殘骸，將",
+        "Your lookout spots the splintered remains of a shipwreck drifting in the waves": "你的瞭望員發現一艘沉船的破碎殘骸正隨波漂流",
         // v0.4.19：博物館收藏的七種古物名稱與劫案準備通知。
         "Arcane Tome": "奧術典籍",
         "Charmcaster's Bauble": "魅惑術士的飾物",
@@ -1086,6 +1109,24 @@
     });
 
     const DYNAMIC = [
+        // v0.4.20：魚叉、船體損傷、種植及航海升級的數值皆可變動。
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Max Harpoons$/i, m => '魚叉上限：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Harpoons$/i, m => '魚叉：'+m[1]],
+        [/^(\d+(?:[.,]\d+)?)%\s+chance of\s+(-?\d+(?:[.,]\d+)?[KMBT]?)\s+Ship HP$/i,
+            m => m[1]+'% 機率使船隻生命值'+(m[2].startsWith('-')?'減少 '+m[2].slice(1):'增加 '+m[2])+' 點'],
+        [/^Failing heists retains\s+(\d+(?:[.,]\d+)?)%\s+of the progress$/i,
+            m => '劫案失敗時保留 '+m[1]+'% 的進度'],
+        [/^Gain x(\d+(?:[.,]\d+)?)\s+Doubloons when selling to Trading Vessels$/i,
+            m => '向商船出售物品時獲得 '+m[1]+' 倍杜布隆金幣'],
+        [/^Studying Art will boost next replicating art progress by\s+([+-]\d+(?:[.,]\d+)?)$/i,
+            m => '研習藝術會使下一次藝術品仿製的進度增加 '+m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+Notoriety from shady talk when not a criminal$/i,
+            m => '非罪犯狀態下，可疑交談獲得的惡名 ×'+m[1]],
+        // 已中文化的戰鬥記錄若仍含英文幫派名稱，套用既有名稱詞庫。
+        [/^你以「([^」]{1,100})」擊中「([^」]{1,100})」，造成$/u,
+            m => '你以「'+translateItemName(m[1])+'」擊中「'+translateItemName(m[2])+'」，造成'],
+        [/^你擊敗了「([^」]{1,100})」，並獲得$/u,
+            m => '你擊敗了「'+translateItemName(m[1])+'」，並獲得'],
         // v0.4.19：碎片進度保留分子、分母，古物名稱由共用詞庫翻譯。
         [/^(\d+)\s*\/\s*(\d+)\s+pieces?\s+found$/i, m => '已找到 '+m[1]+'/'+m[2]+' 塊碎片'],
         [/^You heist the museum's artifact collection, stealing a piece of '(.{1,100})'$/i,
@@ -1449,6 +1490,24 @@
 
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
+        {
+            // 沉船的木材損傷可分開顯示傷害數字及 DMG。
+            pattern:/^Jagged timbers tear into your hull as you pull away, dealing\s+(\d+(?:[.,]\d+)?[KMBT]?)\s+DMG$/i,
+            render:m=>'當你駛離時，尖銳的木材撕裂你的船殼，造成 '+m[1]+' 點傷害',
+            terms:()=>[
+                [/^Jagged timbers tear into your hull as you pull away, dealing\s+/i,'當你駛離時，尖銳的木材撕裂你的船殼，造成 '],
+                [/\s+DMG$/i,' 點傷害']
+            ]
+        },
+        {
+            // 拾取物資時，正號、數量與 Supplies 可能分屬不同節點。
+            pattern:/^Your crew picks through the wreckage and hauls aboard\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Supplies$/i,
+            render:m=>'你的船員翻找殘骸，將 '+m[1]+' 份補給品搬上船',
+            terms:()=>[
+                [/^Your crew picks through the wreckage and hauls aboard\s*/i,'你的船員翻找殘骸，將 '],
+                [/\s+Supplies$/i,' 份補給品搬上船']
+            ]
+        },
         {
             // v0.4.19：古物名稱內可含撇號（例如 Monarch's Ring），以最末引號定位名稱結尾。
             // 跨文字節點時僅改寫必要片段，不破壞日期與古物名稱所在節點。
@@ -2073,7 +2132,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You heist the museum's artifact collection|Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
+        if(full.length>400 || !/(?:Jagged timbers tear into your hull|Your crew picks through the wreckage|You heist the museum's artifact collection|Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
