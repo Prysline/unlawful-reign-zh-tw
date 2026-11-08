@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.23
+// @version      0.4.24
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,18 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.24：藝術品、市場操控、儀式、海軍與邪教技能。
+        "Artificial Demand": "人為製造需求",
+        "Buy up supply to artificially raise Stolen Jewels demand and prices": "買斷供應量，以人為方式提高偷來的珠寶需求與價格",
+        "Cannon Barrage": "大砲齊射",
+        "Critical Strike": "暴擊",
+        "Harvester": "收割者",
+        "Hellish Intelect": "地獄智識（原文異常）",
+        "Max Level Reached": "已達最高等級",
+        "Suspicious Barrels": "可疑木桶",
+        "Tampered Locks": "遭動過手腳的鎖",
+        "Your Gardener can help with harvesting all your 'crops' in one go": "你的園丁能協助你一次收成所有「作物」",
+        "Your hypnotic gaze and unethereal presence lures another naive believer...": "你催眠般的目光與不空靈的存在感又誘惑了一名天真的信徒……",
         // v0.4.23：幫派、盜墓、船員及公司升級名稱。
         "ATM Theft": "自動櫃員機竊盜",
         "Bunk Hammocks": "雙層吊床",
@@ -1142,6 +1154,24 @@
     });
 
     const DYNAMIC = [
+        // v0.4.24：獎勵暴擊、毒品上限、儀式威力與各種獎勵倍率。
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance to critical strike rewards\s*\(\s*x(\d+(?:[.,]\d+)?)\s*\)$/i,
+            m => '獎勵觸發暴擊（×'+m[2]+'）的機率：'+m[1]+'%'],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Max Narcotics$/i, m => '麻醉品持有上限：'+m[1]],
+        [/^([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Followers?$/i,
+            m => /^[+-]/.test(m[1]) ? '追隨者：'+m[1] : m[1]+' 名追隨者'],
+        [/^(\d+(?:[.,]\d+)?)%\s+chance of x(\d+(?:[.,]\d+)?)\s+DMG$/i,
+            m => m[1]+'% 機率造成 '+m[2]+' 倍傷害'],
+        [/^Loses\s+([+-]\d+(?:[.,]\d+)?)%\s+Ritual Power$/i,
+            m => '儀式威力減少 '+m[1]+'%'],
+        [/^Sell\s+x(\d+(?:[.,]\d+)?)\s+Replica Artworks?$/i,
+            m => '出售 ×'+m[1]+' 件藝術品仿作'],
+        [/^x(\d+(?:[.,]\d+)?)\s+Cannon Damage$/i,
+            m => '大砲傷害 ×'+m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+Store and Jewelry Store Robbery Notoriety$/i,
+            m => '商店與珠寶店搶劫獲得的惡名 ×'+m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+Expertise EXP$/i,
+            m => '專精經驗值 ×'+m[1]],
         // v0.4.23：升級數值可變，沿用既有的蠻力、幫派、靈魂與商店搶劫譯名。
         [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Brutality EXP from Store and Jewelry Store Robberies$/i,
             m => '商店與珠寶店搶劫獲得的蠻力經驗值：'+m[1]],
@@ -1562,6 +1592,15 @@
 
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
+        {
+            // 信徒加入事件可能把正號、數字與 Followers 分散在不同文字節點。
+            pattern:/^(Your hypnotic gaze and unethereal presence lures another naive believer\.\.\.)\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Followers?$/i,
+            render:m=>lookup(m[1])+' '+(/^[+-]/.test(m[2])?'追隨者：'+m[2]:m[2]+' 名追隨者'),
+            terms:m=>[
+                [/^Your hypnotic gaze and unethereal presence lures another naive believer\.\.\./i,lookup(m[1])],
+                [/\s+Followers?$/i,' 名追隨者']
+            ]
+        },
         {
             // 裝載魚叉通知中，正負號與魚叉數目、價格可能被切成不同文字節點。
             pattern:/^You load\s*([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Harpoons?\s+onto your ship for\s*([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Doubloons?$/i,
@@ -2235,7 +2274,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:Your crew swings on board the Navy Ship|You load|You leave your calling card at the scene of the crime|Jagged timbers tear into your hull|Your crew picks through the wreckage|You heist the museum's artifact collection|Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
+        if(full.length>400 || !/(?:Your hypnotic gaze and unethereal presence lures|Your crew swings on board the Navy Ship|You load|You leave your calling card at the scene of the crime|Jagged timbers tear into your hull|Your crew picks through the wreckage|You heist the museum's artifact collection|Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
