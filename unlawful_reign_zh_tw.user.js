@@ -1437,6 +1437,12 @@
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
         {
+            // 下一批貨物的剩餘天數可能分成標籤、數字及單位。
+            pattern:/^Next Shipment in\s+(\d+(?:[.,]\d+)?)\s+Days?$/i,
+            render:m=>'距離下一批貨物抵達還有 '+m[1]+' 天',
+            terms:()=>[[/^Next Shipment in\s+/i,'距離下一批貨物抵達還有 '],[/\s+Days?$/i,' 天']]
+        },
+        {
             // 火車目的地直接沿用詞庫，避免為遭遇機率地點逐條建立固定完整句。
             pattern:/^You ride the train and arrive at '([^']{1,100})'$/i,
             render:m=>'你搭乘火車，抵達「'+translateItemName(m[1])+'」',
@@ -2043,7 +2049,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
+        if(full.length>400 || !/(?:Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
