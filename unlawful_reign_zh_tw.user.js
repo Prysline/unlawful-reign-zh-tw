@@ -1595,7 +1595,7 @@
         {
             // 信徒加入事件可能把正號、數字與 Followers 分散在不同文字節點。
             pattern:/^(Your hypnotic gaze and unethereal presence lures another naive believer\.\.\.)\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Followers?$/i,
-            render:m=>lookup(m[1])+' '+(/^[+-]/.test(m[2])?'追隨者：'+m[2]:m[2]+' 名追隨者'),
+            render:m=>lookup(m[1])+' '+m[2]+' 名追隨者',
             terms:m=>[
                 [/^Your hypnotic gaze and unethereal presence lures another naive believer\.\.\./i,lookup(m[1])],
                 [/\s+Followers?$/i,' 名追隨者']
