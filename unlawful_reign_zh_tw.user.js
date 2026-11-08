@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.22
+// @version      0.4.23
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,14 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.23：幫派、盜墓、船員及公司升級名稱。
+        "ATM Theft": "自動櫃員機竊盜",
+        "Bunk Hammocks": "雙層吊床",
+        "Dead Ores": "死者礦石",
+        "Graveside Vigil": "墓旁守夜",
+        "Pie Charts": "圓餅圖",
+        "Unmarked Van": "無標誌廂型車",
+        "Violent Streak": "連續暴行",
         // v0.4.22：魚叉牽制、地圖技能、幫派征服及海軍戰鬥。
         "Alloy Nails": "合金釘",
         "Bracelet Charms": "手鍊吊飾",
@@ -1134,6 +1142,18 @@
     });
 
     const DYNAMIC = [
+        // v0.4.23：升級數值可變，沿用既有的蠻力、幫派、靈魂與商店搶劫譯名。
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Brutality EXP from Store and Jewelry Store Robberies$/i,
+            m => '商店與珠寶店搶劫獲得的蠻力經驗值：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Stolen Jewels?\s+when raiding graves?$/i,
+            m => '盜墓時獲得的偷來的珠寶：'+m[1]],
+        // 原始遊戲文字將 Cemetery 拼成 Cemetary，兩種拼寫共用相同譯文。
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Souls?\s+when Paying Respect at (?:Cemetary|Cemetery)$/i,
+            m => '在墓園致意時獲得的靈魂：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Max Gang Members$/i,
+            m => '幫派成員上限：'+m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+Store Robbery Reward$/i,
+            m => '商店搶劫獎勵 ×'+m[1]],
         // v0.4.22：動態數值、船艦牽制效果與各項升級加成。
         [/^\(\s*Tethered\s+x(\d+(?:[.,]\d+)?)!\s*\)$/i, m => '（牽制 ×'+m[1]+'！）'],
         [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance pickpocket stolen jewels$/i,
