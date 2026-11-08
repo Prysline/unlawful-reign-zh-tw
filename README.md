@@ -30,7 +30,7 @@ Tampermonkey 選單提供：
 
 ## 專案狀態
 
-* 目前版本：`0.4.25`
+* 目前版本：`0.4.26`
 * 版本狀態：測試版，尚未完成全面遊玩驗證。
 * 適用網站：`https://unlawfulreign.netlify.app/`
 * 原有 `@name` 與 `@namespace` 維持不變，盡量延續既有安裝識別與儲存鍵名。
@@ -48,6 +48,13 @@ Tampermonkey 選單提供：
 * 可用 Node.js 執行 `node tests/test_translation.cjs` 進行翻譯格式、圖示及紀錄保存的回歸測試。
 
 
+### v0.4.26 補充
+
+* 將玩家可見的翻譯註記移到使用者腳本內的維護註解。遊戲畫面不再出現「原文異常」、「無法確認」等譯者說明。
+* `Hellish Intelect` 維持原始辨識鍵，顯示為「地獄智識」。`Intelect` 可能是 `Intellect` 的誤拼，此推測僅記錄於程式註解。
+* `You take your time to forge emaculate fake documents...` 維持原始辨識鍵，顯示為「你花時間偽造毫無瑕疵的假文件……」。`emaculate` 確實是表示去除污點的過時英語動詞，但在此作為形容詞的語法不合理，可能意指 `immaculate`，此判讀尚無開發者確認。
+* 更新對應回歸測試，確保顯示文字不混入維護註解。
+
 ### v0.4.25 補充
 
 * 本批 JSON 有 20 筆待翻譯字串和 142 筆上下文；全部上下文的 `complete` 都是 `false`，保留原始片段與完整度狀態。
@@ -62,7 +69,7 @@ Tampermonkey 選單提供：
 * 新增人為製造需求、大砲齊射、暴擊、收割者、地獄智識、可疑木桶、遭動過手腳的鎖及最高等級提示等固定詞彙；保留藝術品仿作、偷來的珠寶、追隨者等既有用語。
 * 新增獎勵暴擊倍率與機率、麻醉品持有上限、追隨者數量、雙倍傷害機率、儀式威力減少、藝術品仿作出售、砲擊傷害及搶劫惡名和專精經驗值倍率等可變數值翻譯，保留 `x1.80` 的數字精度。
 * 邪教招募的 `Your hypnotic gaze and unethereal presence lures another naive believer... +1 Followers` 支援完整字串與跨 DOM 節點翻譯，保留日期、獨立正號及粗體數字。來源上下文仍標記為未確認完整。
-* 原文異常：`Hellish Intelect` 的 `Intelect` 疑似為 `Intellect` 的拼寫錯誤，原始比對鍵維持不變，譯文標示異常；`unethereal presence` 採用直接詞義，不推測為相反的 `ethereal`。
+* 原文異常：`Hellish Intelect` 的 `Intelect` 疑似為 `Intellect` 的拼寫錯誤，原始比對鍵維持不變，異常僅記錄在維護註解；`unethereal presence` 採用直接詞義，不推測為相反的 `ethereal`。
 * 原始資料：`tests/fixtures/batch_v0424.json`；回歸測試：`node tests/test_v0424.cjs`。
 
 ### v0.4.23 補充
@@ -280,7 +287,7 @@ Tampermonkey 選單提供：
 
 * 新增追隨者、邪教信徒、幫派標誌、導師凝視、珠寶箱與邪教相關事件等 16 筆固定翻譯，並以 4 條動態規則涵蓋追隨者解鎖門檻、邪教追隨者數量、獻祭靈魂百分比和藝術品仿製速度。
 * 將 `The power of [名稱] seduces a new Follower to join your cult!` 納入既有的完整句／跨節點共用事件機制，對名稱進行詞庫翻譯，保留日期與粗體等原有 DOM 結構。
-* 原文 `vial display` 的詞意不明，保留 `vial` 並在譯文註記「原文異常」，不將其擅自改成另一個英文詞。
+* 原文 `vial display` 的詞意不明，僅在維護紀錄保留討論；實際譯文不加上異常註記。
 * 本批 20 筆來源：`tests/fixtures/batch_v0401.json`，測試：`tests/test_v0401.cjs`。可執行 `node tests/test_v0401.cjs`。
 
 
@@ -290,7 +297,7 @@ Tampermonkey 選單提供：
 * 既有避風港船隻生命值規則現支援 `haven` 變體，重新集結倒數也涵蓋 `Reloading`；賭注倍率同時接受 `Amount you gamble` 和 `Amount you can Gamble`。
 * 走私容量、賭博贏回金額及港口走私事件採完整句與跨節點共用規則，保留原始粗體數字、日期及互動元素。
 * 純金額 `-₵5K` 保留原文，不視為應翻譯的文字。
-* `emaculate` 為無法確認的原文用字，保留原詞並標示原文異常，不擅自修正。
+* `emaculate` 為罕見的過時動詞，在此句的修飾語位置不合語法；當時保留原詞並於畫面註記，後於 v0.4.26 移到維護註解，顯示文字改依可能的 `immaculate` 詞義翻譯。
 * 原始 43 筆 JSON 存放於 `tests/fixtures/batch_v0402.json`，測試檔為 `tests/test_v0402.cjs`，可執行 `node tests/test_v0402.cjs`。
 
 
