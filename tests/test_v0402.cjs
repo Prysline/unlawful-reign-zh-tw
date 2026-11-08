@@ -78,7 +78,7 @@ const expected={
     'You finish replicating a masterpiece...':'你完成了一件傑作的仿製……',
     'You gamble':'你賭上',
     'You smuggle your':'你走私了你的',
-    'You take your time to forge emaculate fake documents...':'你花時間偽造 emaculate（原文異常，無法確認）假文件……',
+    'You take your time to forge emaculate fake documents...':'你花時間偽造毫無瑕疵的假文件……',
     'at the port and set off again, earning you':'在港口，隨後再次啟航，獲得',
     'but manage to win back':'但設法贏回',
     'x1.5 Ram Damage':'撞角傷害 ×1.5',
