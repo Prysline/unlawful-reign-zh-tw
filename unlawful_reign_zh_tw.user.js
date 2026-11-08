@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.27
+// @version      0.4.28
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,23 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.28：洗衣店、幫派轉換及技能名稱，原文異常僅留在維護紀錄。
+        ", earning you": "，讓你賺得",
+        "Betting Savant": "投注奇才",
+        "Clean your dirty money - literally!": "清洗你的髒錢，字面意義上的清洗！",
+        "Dirty Sales": "骯髒銷售",
+        "Drugs Inventory full!": "毒品庫存已滿！",
+        "Experienced Villain": "老練惡棍",
+        "Graffiti Scholar": "塗鴉學者",
+        "Muscle Memory": "肌肉記憶",
+        "Spectral Walker": "幽靈行者",
+        "Wash Clothes": "洗衣服",
+        "Wash Money": "洗錢",
+        "You put your Gang through grueling challenges, losing": "你讓幫派接受嚴苛的挑戰，失去",
+        "You toss": "你將",
+        "You wash a load of clothes for a customer and get paid": "你替顧客洗了一批衣服，並獲得報酬",
+        "Your cartel sells": "你的販毒集團出售",
+        "into the washer and pull out": "丟進洗衣機，然後取出",
         // v0.4.27：販毒集團、園藝、黑手黨及事件提示詞彙。
         "Able to turn your Gang Members into Cartel members and start your drug empire": "能夠將你的幫派成員轉為販毒集團成員，並建立你的毒品帝國",
         "Bountiful Scythe": "豐收鐮刀",
@@ -1187,6 +1204,27 @@
     });
 
     const DYNAMIC = [
+        // v0.4.28：技能增益、金錢與幫派成員均以可變數值辨識。
+        [/^\+\s+Gang War damage boosted by\s+([+-]\d+(?:[.,]\d+)?)%\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s+Per Lvl\s*\)$/i,
+            m => '＋幫派戰爭傷害提高 '+m[1]+'%（每級 '+m[2]+'%）'],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Global Money Reward for every\s+(\d+(?:[.,]\d+)?[KMBT]?)\s+Notoriety\s*\(\s*Max\s+([+-]\d+(?:[.,]\d+)?)%\s*\)$/i,
+            m => '每 '+m[2]+' 點惡名的全域金錢獎勵：'+m[1]+'%（最高 '+m[3]+'%）'],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Artistry EXP from Graffiti$/i,
+            m => '塗鴉獲得的藝術經驗值：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Brutality EXP from Casino Robbery$/i,
+            m => '賭場搶劫獲得的蠻力經驗值：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Finance EXP from Gambling$/i,
+            m => '賭博獲得的財務經驗值：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Stealth EXP from Shoplifting$/i,
+            m => '商店行竊獲得的潛行經驗值：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Notoriety Rewards$/i,
+            m => '惡名獎勵：'+m[1]+'%'],
+        [/^(\d+(?:[.,]\d+)?[KMBT]?)\s+Cartel Members?$/i,
+            m => m[1]+' 名販毒集團成員'],
+        [/^(\d+(?:[.,]\d+)?[KMBT]?)\s+Gang Members but gaining$/i,
+            m => m[1]+' 名幫派成員，但獲得'],
+        [/^Converts\s+(\d+(?:[.,]\d+)?)%\s+of your Dirty Money$/i,
+            m => '轉換你 '+m[1]+'% 的髒錢'],
         // v0.4.27：販毒集團、麻醉品、販售週期與收成加成的可變數值。
         [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Cartel Members?$/i, m => '販毒集團成員：'+m[1]],
         [/^Cartel Members:\s*(\d+(?:[.,]\d+)?[KMBT]?)$/i, m => '販毒集團成員：'+m[1]],
@@ -1651,6 +1689,43 @@
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
         {
+            // 幫派成員轉換為販毒集團成員；保留拆分的負號、正號及數量。
+            pattern:/^You put your Gang through grueling challenges, losing\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Gang Members but gaining\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Cartel Members?$/i,
+            render:m=>'你讓幫派接受嚴苛的挑戰，失去 '+m[1]+' 名幫派成員，但獲得 '+m[2]+' 名販毒集團成員',
+            terms:()=>[
+                [/^You put your Gang through grueling challenges, losing\s*/i,'你讓幫派接受嚴苛的挑戰，失去 '],
+                [/\s+Gang Members but gaining\s*/i,' 名幫派成員，但獲得 '],
+                [/\s+Cartel Members?$/i,' 名販毒集團成員']
+            ]
+        },
+        {
+            // 洗衣機洗錢事件；保留 -$ 與 +₵ 幣別及原始數值。
+            pattern:/^You toss\s+([+-]?\$[\d,.]+[KMBT]?)\s+into the washer and pull out\s+([+-]?₵[\d,.]+[KMBT]?)$/i,
+            render:m=>'你將 '+m[1]+' 丟進洗衣機，然後取出 '+m[2],
+            terms:()=>[
+                [/^You toss\s*/i,'你將 '],
+                [/\s+into the washer and pull out\s*/i,' 丟進洗衣機，然後取出 ']
+            ]
+        },
+        {
+            // 洗衣服務收費事件保留 ₵ 的金額節點。
+            pattern:/^You wash a load of clothes for a customer and get paid\s+([+-]?₵[\d,.]+[KMBT]?)$/i,
+            render:m=>'你替顧客洗了一批衣服，並獲得報酬 '+m[1],
+            terms:()=>[
+                [/^You wash a load of clothes for a customer and get paid\s*/i,'你替顧客洗了一批衣服，並獲得報酬 ']
+            ]
+        },
+        {
+            // 已確認完整的販毒集團交易通知；獨立的數量、金額、正號與驚嘆號均保留。
+            pattern:/^Your cartel sells\s+(\d+(?:[.,]\d+)?[KMBT]?)\s+Drugs?,\s+earning you\s+([+-]?\$[\d,.]+[KMBT]?)!$/i,
+            render:m=>'你的販毒集團出售 '+m[1]+' 份毒品，讓你賺得 '+m[2]+'！',
+            terms:()=>[
+                [/^Your cartel sells\s*/i,'你的販毒集團出售 '],
+                [/\s+Drugs?,\s+earning you\s*/i,' 份毒品，讓你賺得 '],
+                [/!$/i,'！']
+            ]
+        },
+        {
             // 園藝收成通知的正負號與麻醉品數字可能在不同節點，保留原始數值節點。
             pattern:/^Harvested your garden flowers\.\.\.\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Narcotics$/i,
             render:m=>lookup('Harvested your garden flowers...')+' '+m[1]+' 份麻醉品',
@@ -1954,6 +2029,8 @@
     ];
 
     const NONTRANSLATABLE = [
+        // 已中文化的「每級古物獲得的惡名：+3.7K」包含數量縮寫，不應再次收集。
+        /^每級古物獲得的惡名：\s*[+-]?\d+(?:[.,]\d+)?[KMBT]?$/iu,
         // v0.4.22：已翻譯的惡名數值包含 K/M/B/T 時，無需再次收集。
         /^[+-]?\d+(?:[.,]\d+)?[KMBT]?\s+惡名$/iu,
         // 進度顯示中的 K/M/B/T 為數量縮寫，不應收錄為英文待翻譯文字。
@@ -2378,7 +2455,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:Harvested your garden flowers|You purchase a rare Treasure Map from the Trading Vessel|Your minions are provoked into a frenzy|You sold|Pay\s+\d+(?:[.,]\d+)?%\s+less when Busted|Your hypnotic gaze and unethereal presence lures|Your crew swings on board the Navy Ship|You load|You leave your calling card at the scene of the crime|Jagged timbers tear into your hull|Your crew picks through the wreckage|You heist the museum's artifact collection|Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
+        if(full.length>400 || !/(?:You put your Gang through grueling challenges|You toss|You wash a load of clothes|Your cartel sells|Harvested your garden flowers|You purchase a rare Treasure Map from the Trading Vessel|Your minions are provoked into a frenzy|You sold|Pay\s+\d+(?:[.,]\d+)?%\s+less when Busted|Your hypnotic gaze and unethereal presence lures|Your crew swings on board the Navy Ship|You load|You leave your calling card at the scene of the crime|Jagged timbers tear into your hull|Your crew picks through the wreckage|You heist the museum's artifact collection|Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
