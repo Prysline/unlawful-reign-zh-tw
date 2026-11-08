@@ -1620,7 +1620,7 @@
             terms:()=>[
                 [/^Pay\s*/i,'被逮捕時少支付 '],
                 [/\s+less when Busted\s*\(\s*/i,'（每名員工 '],
-                [/\s*\/\s*Employee\s*\)$/i,'）']
+                [/\s*\/\s*Employee\s*\)\s*$/i,'）']
             ]
         },
         {
