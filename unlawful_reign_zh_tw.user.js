@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.17
+// @version      0.4.18
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,41 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.18：火車、海難打撈、公司倉儲與相關升級。
+        "A one-way pass to the richest carriage and the fastest exit route": "通往最富裕車廂與最快出口路線的單程通行證",
+        "A wicked Train of thought": "邪惡的思緒列車",
+        "Diamond Headed": "鑽石腦袋",
+        "Dive the Shipwreck for loot": "潛入沉船搜尋戰利品",
+        "Diving Bell": "潛水鐘",
+        "Global Notoriety": "全域惡名",
+        "Hollow Books": "中空書籍",
+        "Make your own way through life": "走出自己的人生道路",
+        "New Office Space": "新辦公空間",
+        "Next Shipment in": "距離下一批貨物抵達還有",
+        "Ninja Training": "忍者訓練",
+        "Patented Tech": "專利技術",
+        "Precious Pilfer": "珍寶偷竊",
+        "Premium Coach": "高級車廂",
+        "Railway Station": "火車站",
+        "Red X": "紅色叉號",
+        "Ride the Train": "搭乘火車",
+        "Salvage Net": "打撈網",
+        "Scavenge Supplies": "搜尋補給品",
+        "Scavenge for supplies at Deserted Islands": "在荒島上搜尋補給品",
+        "Side Skimmer": "舷側撈取器",
+        "Taken Trinkets": "偷來的小飾品",
+        "Towering Tides": "滔天巨浪",
+        "Train": "火車",
+        "Under your command, your gang strips the train's passengers of their wealth!": "在你的指揮下，你的幫派洗劫了火車乘客的財物！",
+        "Warehouse Department": "倉儲部門",
+        "Wealthier Victims": "更富裕的受害者",
+        "Wild Bunch": "狂野幫眾",
+        "You readjust the course of your ship, ready to ram again!": "你重新調整船隻航向，準備再次撞擊！",
+        "You trade with the vessel, buying": "你與商船交易，購買",
+        "You've deciphered the route to a cache of hidden treasure!": "你已解讀出通往一處隱藏寶藏的路線！",
+        "Your Warehouse shipment of": "你的倉庫貨運，包含",
+        "Your gang and you can steal the cargo off a Train": "你與幫派成員可以偷取火車上的貨物",
+        "arrives!": "已送達！",
         // v0.4.17：劫案警報、策劃與海盜地圖解讀事件。
         "The alarms go off and the police come rushing to the scene, catching you!": "警報響起，警察迅速趕到現場並抓住了你！",
         "You continue making detailed heist preparations...": "你繼續進行詳盡的劫案準備……",
@@ -1042,6 +1077,24 @@
     });
 
     const DYNAMIC = [
+        // v0.4.18：火車目的地沿用既有遭遇名稱翻譯，不預設只有四種目的地。
+        [/^You ride the train and arrive at '([^']{1,100})'$/i, m => '你搭乘火車，抵達「' + translateItemName(m[1]) + '」'],
+        [/^\(\s*([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s*\/\s*Employee\s*\)$/i, m => '（每名員工 '+m[1]+'）'],
+        [/^\+\s*Chance to create Original Artwork\s+([+-]\d+(?:[.,]\d+)?)%\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s*Per Lvl\s*\)$/i,
+            m => '＋創作原創藝術品的機率 '+m[1]+'%（每級 '+m[2]+'%）'],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Stealth EXP from pickpocketing$/i, m => '扒竊獲得的潛行經驗值：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Flee chance$/i, m => '逃跑機率：'+m[1]+'%'],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Jewelry Store Heist Planning Speed$/i, m => '珠寶店劫案策劃速度：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance to Pickpocket Jewels$/i, m => '扒竊時偷得珠寶的機率：'+m[1]+'%'],
+        [/^([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Treasure Maps?$/i,
+            m => /^[+-]/.test(m[1]) ? '藏寶圖：'+m[1] : m[1]+' 張藏寶圖'],
+        [/^Rob Passengers\s*\(\s*(\d+)\s+G\.M\.?\s*,\s*(\d+)\s+S\.M\.G\.?\s*\)$/i,
+            m => '搶劫乘客（'+m[1]+' 名幫派成員、'+m[2]+' 把衝鋒槍）'],
+        [/^Gain\s+(\d+(?:[.,]\d+)?)%\s+of Supplies when sailing past Shipwrecks$/i,
+            m => '航行經過沉船時獲得其補給品的 '+m[1]+'%'],
+        [/^x(\d+(?:[.,]\d+)?)\s+(Train Robbery Money|Supplies from Salvaging Wreckage|Rob Passengers Reward|Pickpocket and Shoplift Reward)$/i,
+            m => ({'train robbery money':'火車搶劫金錢','supplies from salvaging wreckage':'打撈殘骸獲得的補給品','rob passengers reward':'搶劫乘客獎勵','pickpocket and shoplift reward':'扒竊及商店行竊獎勵'})[m[2].toLowerCase()]+' ×'+m[1]],
+        [/^Next Shipment in\s+(\d+(?:[.,]\d+)?)\s+Days?$/i, m => '距離下一批貨物抵達還有 '+m[1]+' 天'],
         // v0.4.16：以同一套可變數值格式涵蓋研究、古物、博物館策劃與部門加成。
         [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Finance EXP from Studying Operations$/i, m => '研究營運獲得的財務經驗值：'+m[1]],
         [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Random Artifact Pieces?$/i, m => '隨機古物碎片：'+m[1]],
@@ -1384,6 +1437,50 @@
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
         {
+            // 火車目的地直接沿用詞庫，避免為遭遇機率地點逐條建立固定完整句。
+            pattern:/^You ride the train and arrive at '([^']{1,100})'$/i,
+            render:m=>'你搭乘火車，抵達「'+translateItemName(m[1])+'」',
+            terms:m=>[
+                [/^You ride the train and arrive at '/i,'你搭乘火車，抵達「'],
+                [/^[^']{1,100}(?='$)/,translateItemName(m[1])],
+                [/'$/,'」']
+            ]
+        },
+        {
+            // 完整火車乘客搶劫通知：金錢數值可位於獨立粗體節點。
+            pattern:/^(Under your command, your gang strips the train's passengers of their wealth!)\s+([+-]?\$[\d,.]+[KMBT]?)$/i,
+            render:m=>lookup(m[1])+' '+m[2],
+            terms:m=>[[/^Under your command, your gang strips the train's passengers of their wealth!/i,lookup(m[1])]]
+        },
+        {
+            // 商船購買事件中，正負號與物資數值可以分開存放。
+            pattern:/^You trade with the vessel, buying\s*([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Stolen Goods\s+for\s*([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Doubloons$/i,
+            render:m=>'你與商船交易，購買 '+m[1]+' 件贓物，支付 '+m[2]+' 枚杜布隆金幣',
+            terms:()=>[
+                [/^You trade with the vessel, buying\s*/i,'你與商船交易，購買 '],
+                [/\s+Stolen Goods(?=\s+for\s+[+-]?\d+(?:[.,]\d+)?[KMBT]?\s+Doubloons$)/i,' 件贓物'],
+                [/\s+for\s+/i,'，支付 '],
+                [/\s+Doubloons$/i,' 枚杜布隆金幣']
+            ]
+        },
+        {
+            pattern:/^(You've deciphered the route to a cache of hidden treasure!)\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Treasure Maps?$/i,
+            render:m=>lookup(m[1])+' '+m[2]+' 張藏寶圖',
+            terms:m=>[
+                [/^You've deciphered the route to a cache of hidden treasure!/i,lookup(m[1])],
+                [/\s+Treasure Maps?$/i,' 張藏寶圖']
+            ]
+        },
+        {
+            pattern:/^Your Warehouse shipment of\s*([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Stolen Goods\s+arrives!$/i,
+            render:m=>'你的倉庫貨運，包含 '+m[1]+' 件贓物，已送達！',
+            terms:()=>[
+                [/^Your Warehouse shipment of\s*/i,'你的倉庫貨運，包含 '],
+                [/\s+Stolen Goods(?=\s+arrives!$)/i,' 件贓物'],
+                [/\s+arrives!$/i,'，已送達！']
+            ]
+        },
+        {
             // v0.4.17：單段句子和獨立進度節點共用同一譯文，不改變進度節點。
             pattern:/^(You continue making detailed heist preparations\.\.\.|You continue to decipher cryptic symbols and pirate texts\.\.\.)\s+(\(\s*\d+(?:[.,]\d+)?\s*\/\s*\d+(?:[.,]\d+)?\s*\))$/i,
             render:m=>lookup(m[1])+' '+m[2],
@@ -1524,6 +1621,8 @@
     ];
 
     const NONTRANSLATABLE = [
+        // 進度顯示中的 K/M/B/T 為數量縮寫，不應收錄為英文待翻譯文字。
+        /^\d+(?:[.,]\d+)?[KMBT]?\s*\/\s*\d+(?:[.,]\d+)?[KMBT]?$/i,
         // v0.4.17：只有金額與百分比的顯示值，K 等數量縮寫不代表未翻譯英文。
         /^[+-]?\$[\d,.]+[KMBT]?\s*\(\s*\d+(?:[.,]\d+)?%\s*\)$/i,
         // v0.4.16：中文生命值與補給品後方的 K/M/B/T 是單位，不是待翻譯英文。
@@ -1944,7 +2043,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
+        if(full.length>400 || !/(?:You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
