@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.21
+// @version      0.4.22
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,23 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.22：魚叉牽制、地圖技能、幫派征服及海軍戰鬥。
+        "Alloy Nails": "合金釘",
+        "Bracelet Charms": "手鍊吊飾",
+        "Campaign Complete": "戰役完成",
+        "Chaos Canvas": "混亂畫布",
+        "Fire Harpoon": "發射魚叉",
+        "Gem Hungry": "渴求寶石",
+        "No rivals remaining": "沒有剩餘的對手",
+        "Novice Cartographer": "新手製圖師",
+        "Professor of Archaeology": "考古學教授",
+        "Provoke your minions at the Cemetery": "在墓園挑釁你的僕從",
+        "Restless Rest": "不安的安息",
+        "Shady Employees": "可疑員工",
+        "Silent Shoes": "無聲鞋",
+        "Tethered": "已牽制",
+        "Your crew has taken every district it can reach.": "你的船員已奪下所有能夠抵達的地區。",
+        "Your harpoon bites into the Navy Ship and the line pulls taut, leaving it open to your next attack": "你的魚叉刺入海軍艦艇，繩索隨即繃緊，使它在你的下一次攻擊面前暴露破綻",
         // v0.4.21：畫廊、公司、船槳、播種與犯罪現場留下名片事件。
         "Corporate Funded Gang": "公司資助的幫派",
         "Deface Artwork": "污損藝術品",
@@ -1117,6 +1134,27 @@
     });
 
     const DYNAMIC = [
+        // v0.4.22：動態數值、船艦牽制效果與各項升級加成。
+        [/^\(\s*Tethered\s+x(\d+(?:[.,]\d+)?)!\s*\)$/i, m => '（牽制 ×'+m[1]+'！）'],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Chance pickpocket stolen jewels$/i,
+            m => '扒竊取得偷來的珠寶的機率：'+m[1]+'%'],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Next Create Replica Progress$/i,
+            m => '下次製作藝術品仿作的進度：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Decipher map speed$/i,
+            m => '地圖解讀速度：'+m[1]],
+        // 原文 "when you gamble and win than lose" 語法不明確，避免臆測具體勝率機制。
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+when you gamble and win than lose$/i,
+            m => '賭博時獲勝而非落敗：'+m[1]+'%'],
+        [/^(\d+(?:[.,]\d+)?[KMBT]?)\s+Harpoons?\s+onto your ship for$/i,
+            m => m[1]+' 支魚叉到你的船上，花費'],
+        [/^(\d+(?:[.,]\d+)?[KMBT]?)\s*\/\s*(\d+(?:[.,]\d+)?[KMBT]?)\s+Harpoons?\s+left$/i,
+            m => '剩餘魚叉：'+m[1]+'/'+m[2]],
+        [/^Deal\s+(\d+(?:[.,]\d+)?[KMBT]?)\s+DMG\s+\(\s*Tethered\s*\)$/i,
+            m => '造成 '+m[1]+' 點傷害（牽制）'],
+        [/^Next attack deals\s+x(\d+(?:[.,]\d+)?)\s+DMG$/i,
+            m => '下一次攻擊的傷害 ×'+m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+Gang Passive Income$/i,
+            m => '幫派被動收入 ×'+m[1]],
         // v0.4.21：魚叉數量片段、藝術品購買、農作物、儀式及靈魂每日消耗的可變規則。
         [/^(\/\s*\d+(?:[.,]\d+)?[KMBT]?)\s+Harpoons$/i, m => m[1]+' 魚叉'],
         [/^Buy\s+x(\d+(?:[.,]\d+)?)\s+Replica Artworks?$/i, m => '購買 ×'+m[1]+' 件藝術品仿作'],
@@ -1505,6 +1543,26 @@
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
         {
+            // 裝載魚叉通知中，正負號與魚叉數目、價格可能被切成不同文字節點。
+            pattern:/^You load\s*([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Harpoons?\s+onto your ship for\s*([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Doubloons?$/i,
+            render:m=>'你裝載 '+m[1]+' 支魚叉到船上，花費 '+m[2]+' 枚杜布隆金幣',
+            terms:()=>[
+                [/^You load\s*/i,'你裝載 '],
+                [/\s+Harpoons?\s+onto your ship for\s*/i,' 支魚叉到船上，花費 '],
+                [/\s+Doubloons?$/i,' 枚杜布隆金幣']
+            ]
+        },
+        {
+            // 牽制中的登艦攻擊保留被拆分的正負號、傷害數值和倍率。
+            pattern:/^Your crew swings on board the Navy Ship, dealing\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+DMG\s+\(Tethered\s+x(\d+(?:[.,]\d+)?)!\)$/i,
+            render:m=>'你的船員盪上海軍艦艇，造成 '+m[1]+' 點傷害（牽制 ×'+m[2]+'！）',
+            terms:m=>[
+                [/^Your crew swings on board the Navy Ship, dealing\s+/i,'你的船員盪上海軍艦艇，造成 '],
+                [/\s+DMG(?=\s+\(Tethered\s+x\d+(?:[.,]\d+)?!\)$)/i,' 點傷害'],
+                [/\s+\(Tethered\s+x\d+(?:[.,]\d+)?!\)$/i,'（牽制 ×'+m[2]+'！）']
+            ]
+        },
+        {
             // 犯罪現場名片事件中，正號、縮寫數值與惡名單位可能在不同節點。
             pattern:/^(You leave your calling card at the scene of the crime\.\.\.)\s+([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Not\.$/i,
             render:m=>lookup(m[1])+' '+m[2]+' 惡名',
@@ -1733,6 +1791,8 @@
     ];
 
     const NONTRANSLATABLE = [
+        // v0.4.22：已翻譯的惡名數值包含 K/M/B/T 時，無需再次收集。
+        /^[+-]?\d+(?:[.,]\d+)?[KMBT]?\s+惡名$/iu,
         // 進度顯示中的 K/M/B/T 為數量縮寫，不應收錄為英文待翻譯文字。
         /^\d+(?:[.,]\d+)?[KMBT]?\s*\/\s*\d+(?:[.,]\d+)?[KMBT]?$/i,
         // v0.4.17：只有金額與百分比的顯示值，K 等數量縮寫不代表未翻譯英文。
@@ -2155,7 +2215,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You leave your calling card at the scene of the crime|Jagged timbers tear into your hull|Your crew picks through the wreckage|You heist the museum's artifact collection|Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
+        if(full.length>400 || !/(?:Your crew swings on board the Navy Ship|You load|You leave your calling card at the scene of the crime|Jagged timbers tear into your hull|Your crew picks through the wreckage|You heist the museum's artifact collection|Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
