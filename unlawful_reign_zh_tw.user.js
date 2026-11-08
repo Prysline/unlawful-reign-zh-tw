@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.26
+// @version      0.4.27
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,26 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.27：販毒集團、園藝、黑手黨及事件提示詞彙。
+        "Able to turn your Gang Members into Cartel members and start your drug empire": "能夠將你的幫派成員轉為販毒集團成員，並建立你的毒品帝國",
+        "Bountiful Scythe": "豐收鐮刀",
+        "Cartel": "販毒集團",
+        "Dim Lighting": "昏暗照明",
+        "Harvest Max": "收成至上限",
+        "Harvested your garden flowers...": "你收成了花園裡的花朵……",
+        "Hire Cartel Member": "招募販毒集團成員",
+        "Hydrated Foliage": "水潤葉片",
+        "Laundromat": "自助洗衣店",
+        "Narcos": "毒梟",
+        "Narcotics Inventory full!": "麻醉品庫存已滿！",
+        "Nitrogen-Rich": "富含氮素",
+        "Nothing to Harvest...": "沒有東西可收成……",
+        "Provoke Minions": "挑釁僕從",
+        "Start your own Mafia family": "建立你自己的黑手黨家族",
+        "The Godfather": "教父",
+        "Treats": "零食",
+        "You purchase a rare Treasure Map from the Trading Vessel,": "你從商船購買了一張稀有藏寶圖，",
+        "Your minions are provoked into a frenzy, harvesting souls...": "你的僕從受到挑釁而陷入狂亂，收割靈魂……",
         // v0.4.25：種植、海戰、賭場洗錢與商店合作詞彙。
         "Clean cuts, quick harvests, and a suspiciously well-trimmed garden": "俐落的修剪、迅速的收成，以及修整得可疑地整齊的花園",
         "Flammable Supply": "易燃補給品",
@@ -1167,6 +1187,20 @@
     });
 
     const DYNAMIC = [
+        // v0.4.27：販毒集團、麻醉品、販售週期與收成加成的可變數值。
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Cartel Members?$/i, m => '販毒集團成員：'+m[1]],
+        [/^Cartel Members:\s*(\d+(?:[.,]\d+)?[KMBT]?)$/i, m => '販毒集團成員：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Max Drugs dealt to Shady Strangers?$/i,
+            m => '向可疑陌生人販售毒品的上限：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Drugs?\s*\(\s*(\d+(?:[.,]\d+)?)%\s+for\s+x(\d+(?:[.,]\d+)?)\s*\)$/i,
+            m => '毒品：'+m[1]+'（'+m[2]+'% 機率 ×'+m[3]+'）'],
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Narcotics$/i, m => '麻醉品：'+m[1]],
+        [/^(\d+(?:[.,]\d+)?[KMBT]?)\s+Narcotics$/i, m => m[1]+' 份麻醉品'],
+        [/^Dealing\s+(\d+(?:[.,]\d+)?[KMBT]?)\s+Drugs?\s+in\s+(\d+(?:[.,]\d+)?)\s+Days?$/i,
+            m => '在 '+m[2]+' 天內販售 '+m[1]+' 份毒品'],
+        // 原文 gardenerer 疑為 gardener 的筆誤，只在後台記錄，不在譯文標註。
+        [/^Your gardenerer waters your greenhouse every\s+(\d+(?:[.,]\d+)?)\s+days?$/i,
+            m => '你的園丁每 '+m[1]+' 天為溫室澆水'],
         // v0.4.25：擁擠影響、火砲攻擊、麻醉品種植及收益倍率的可變數值。
         [/^Crowded,\s+slowing down growth by\s+(\d+(?:[.,]\d+)?)%$/i,
             m => '過於擁擠，使生長速度降低 '+m[1]+'%'],
@@ -1616,6 +1650,42 @@
 
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
+        {
+            // 園藝收成通知的正負號與麻醉品數字可能在不同節點，保留原始數值節點。
+            pattern:/^Harvested your garden flowers\.\.\.\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Narcotics$/i,
+            render:m=>lookup('Harvested your garden flowers...')+' '+m[1]+' 份麻醉品',
+            terms:()=>[
+                [/^Harvested your garden flowers\.\.\./i,lookup('Harvested your garden flowers...')],
+                [/\s+Narcotics$/i,' 份麻醉品']
+            ]
+        },
+        {
+            // 商船購買稀有藏寶圖：獨立負號、數值與幣別不改動。
+            pattern:/^You purchase a rare Treasure Map from the Trading Vessel,\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Doubloons?$/i,
+            render:m=>lookup('You purchase a rare Treasure Map from the Trading Vessel,')+' '+m[1]+' 枚杜布隆金幣',
+            terms:()=>[
+                [/^You purchase a rare Treasure Map from the Trading Vessel,/i,lookup('You purchase a rare Treasure Map from the Trading Vessel,')],
+                [/\s+Doubloons?$/i,' 枚杜布隆金幣']
+            ]
+        },
+        {
+            // 僕從收割靈魂的事件保留獨立的正號與數值。
+            pattern:/^Your minions are provoked into a frenzy, harvesting souls\.\.\.\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Souls?$/i,
+            render:m=>lookup('Your minions are provoked into a frenzy, harvesting souls...')+' '+m[1]+' 個靈魂',
+            terms:()=>[
+                [/^Your minions are provoked into a frenzy, harvesting souls\.\.\./i,lookup('Your minions are provoked into a frenzy, harvesting souls...')],
+                [/\s+Souls?$/i,' 個靈魂']
+            ]
+        },
+        {
+            // 販售麻醉品：數量、幣值及符號皆可能各自位於獨立 DOM 節點。
+            pattern:/^You sold\s+(\d+(?:[.,]\d+)?[KMBT]?)\s+Narcotics\s+and earned\s+([+-]?\$[\d,.]+[KMBT]?)$/i,
+            render:m=>'你賣出了 '+m[1]+' 份麻醉品，賺得 '+m[2],
+            terms:()=>[
+                [/^You sold\s+/i,'你賣出了 '],
+                [/\s+Narcotics\s+and earned\s+/i,' 份麻醉品，賺得 ']
+            ]
+        },
         {
             // 公司被捕費用可拆成 Pay、百分比、less when Busted、每位員工修正值。
             pattern:/^Pay\s+(\d+(?:[.,]\d+)?)%\s+less when Busted\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s*\/\s*Employee\s*\)$/i,
@@ -2308,7 +2378,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:Pay\s+\d+(?:[.,]\d+)?%\s+less when Busted|Your hypnotic gaze and unethereal presence lures|Your crew swings on board the Navy Ship|You load|You leave your calling card at the scene of the crime|Jagged timbers tear into your hull|Your crew picks through the wreckage|You heist the museum's artifact collection|Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
+        if(full.length>400 || !/(?:Harvested your garden flowers|You purchase a rare Treasure Map from the Trading Vessel|Your minions are provoked into a frenzy|You sold|Pay\s+\d+(?:[.,]\d+)?%\s+less when Busted|Your hypnotic gaze and unethereal presence lures|Your crew swings on board the Navy Ship|You load|You leave your calling card at the scene of the crime|Jagged timbers tear into your hull|Your crew picks through the wreckage|You heist the museum's artifact collection|Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
