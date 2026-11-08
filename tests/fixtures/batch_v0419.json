@@ -1,0 +1,644 @@
+{
+  "translations": {
+    "1/32 pieces found": "",
+    "Arcane Tome": "",
+    "Charmcaster's Bauble": "",
+    "Eclipse Mask": "",
+    "Ethereal Chalice": "",
+    "Monarch's Ring": "",
+    "Opulent Amulet": "",
+    "Tempest Medallion": "",
+    "You heist the museum's artifact collection, stealing a piece of 'Monarch's Ring'": "",
+    "You're prepared to heist the museum's artifact collection": ""
+  },
+  "contexts": [
+    {
+      "fragments": [
+        " ??? ",
+        " (Approach closer) "
+      ],
+      "fullText": "???  (Approach closer)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "(6)",
+        " The Crimson Ravagers "
+      ],
+      "fullText": "(6) The Crimson Ravagers",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " + Graffiti boosted by +25% (+5% Per Lvl) ",
+        " + Replicate Artwork Speed +5 (+1 Per Lvl) ",
+        " + Chance to create Original Artwork +10% (+2% Per Lvl) ",
+        " + ??? (Unlocked at Lvl. 7) "
+      ],
+      "fullText": "+ Graffiti boosted by +25% (+5% Per Lvl)  + Replicate Artwork Speed +5 (+1 Per Lvl)  + Chance to create Original Artwork +10% (+2% Per Lvl)  + ??? (Unlocked at Lvl. 7)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+$1.1K (80%)",
+        "+3 Finance EXP",
+        "-$400 (20%)",
+        "Hotkey: W"
+      ],
+      "fullText": "+$1.1K (80%)+3 Finance EXP-$400 (20%)Hotkey: W",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+0 Not.",
+        "+130 Not. Per Artifact Level"
+      ],
+      "fullText": "+0 Not.+130 Not. Per Artifact Level",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+0 Stolen Goods",
+        " (+4/Employee) "
+      ],
+      "fullText": "+0 Stolen Goods (+4/Employee)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+0% Doubloons",
+        "(+20% Doubloons/Blackwater Market)",
+        "-0 Doubloons per day",
+        "( -10 Doubloons per day/Blackwater Market)"
+      ],
+      "fullText": "+0% Doubloons(+20% Doubloons/Blackwater Market)-0 Doubloons per day( -10 Doubloons per day/Blackwater Market)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+0% Money",
+        "(+20% Money/Coinmaster's Den)",
+        "-0 Doubloons per day",
+        "( -10 Doubloons per day/Coinmaster's Den)"
+      ],
+      "fullText": "+0% Money(+20% Money/Coinmaster's Den)-0 Doubloons per day( -10 Doubloons per day/Coinmaster's Den)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+1 Blackwater Market",
+        "-200 Supplies",
+        "-200 Doubloons"
+      ],
+      "fullText": "+1 Blackwater Market-200 Supplies-200 Doubloons",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+1 Coinmaster's Den",
+        "-250 Supplies",
+        "-150 Doubloons"
+      ],
+      "fullText": "+1 Coinmaster's Den-250 Supplies-150 Doubloons",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+1 Random Artifact Piece",
+        "100% chance of getting busted",
+        "Hotkey: W"
+      ],
+      "fullText": "+1 Random Artifact Piece100% chance of getting bustedHotkey: W",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " 1/32 pieces found ",
+        " +1% Notoriety "
+      ],
+      "fullText": "1/32 pieces found  +1% Notoriety",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "All on Red",
+        "x2 Casino Robbery Reward"
+      ],
+      "fullText": "All on Redx2 Casino Robbery Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Arcane Tome ",
+        " +??? ",
+        " 0 / 8 "
+      ],
+      "fullText": "Arcane Tome  +???  0 / 8",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Art of the Deal",
+        "x2 Stolen Goods sell price"
+      ],
+      "fullText": "Art of the Dealx2 Stolen Goods sell price",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Basic Lab",
+        "x2 Research Speed"
+      ],
+      "fullText": "Basic Labx2 Research Speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Blackwater Market",
+        "0/0"
+      ],
+      "fullText": "Blackwater Market0/0",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Blackwater Market",
+        "0/0",
+        " Increases Doubloons Gain ",
+        " Costs Doubloons Daily "
+      ],
+      "fullText": "Blackwater Market0/0 Increases Doubloons Gain  Costs Doubloons Daily",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Business Diploma",
+        "x1.5 Sales Department Clean Money"
+      ],
+      "fullText": "Business Diplomax1.5 Sales Department Clean Money",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Business School",
+        "+1 Finance EXP from Studying Operations"
+      ],
+      "fullText": "Business School+1 Finance EXP from Studying Operations",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Charmcaster's Bauble ",
+        " +??? ",
+        " 0 / 5 "
+      ],
+      "fullText": "Charmcaster's Bauble  +???  0 / 5",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Coinmaster's Den",
+        "0/0"
+      ],
+      "fullText": "Coinmaster's Den0/0",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Coinmaster's Den",
+        "0/0",
+        " Increases Money Gain ",
+        " Costs Doubloons Daily "
+      ],
+      "fullText": "Coinmaster's Den0/0 Increases Money Gain  Costs Doubloons Daily",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Deal 40 DMG",
+        "Readjusting (4 Days Left)"
+      ],
+      "fullText": "Deal 40 DMGReadjusting (4 Days Left)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Diamond Headed",
+        "+4 Jewelry Store Heist Planning Speed"
+      ],
+      "fullText": "Diamond Headed+4 Jewelry Store Heist Planning Speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Diving Bell",
+        "Dive the Shipwreck for loot"
+      ],
+      "fullText": "Diving BellDive the Shipwreck for loot",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Early Workforce",
+        "+2 Employees"
+      ],
+      "fullText": "Early Workforce+2 Employees",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Eclipse Mask ",
+        " +??? ",
+        " 0 / 3 "
+      ],
+      "fullText": "Eclipse Mask  +???  0 / 3",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Ethereal Chalice ",
+        " +??? ",
+        " 0 / 3 "
+      ],
+      "fullText": "Ethereal Chalice  +???  0 / 3",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Expand ",
+        "Driftport"
+      ],
+      "fullText": "Expand Driftport",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Expand ",
+        "Driftport",
+        " -1K Supplies "
+      ],
+      "fullText": "Expand Driftport -1K Supplies",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Fake Posture",
+        "+5% Chance Fake Identity not used up"
+      ],
+      "fullText": "Fake Posture+5% Chance Fake Identity not used up",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "First Client",
+        "x2 Sales Department Clean Money"
+      ],
+      "fullText": "First Clientx2 Sales Department Clean Money",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Health",
+        " 1K/1K HP "
+      ],
+      "fullText": "Health 1K/1K HP",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Hockey Mask",
+        "x2 Mugging Reward"
+      ],
+      "fullText": "Hockey Maskx2 Mugging Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Hollow Books",
+        "+5 Max Drugs"
+      ],
+      "fullText": "Hollow Books+5 Max Drugs",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Infernal Summons ",
+        " Rune "
+      ],
+      "fullText": "Infernal Summons  Rune",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Longer Scope",
+        "Spyglass can see 50 Nautical Miles further"
+      ],
+      "fullText": "Longer ScopeSpyglass can see 50 Nautical Miles further",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Mental Math",
+        "x2 Counting Cards Reward"
+      ],
+      "fullText": "Mental Mathx2 Counting Cards Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Monarch's Ring ",
+        " +??? ",
+        " 1 / 5 "
+      ],
+      "fullText": "Monarch's Ring  +???  1 / 5",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Museum:",
+        "9.71%"
+      ],
+      "fullText": "Museum:9.71%",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "New Office Space",
+        "+3 Employees"
+      ],
+      "fullText": "New Office Space+3 Employees",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Basic Lab"
+      ],
+      "fullText": "Next Unlock: Basic Lab",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Business Diploma"
+      ],
+      "fullText": "Next Unlock: Business Diploma",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Early Workforce"
+      ],
+      "fullText": "Next Unlock: Early Workforce",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "New Office Space"
+      ],
+      "fullText": "Next Unlock: New Office Space",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Patented Tech"
+      ],
+      "fullText": "Next Unlock: Patented Tech",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Tax Relief"
+      ],
+      "fullText": "Next Unlock: Tax Relief",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Ninja Training",
+        "+1 Stealth EXP from pickpocketing"
+      ],
+      "fullText": "Ninja Training+1 Stealth EXP from pickpocketing",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Opulent Amulet ",
+        " +??? ",
+        " 0 / 3 "
+      ],
+      "fullText": "Opulent Amulet  +???  0 / 3",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Part-Time Archaeologist",
+        "+5 Museum Plan Heist Speed"
+      ],
+      "fullText": "Part-Time Archaeologist+5 Museum Plan Heist Speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Precious Pilfer",
+        "+5% Chance to Pickpocket Jewels"
+      ],
+      "fullText": "Precious Pilfer+5% Chance to Pickpocket Jewels",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Premium Coach",
+        "x1.5 Rob Passengers Reward"
+      ],
+      "fullText": "Premium Coachx1.5 Rob Passengers Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Providing:",
+        "+0%",
+        " Global Money",
+        " (",
+        "+2%",
+        "/Employee) "
+      ],
+      "fullText": "Providing:+0% Global Money (+2%/Employee)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Python ",
+        " Current companion "
+      ],
+      "fullText": "Python  Current companion",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Python ",
+        " Current companion ",
+        " Level ",
+        "2",
+        " 33/35 EXP ",
+        " +14% Fake Identity Speed and conservation "
+      ],
+      "fullText": "Python  Current companion  Level 2 33/35 EXP  +14% Fake Identity Speed and conservation",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Python",
+        " Level ",
+        "1"
+      ],
+      "fullText": "Python Level 1",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Python",
+        " Level ",
+        "1",
+        "+12% Fake Identity Speed and conservation"
+      ],
+      "fullText": "Python Level 1+12% Fake Identity Speed and conservation",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Red X",
+        "+10% chance of finding Treasure"
+      ],
+      "fullText": "Red X+10% chance of finding Treasure",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Research Points:",
+        " 14/1K "
+      ],
+      "fullText": "Research Points: 14/1K",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Salvage Net",
+        "x1.4 Supplies from Salvaging Wreckage"
+      ],
+      "fullText": "Salvage Netx1.4 Supplies from Salvaging Wreckage",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Say My Name",
+        "x2 All Notoriety Rewards"
+      ],
+      "fullText": "Say My Namex2 All Notoriety Rewards",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Scavenge Supplies",
+        "Scavenge for supplies at Deserted Islands"
+      ],
+      "fullText": "Scavenge SuppliesScavenge for supplies at Deserted Islands",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Side Skimmer",
+        "Gain 20% of Supplies when sailing past Shipwrecks"
+      ],
+      "fullText": "Side SkimmerGain 20% of Supplies when sailing past Shipwrecks",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Storage Shed",
+        "+20 Max Stolen Goods"
+      ],
+      "fullText": "Storage Shed+20 Max Stolen Goods",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Taken Trinkets",
+        "Mugging gives +2 Stolen Goods"
+      ],
+      "fullText": "Taken TrinketsMugging gives +2 Stolen Goods",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Tempest Medallion ",
+        " +??? ",
+        " 0 / 5 "
+      ],
+      "fullText": "Tempest Medallion  +???  0 / 5",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Towering Tides",
+        "+15% Flee chance"
+      ],
+      "fullText": "Towering Tides+15% Flee chance",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Train Ticket ",
+        " x1.2 Train Robbery Money "
+      ],
+      "fullText": "Train Ticket  x1.2 Train Robbery Money",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Train:",
+        "8.85%"
+      ],
+      "fullText": "Train:8.85%",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Wealthier Victims",
+        "x2 Pickpocket and Shoplift Reward"
+      ],
+      "fullText": "Wealthier Victimsx2 Pickpocket and Shoplift Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Wild Bunch",
+        "Your gang and you can steal the cargo off a Train"
+      ],
+      "fullText": "Wild BunchYour gang and you can steal the cargo off a Train",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "[D51 Y27]: ",
+        "You heist the museum's artifact collection, stealing a piece of 'Monarch's Ring'"
+      ],
+      "fullText": "You heist the museum's artifact collection, stealing a piece of 'Monarch's Ring'",
+      "datePrefix": "[D51 Y27]:",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "[D27 Y27]: ",
+        "You're prepared to heist the museum's artifact collection"
+      ],
+      "fullText": "You're prepared to heist the museum's artifact collection",
+      "datePrefix": "[D27 Y27]:",
+      "complete": false
+    }
+  ]
+}
