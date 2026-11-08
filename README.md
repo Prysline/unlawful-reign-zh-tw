@@ -30,7 +30,7 @@ Tampermonkey 選單提供：
 
 ## 專案狀態
 
-* 目前版本：`0.4.23`
+* 目前版本：`0.4.24`
 * 版本狀態：測試版，尚未完成全面遊玩驗證。
 * 適用網站：`https://unlawfulreign.netlify.app/`
 * 原有 `@name` 與 `@namespace` 維持不變，盡量延續既有安裝識別與儲存鍵名。
@@ -47,6 +47,15 @@ Tampermonkey 選單提供：
 * 購買裝備與升級通知可辨識拆分成多個文字節點的情況，避免重複收集殘句。
 * 可用 Node.js 執行 `node tests/test_translation.cjs` 進行翻譯格式、圖示及紀錄保存的回歸測試。
 
+
+### v0.4.24 補充
+
+* 本批來源 JSON 包含 21 筆待翻譯文字及 130 筆上下文，全部上下文的 `complete` 均為 `false`，沒有擅自將介面拼接結果視為已確認的完整事件。
+* 新增人為製造需求、大砲齊射、暴擊、收割者、地獄智識、可疑木桶、遭動過手腳的鎖及最高等級提示等固定詞彙；保留藝術品仿作、偷來的珠寶、追隨者等既有用語。
+* 新增獎勵暴擊倍率與機率、麻醉品持有上限、追隨者數量、雙倍傷害機率、儀式威力減少、藝術品仿作出售、砲擊傷害及搶劫惡名和專精經驗值倍率等可變數值翻譯，保留 `x1.80` 的數字精度。
+* 邪教招募的 `Your hypnotic gaze and unethereal presence lures another naive believer... +1 Followers` 支援完整字串與跨 DOM 節點翻譯，保留日期、獨立正號及粗體數字。來源上下文仍標記為未確認完整。
+* 原文異常：`Hellish Intelect` 的 `Intelect` 疑似為 `Intellect` 的拼寫錯誤，原始比對鍵維持不變，譯文標示異常；`unethereal presence` 採用直接詞義，不推測為相反的 `ethereal`。
+* 原始資料：`tests/fixtures/batch_v0424.json`；回歸測試：`node tests/test_v0424.cjs`。
 
 ### v0.4.23 補充
 
