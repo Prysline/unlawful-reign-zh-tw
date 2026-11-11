@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unlawful Reign 繁體中文化（測試版）
 // @namespace    https://unlawfulreign.netlify.app/
-// @version      0.4.28
+// @version      0.4.29
 // @description  繁體中文化遊戲介面與動態文字，持續保存待翻譯紀錄。
 // @homepageURL  https://github.com/Prysline/unlawful-reign-zh-tw
 // @supportURL   https://github.com/Prysline/unlawful-reign-zh-tw/issues
@@ -20,6 +20,19 @@
     // 已確認出現在遊戲起始畫面的文字，加上遊戲類型常見詞彙。
     // 後者不代表已逐一核實在目前版本中的原文拼寫。
     const BUILTIN = Object.freeze({
+        // v0.4.29：美術館、潛水、賭博與種植退款詞彙。
+        "Art school arrogance stitched into a hat that begs to be seen at the scene": "藝術學院的傲慢縫進了一頂迫不及待想在現場引人注目的帽子裡",
+        "French Beret": "法式貝雷帽",
+        "Gallery Floor Plans": "美術館樓層平面圖",
+        "Gambler's Getaway": "賭徒的脫身之道",
+        "Life Buoy Ring": "救生圈",
+        "Midas Touch": "點石成金",
+        "Reinforced Diving Bell": "強化潛水鐘",
+        "Removed unripe narcotics plant, refunded": "移除了未成熟的麻醉品植株，退還",
+        "Save capsized crewmates and earn their loyalty": "救起遭遇翻船的船員，並贏得他們的忠誠",
+        "Thief's Toolbag": "竊賊工具袋",
+        "Whale Status": "豪賭客身分",
+        "Wildly Notorious": "極度惡名昭彰",
         // v0.4.28：洗衣店、幫派轉換及技能名稱，原文異常僅留在維護紀錄。
         ", earning you": "，讓你賺得",
         "Betting Savant": "投注奇才",
@@ -1204,6 +1217,23 @@
     });
 
     const DYNAMIC = [
+        // v0.4.29：美術館與珠寶、犯罪狀態、潛水報酬及賭博倍率。
+        [/^([+-]\d+(?:[.,]\d+)?[KMBT]?)\s+Art gallery plan heist speed$/i,
+            m => '美術館劫案策劃速度：'+m[1]],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Pickpocket Stolen Jewels chance$/i,
+            m => '扒竊取得偷來的珠寶的機率：'+m[1]+'%'],
+        [/^([+-]\d+(?:[.,]\d+)?)%\s+Notoriety if criminal status\s*>=\s*(\d+)$/i,
+            m => '犯罪狀態 ≥ '+m[2]+' 時，惡名 '+m[1]+'%'],
+        [/^Find x(\d+(?:[.,]\d+)?)\s+more Doubloons when diving Shipwrecks$/i,
+            m => '潛入沉船時找到的杜布隆金幣數量 ×'+m[1]],
+        [/^Reduce Casino Robbery crime and max crime penalty by\s+(\d+(?:[.,]\d+)?)$/i,
+            m => '賭場搶劫的犯罪值與最高犯罪懲罰各減少 '+m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+Deface Artwork Notoriety$/i,
+            m => '污損藝術品獲得的惡名 ×'+m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+Gamble amount$/i,
+            m => '賭博金額 ×'+m[1]],
+        [/^x(\d+(?:[.,]\d+)?)\s+Expertise EXP\s*\(\s*(\d+)\s+days?\s*\)$/i,
+            m => '專精經驗值 ×'+m[1]+'（'+m[2]+' 天）'],
         // v0.4.28：技能增益、金錢與幫派成員均以可變數值辨識。
         [/^\+\s+Gang War damage boosted by\s+([+-]\d+(?:[.,]\d+)?)%\s*\(\s*([+-]\d+(?:[.,]\d+)?)%\s+Per Lvl\s*\)$/i,
             m => '＋幫派戰爭傷害提高 '+m[1]+'%（每級 '+m[2]+'%）'],
@@ -1689,6 +1719,14 @@
     // 整句與 DOM 拆句共用同一套辨識與輸出。
     const COMPOSITE_EVENT_RULES = [
         {
+            // 未成熟麻醉品植株移除後的退款；正號與金額可在不同 DOM 節點。
+            pattern:/^Removed unripe narcotics plant, refunded\s+([+-]?\$[\d,.]+[KMBT]?)$/i,
+            render:m=>lookup('Removed unripe narcotics plant, refunded')+' '+m[1],
+            terms:()=>[
+                [/^Removed unripe narcotics plant, refunded\s*/i,'移除了未成熟的麻醉品植株，退還 ']
+            ]
+        },
+        {
             // 幫派成員轉換為販毒集團成員；保留拆分的負號、正號及數量。
             pattern:/^You put your Gang through grueling challenges, losing\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Gang Members but gaining\s+([+-]?\d+(?:[.,]\d+)?[KMBT]?)\s+Cartel Members?$/i,
             render:m=>'你讓幫派接受嚴苛的挑戰，失去 '+m[1]+' 名幫派成員，但獲得 '+m[2]+' 名販毒集團成員',
@@ -2029,6 +2067,9 @@
     ];
 
     const NONTRANSLATABLE = [
+        // v0.4.29：已中文化的補給品及招募船員通知含數字單位 K/M/B/T，無須重複收錄。
+        /^[+-]?\d+(?:[.,]\d+)?[KMBT]?\s+份補給品$/iu,
+        /^你花費\s*[+-]?\d+(?:[.,]\d+)?[KMBT]?\s+枚杜布隆金幣，雇用一名新船員登船$/iu,
         // 已中文化的「每級古物獲得的惡名：+3.7K」包含數量縮寫，不應再次收集。
         /^每級古物獲得的惡名：\s*[+-]?\d+(?:[.,]\d+)?[KMBT]?$/iu,
         // v0.4.22：已翻譯的惡名數值包含 K/M/B/T 時，無需再次收集。
@@ -2455,7 +2496,7 @@
     function normalizeCompositeEvent(element) {
         if (!(element instanceof Element) || skipElement(element)) return false;
         const full=element.textContent||'';
-        if(full.length>400 || !/(?:You put your Gang through grueling challenges|You toss|You wash a load of clothes|Your cartel sells|Harvested your garden flowers|You purchase a rare Treasure Map from the Trading Vessel|Your minions are provoked into a frenzy|You sold|Pay\s+\d+(?:[.,]\d+)?%\s+less when Busted|Your hypnotic gaze and unethereal presence lures|Your crew swings on board the Navy Ship|You load|You leave your calling card at the scene of the crime|Jagged timbers tear into your hull|Your crew picks through the wreckage|You heist the museum's artifact collection|Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
+        if(full.length>400 || !/(?:Removed unripe narcotics plant, refunded|You put your Gang through grueling challenges|You toss|You wash a load of clothes|Your cartel sells|Harvested your garden flowers|You purchase a rare Treasure Map from the Trading Vessel|Your minions are provoked into a frenzy|You sold|Pay\s+\d+(?:[.,]\d+)?%\s+less when Busted|Your hypnotic gaze and unethereal presence lures|Your crew swings on board the Navy Ship|You load|You leave your calling card at the scene of the crime|Jagged timbers tear into your hull|Your crew picks through the wreckage|You heist the museum's artifact collection|Next Shipment in|You ride the train and arrive at|Under your command, your gang strips|You trade with the vessel, buying|You've deciphered the route|Your Warehouse shipment of|You continue making detailed heist preparations|You continue to decipher cryptic symbols and pirate texts|You purchase the exotic pet|You strike a burried treasure chest|你挖到一個埋藏的寶箱|You load|You offer|The Navy Ship rams|You spend|You continue planning intricate heist strategies|The power of|Can smuggle max|You gamble|You smuggle your|R\.P\/Employee|Select\s+\d+\s+more pacts?|Spend\s+\d+\s+more pacts?|Your researches have finished researching|reached level\s+\d+!|\/\s*\d[\d,.]*\s+EXP|Ending in\s+\d+\s+Days?|[+-]\d+(?:[.,]\d+)?%\s+(?:Mugging|Pickpocket|Research Speed|Sell Prices|Global Money))/i.test(full)) return false;
         const line=full.replace(COMPOSITE_DATE_PREFIX,'').trim();
         const rule=COMPOSITE_EVENT_RULES.find(item=>item.pattern.test(line));
         if(!rule || element.querySelector('button, a, input, textarea, select, svg, [contenteditable]')) return false;
