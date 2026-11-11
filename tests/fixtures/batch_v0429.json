@@ -1,0 +1,1560 @@
+{
+  "translations": {
+    "+1 Art gallery plan heist speed": "",
+    "+10% Pickpocket Stolen Jewels chance": "",
+    "+15% Notoriety if criminal status >= 5": "",
+    "1K 份補給品": "",
+    "Art school arrogance stitched into a hat that begs to be seen at the scene": "",
+    "Find x1.4 more Doubloons when diving Shipwrecks": "",
+    "French Beret": "",
+    "Gallery Floor Plans": "",
+    "Gambler's Getaway": "",
+    "Life Buoy Ring": "",
+    "Midas Touch": "",
+    "Reduce Casino Robbery crime and max crime penalty by 1": "",
+    "Reinforced Diving Bell": "",
+    "Removed unripe narcotics plant, refunded": "",
+    "Save capsized crewmates and earn their loyalty": "",
+    "Thief's Toolbag": "",
+    "Whale Status": "",
+    "Wildly Notorious": "",
+    "x1.2 Deface Artwork Notoriety": "",
+    "x2.5 Gamble amount": "",
+    "x3.83 Expertise EXP (33 days)": "",
+    "你花費 1.9K 枚杜布隆金幣，雇用一名新船員登船": ""
+  },
+  "contexts": [
+    {
+      "fragments": [
+        " ??? ",
+        " (Approach closer) "
+      ],
+      "fullText": "???  (Approach closer)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "(6)",
+        " The Crimson Ravagers "
+      ],
+      "fullText": "(6) The Crimson Ravagers",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "(7)",
+        " The Street Knights "
+      ],
+      "fullText": "(7) The Street Knights",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "(8)",
+        " The Patient Torments "
+      ],
+      "fullText": "(8) The Patient Torments",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " + Graffiti boosted by +25% (+5% Per Lvl) ",
+        " + Replicate Artwork Speed +5 (+1 Per Lvl) ",
+        " + Chance to create Original Artwork +10% (+2% Per Lvl) ",
+        " + ??? (Unlocked at Lvl. 7) "
+      ],
+      "fullText": "+ Graffiti boosted by +25% (+5% Per Lvl)  + Replicate Artwork Speed +5 (+1 Per Lvl)  + Chance to create Original Artwork +10% (+2% Per Lvl)  + ??? (Unlocked at Lvl. 7)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " + Store Robberies boosted by +25% (+5% Per Lvl) ",
+        " + Casino Robberies boosted by +10% (+2% Per Lvl) ",
+        " + Gang War damage boosted by +20% (+4% Per Lvl) ",
+        " + ??? (Unlocked at Lvl. 7) "
+      ],
+      "fullText": "+ Store Robberies boosted by +25% (+5% Per Lvl)  + Casino Robberies boosted by +10% (+2% Per Lvl)  + Gang War damage boosted by +20% (+4% Per Lvl)  + ??? (Unlocked at Lvl. 7)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+$1.1K (80%)",
+        "+3 Finance EXP",
+        "-$400 (20%)",
+        "Hotkey: W"
+      ],
+      "fullText": "+$1.1K (80%)+3 Finance EXP-$400 (20%)Hotkey: W",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+$17.2K",
+        "-4 Narcotics"
+      ],
+      "fullText": "+$17.2K-4 Narcotics",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+₵729.06",
+        "-$729.06",
+        "Converts 1% of your Dirty Money",
+        "Hotkey: W"
+      ],
+      "fullText": "+₵729.06-$729.06Converts 1% of your Dirty MoneyHotkey: W",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+0 Not.",
+        "+130 Not. Per Artifact Level"
+      ],
+      "fullText": "+0 Not.+130 Not. Per Artifact Level",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+0 Stolen Goods",
+        " (+4/Employee) "
+      ],
+      "fullText": "+0 Stolen Goods (+4/Employee)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+0% Doubloons",
+        "(+20% Doubloons/Blackwater Market)",
+        "-0 Doubloons per day",
+        "( -10 Doubloons per day/Blackwater Market)"
+      ],
+      "fullText": "+0% Doubloons(+20% Doubloons/Blackwater Market)-0 Doubloons per day( -10 Doubloons per day/Blackwater Market)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+0% Money",
+        "(+20% Money/Coinmaster's Den)",
+        "-0 Doubloons per day",
+        "( -10 Doubloons per day/Coinmaster's Den)"
+      ],
+      "fullText": "+0% Money(+20% Money/Coinmaster's Den)-0 Doubloons per day( -10 Doubloons per day/Coinmaster's Den)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+1 Blackwater Market",
+        "-200 Supplies",
+        "-200 Doubloons"
+      ],
+      "fullText": "+1 Blackwater Market-200 Supplies-200 Doubloons",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+1 Cartel Member",
+        "-30 Gang Members"
+      ],
+      "fullText": "+1 Cartel Member-30 Gang Members",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+1 Coinmaster's Den",
+        "-250 Supplies",
+        "-150 Doubloons"
+      ],
+      "fullText": "+1 Coinmaster's Den-250 Supplies-150 Doubloons",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+1 Narcotics",
+        "+1 Narcotics"
+      ],
+      "fullText": "+1 Narcotics+1 Narcotics",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+1 Random Artifact Piece",
+        "100% chance of getting busted",
+        "Hotkey: W"
+      ],
+      "fullText": "+1 Random Artifact Piece100% chance of getting bustedHotkey: W",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+100 Supplies",
+        "25% chance of -25 Ship HP"
+      ],
+      "fullText": "+100 Supplies25% chance of -25 Ship HP",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+2 Harpoons",
+        "-600 Supplies"
+      ],
+      "fullText": "+2 Harpoons-600 Supplies",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+2 Next Create Replica Progress",
+        "+4 Artistry EXP",
+        "Hotkey: Q"
+      ],
+      "fullText": "+2 Next Create Replica Progress+4 Artistry EXPHotkey: Q",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "+4 Drugs",
+        "+1 Narcotics"
+      ],
+      "fullText": "+4 Drugs+1 Narcotics",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " 1/32 pieces found ",
+        " +1% Notoriety "
+      ],
+      "fullText": "1/32 pieces found  +1% Notoriety",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "2",
+        " / 2 ",
+        "Harpoons"
+      ],
+      "fullText": "2 / 2 Harpoons",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "All on Red",
+        "x2 Casino Robbery Reward"
+      ],
+      "fullText": "All on Redx2 Casino Robbery Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Alloy Nails",
+        "+50 Ship Max HP"
+      ],
+      "fullText": "Alloy Nails+50 Ship Max HP",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Arcane Tome ",
+        " +??? ",
+        " 0 / 8 "
+      ],
+      "fullText": "Arcane Tome  +???  0 / 8",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Art of the Deal",
+        "x2 Stolen Goods sell price"
+      ],
+      "fullText": "Art of the Dealx2 Stolen Goods sell price",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Artificial Demand",
+        "Buy up supply to artificially raise Stolen Jewels demand and prices"
+      ],
+      "fullText": "Artificial DemandBuy up supply to artificially raise Stolen Jewels demand and prices",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "ATM Theft",
+        "x2 Store Robbery Reward"
+      ],
+      "fullText": "ATM Theftx2 Store Robbery Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Basic Lab",
+        "x2 Research Speed"
+      ],
+      "fullText": "Basic Labx2 Research Speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Betting Savant",
+        "+1 Finance EXP from Gambling"
+      ],
+      "fullText": "Betting Savant+1 Finance EXP from Gambling",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Blackwater Market",
+        "0/0"
+      ],
+      "fullText": "Blackwater Market0/0",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Blackwater Market",
+        "0/0",
+        " Increases Doubloons Gain ",
+        " Costs Doubloons Daily "
+      ],
+      "fullText": "Blackwater Market0/0 Increases Doubloons Gain  Costs Doubloons Daily",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Bountiful Scythe",
+        "+5% Chance for x2 Drugs on harvest"
+      ],
+      "fullText": "Bountiful Scythe+5% Chance for x2 Drugs on harvest",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Bracelet Charms",
+        "+5% when you gamble and win than lose"
+      ],
+      "fullText": "Bracelet Charms+5% when you gamble and win than lose",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Bunk Hammocks",
+        "+4 Max Crewmates"
+      ],
+      "fullText": "Bunk Hammocks+4 Max Crewmates",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Business Diploma",
+        "x1.5 Sales Department Clean Money"
+      ],
+      "fullText": "Business Diplomax1.5 Sales Department Clean Money",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Business School",
+        "+1 Finance EXP from Studying Operations"
+      ],
+      "fullText": "Business School+1 Finance EXP from Studying Operations",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Campaign Complete ",
+        " No rivals remaining ",
+        " Your crew has taken every district it can reach. "
+      ],
+      "fullText": "Campaign Complete  No rivals remaining  Your crew has taken every district it can reach.",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Cannon Barrage",
+        "x1.5 Cannon Damage"
+      ],
+      "fullText": "Cannon Barragex1.5 Cannon Damage",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Cannons",
+        " 25 ",
+        "DMG",
+        " 10% chance of x2 DMG "
+      ],
+      "fullText": "Cannons 25 DMG 10% chance of x2 DMG",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Cartel ",
+        "(!)"
+      ],
+      "fullText": "Cartel (!)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Cartel Members: 0 ",
+        " Dealing 0 Drugs in 30 Days "
+      ],
+      "fullText": "Cartel Members: 0  Dealing 0 Drugs in 30 Days",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Chaos Canvas",
+        "x3 Graffiti Notoriety Reward"
+      ],
+      "fullText": "Chaos Canvasx3 Graffiti Notoriety Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Charmcaster's Bauble ",
+        " +??? ",
+        " 0 / 5 "
+      ],
+      "fullText": "Charmcaster's Bauble  +???  0 / 5",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Coinmaster's Den",
+        "0/0"
+      ],
+      "fullText": "Coinmaster's Den0/0",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Coinmaster's Den",
+        "0/0",
+        " Increases Money Gain ",
+        " Costs Doubloons Daily "
+      ],
+      "fullText": "Coinmaster's Den0/0 Increases Money Gain  Costs Doubloons Daily",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Corporate Funded Gang",
+        "x2 Gang Passive Income"
+      ],
+      "fullText": "Corporate Funded Gangx2 Gang Passive Income",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Criminal Intuition",
+        "Gain EXP from more sources"
+      ],
+      "fullText": "Criminal IntuitionGain EXP from more sources",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Critical Strike",
+        "+1% Chance to critical strike rewards (x1.5)"
+      ],
+      "fullText": "Critical Strike+1% Chance to critical strike rewards (x1.5)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Cult Level",
+        "7",
+        " Max Level Reached "
+      ],
+      "fullText": "Cult Level7 Max Level Reached",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Dead Ores",
+        "+1 Stolen Jewel when raiding grave"
+      ],
+      "fullText": "Dead Ores+1 Stolen Jewel when raiding grave",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Deal 158 DMG (Tethered)",
+        "Takes 4 days to regroup"
+      ],
+      "fullText": "Deal 158 DMG (Tethered)Takes 4 days to regroup",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Deal 25 DMG (10% chance of x2 DMG)",
+        "-1 Cannonballs",
+        "Takes 6 days to reload",
+        "5/5 Cannonballs left"
+      ],
+      "fullText": "Deal 25 DMG (10% chance of x2 DMG)-1 CannonballsTakes 6 days to reload5/5 Cannonballs left",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Deal 40 DMG",
+        "Readjusting (4 Days Left)"
+      ],
+      "fullText": "Deal 40 DMGReadjusting (4 Days Left)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Deal 80 DMG (Tethered)",
+        "Readjusting (10 Days Left)"
+      ],
+      "fullText": "Deal 80 DMG (Tethered)Readjusting (10 Days Left)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Deface Artwork",
+        "Deface Artwork at the Art Gallery to send a message"
+      ],
+      "fullText": "Deface ArtworkDeface Artwork at the Art Gallery to send a message",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Diamond Headed",
+        "+4 Jewelry Store Heist Planning Speed"
+      ],
+      "fullText": "Diamond Headed+4 Jewelry Store Heist Planning Speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Dim Lighting",
+        "+1 Max Drugs dealt to Shady Stranger"
+      ],
+      "fullText": "Dim Lighting+1 Max Drugs dealt to Shady Stranger",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Diving Bell",
+        "Dive the Shipwreck for loot"
+      ],
+      "fullText": "Diving BellDive the Shipwreck for loot",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Drunkard Traders",
+        "Gain x2 Doubloons when selling to Trading Vessels"
+      ],
+      "fullText": "Drunkard TradersGain x2 Doubloons when selling to Trading Vessels",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Early Workforce",
+        "+2 Employees"
+      ],
+      "fullText": "Early Workforce+2 Employees",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Eclipse Mask ",
+        " +??? ",
+        " 0 / 3 "
+      ],
+      "fullText": "Eclipse Mask  +???  0 / 3",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Eclipse Mask ",
+        " +100% Notoriety Rewards ",
+        " 3 / 3 "
+      ],
+      "fullText": "Eclipse Mask  +100% Notoriety Rewards  3 / 3",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Ethereal Chalice ",
+        " +??? ",
+        " 0 / 3 "
+      ],
+      "fullText": "Ethereal Chalice  +???  0 / 3",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Expand ",
+        "Driftport"
+      ],
+      "fullText": "Expand Driftport",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Expand ",
+        "Driftport",
+        " -1K Supplies "
+      ],
+      "fullText": "Expand Driftport -1K Supplies",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Experienced Villain",
+        "+0.5% Global Money Reward for every 1000 Notoriety (Max +100%)"
+      ],
+      "fullText": "Experienced Villain+0.5% Global Money Reward for every 1000 Notoriety (Max +100%)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Fake Posture",
+        "+5% Chance Fake Identity not used up"
+      ],
+      "fullText": "Fake Posture+5% Chance Fake Identity not used up",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "First Client",
+        "x2 Sales Department Clean Money"
+      ],
+      "fullText": "First Clientx2 Sales Department Clean Money",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Flammable Supply",
+        "x1.2 Drugs Sell Price"
+      ],
+      "fullText": "Flammable Supplyx1.2 Drugs Sell Price",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Flower Garden",
+        "Be able to grow Narcotics. Doesn't like to grow next to other plants"
+      ],
+      "fullText": "Flower GardenBe able to grow Narcotics. Doesn't like to grow next to other plants",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " French Beret ",
+        " x1.2 Deface Artwork Notoriety "
+      ],
+      "fullText": "French Beret  x1.2 Deface Artwork Notoriety",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Gallery Floor Plans",
+        "+1 Art gallery plan heist speed"
+      ],
+      "fullText": "Gallery Floor Plans+1 Art gallery plan heist speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Gambler's Getaway",
+        "Reduce Casino Robbery crime and max crime penalty by 1"
+      ],
+      "fullText": "Gambler's GetawayReduce Casino Robbery crime and max crime penalty by 1",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Gem Hungry",
+        "+15% Chance pickpocket stolen jewels"
+      ],
+      "fullText": "Gem Hungry+15% Chance pickpocket stolen jewels",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Graffiti Scholar",
+        "+1 Artistry EXP from Graffiti"
+      ],
+      "fullText": "Graffiti Scholar+1 Artistry EXP from Graffiti",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Graveside Vigil",
+        "+3 Souls when Paying Respect at Cemetary"
+      ],
+      "fullText": "Graveside Vigil+3 Souls when Paying Respect at Cemetary",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Harpoon Rack",
+        "+2 Max Harpoons"
+      ],
+      "fullText": "Harpoon Rack+2 Max Harpoons",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Harpoons ",
+        "2",
+        " / 2 "
+      ],
+      "fullText": "Harpoons 2 / 2",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Harvester",
+        "Your Gardener can help with harvesting all your 'crops' in one go"
+      ],
+      "fullText": "HarvesterYour Gardener can help with harvesting all your 'crops' in one go",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Health",
+        " 1K/1K HP "
+      ],
+      "fullText": "Health 1K/1K HP",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Hellish Intelect ",
+        " Ritual "
+      ],
+      "fullText": "Hellish Intelect  Ritual",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Herbicide",
+        "Stops Weeds (The bad kind) from growing in your greenhouse"
+      ],
+      "fullText": "HerbicideStops Weeds (The bad kind) from growing in your greenhouse",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "High Roller Wash",
+        "x1.5 Casino Launder Money Amount"
+      ],
+      "fullText": "High Roller Washx1.5 Casino Launder Money Amount",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Hire Cartel Member",
+        " -30 Gang Members "
+      ],
+      "fullText": "Hire Cartel Member -30 Gang Members",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Hockey Mask",
+        "x2 Mugging Reward"
+      ],
+      "fullText": "Hockey Maskx2 Mugging Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Hollow Books",
+        "+5 Max Drugs"
+      ],
+      "fullText": "Hollow Books+5 Max Drugs",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Hydrated Foliage",
+        "Your gardenerer waters your greenhouse every 20 days"
+      ],
+      "fullText": "Hydrated FoliageYour gardenerer waters your greenhouse every 20 days",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Infernal Summons ",
+        " Rune "
+      ],
+      "fullText": "Infernal Summons  Rune",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Internalized Vision",
+        "Studying Art will boost next replicating art progress by +2"
+      ],
+      "fullText": "Internalized VisionStudying Art will boost next replicating art progress by +2",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Larger Oars",
+        "x1.4 Ship Speed"
+      ],
+      "fullText": "Larger Oarsx1.4 Ship Speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Laundromat",
+        "Clean your dirty money - literally!"
+      ],
+      "fullText": "LaundromatClean your dirty money - literally!",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Life Buoy Ring",
+        "Save capsized crewmates and earn their loyalty"
+      ],
+      "fullText": "Life Buoy RingSave capsized crewmates and earn their loyalty",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Longer Scope",
+        "Spyglass can see 50 Nautical Miles further"
+      ],
+      "fullText": "Longer ScopeSpyglass can see 50 Nautical Miles further",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Mental Math",
+        "x2 Counting Cards Reward"
+      ],
+      "fullText": "Mental Mathx2 Counting Cards Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Midas Touch",
+        "+10% Pickpocket Stolen Jewels chance"
+      ],
+      "fullText": "Midas Touch+10% Pickpocket Stolen Jewels chance",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Monarch's Ring ",
+        " +??? ",
+        " 1 / 5 "
+      ],
+      "fullText": "Monarch's Ring  +???  1 / 5",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Muscle Memory",
+        "+1 Brutality EXP from Casino Robbery"
+      ],
+      "fullText": "Muscle Memory+1 Brutality EXP from Casino Robbery",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Museum:",
+        "9.71%"
+      ],
+      "fullText": "Museum:9.71%",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Narcos",
+        "Able to turn your Gang Members into Cartel members and start your drug empire"
+      ],
+      "fullText": "NarcosAble to turn your Gang Members into Cartel members and start your drug empire",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Narcotics",
+        " 1/5 "
+      ],
+      "fullText": "Narcotics 1/5",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Narcotics",
+        "(Sickle)"
+      ],
+      "fullText": "Narcotics(Sickle)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Narcotics",
+        "(Sickle)",
+        " Growth: 0% ",
+        " Wetness: 50% ",
+        "Crowded, slowing down growth by 20%",
+        "Not ready, refunds 60% of seed cost"
+      ],
+      "fullText": "Narcotics(Sickle) Growth: 0%  Wetness: 50% Crowded, slowing down growth by 20%Not ready, refunds 60% of seed cost",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Narcotics",
+        "(Sow)"
+      ],
+      "fullText": "Narcotics(Sow)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Narcotics",
+        "(Water)"
+      ],
+      "fullText": "Narcotics(Water)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Narcotics",
+        "(Water)",
+        " Growth: 12% ",
+        " Wetness: 100% ",
+        "Crowded, slowing down growth by 20%"
+      ],
+      "fullText": "Narcotics(Water) Growth: 12%  Wetness: 100% Crowded, slowing down growth by 20%",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Narcotics",
+        "(Water)",
+        " Growth: 20% ",
+        " Wetness: 25% ",
+        "Dry, slowing down growth by 60%",
+        "Crowded, slowing down growth by 20%"
+      ],
+      "fullText": "Narcotics(Water) Growth: 20%  Wetness: 25% Dry, slowing down growth by 60%Crowded, slowing down growth by 20%",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Narcotics",
+        "$4.3K",
+        "4/5"
+      ],
+      "fullText": "Narcotics$4.3K4/5",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "New Office Space",
+        "+3 Employees"
+      ],
+      "fullText": "New Office Space+3 Employees",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Next attack deals x2 DMG",
+        "-1 Harpoons",
+        "2/2 Harpoons left"
+      ],
+      "fullText": "Next attack deals x2 DMG-1 Harpoons2/2 Harpoons left",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Next attack deals x2 DMG",
+        "-1 Harpoons",
+        "Out of Harpoons"
+      ],
+      "fullText": "Next attack deals x2 DMG-1 HarpoonsOut of Harpoons",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Basic Lab"
+      ],
+      "fullText": "Next Unlock: Basic Lab",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Business Diploma"
+      ],
+      "fullText": "Next Unlock: Business Diploma",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Corporate Funded Gang"
+      ],
+      "fullText": "Next Unlock: Corporate Funded Gang",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Dirty Sales"
+      ],
+      "fullText": "Next Unlock: Dirty Sales",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Early Workforce"
+      ],
+      "fullText": "Next Unlock: Early Workforce",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Laundromat"
+      ],
+      "fullText": "Next Unlock: Laundromat",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "New Office Space"
+      ],
+      "fullText": "Next Unlock: New Office Space",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Patented Tech"
+      ],
+      "fullText": "Next Unlock: Patented Tech",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Pie Charts"
+      ],
+      "fullText": "Next Unlock: Pie Charts",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Shady Employees"
+      ],
+      "fullText": "Next Unlock: Shady Employees",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Superstore Partnership"
+      ],
+      "fullText": "Next Unlock: Superstore Partnership",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Next Unlock: ",
+        "Tax Relief"
+      ],
+      "fullText": "Next Unlock: Tax Relief",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Ninja Training",
+        "+1 Stealth EXP from pickpocketing"
+      ],
+      "fullText": "Ninja Training+1 Stealth EXP from pickpocketing",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Nitrogen-Rich",
+        "x1.2 Narcotics growth speed"
+      ],
+      "fullText": "Nitrogen-Richx1.2 Narcotics growth speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Novice Cartographer",
+        "+5 Decipher map speed"
+      ],
+      "fullText": "Novice Cartographer+5 Decipher map speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Opulent Amulet ",
+        " +??? ",
+        " 0 / 3 "
+      ],
+      "fullText": "Opulent Amulet  +???  0 / 3",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Part-Time Archaeologist",
+        "+5 Museum Plan Heist Speed"
+      ],
+      "fullText": "Part-Time Archaeologist+5 Museum Plan Heist Speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Persistent",
+        "Failing heists retains 15% of the progress"
+      ],
+      "fullText": "PersistentFailing heists retains 15% of the progress",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Precious Pilfer",
+        "+5% Chance to Pickpocket Jewels"
+      ],
+      "fullText": "Precious Pilfer+5% Chance to Pickpocket Jewels",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Premium Coach",
+        "x1.5 Rob Passengers Reward"
+      ],
+      "fullText": "Premium Coachx1.5 Rob Passengers Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Professor of Archaeology",
+        "+5 Museum Plan Heist Speed"
+      ],
+      "fullText": "Professor of Archaeology+5 Museum Plan Heist Speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Providing:",
+        "+0%",
+        " Global Money",
+        " (",
+        "+2%",
+        "/Employee) "
+      ],
+      "fullText": "Providing:+0% Global Money (+2%/Employee)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Pruning Shears ",
+        " x1.1 Narcotics growth speed "
+      ],
+      "fullText": "Pruning Shears  x1.1 Narcotics growth speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Python ",
+        " Current companion "
+      ],
+      "fullText": "Python  Current companion",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Python ",
+        " Current companion ",
+        " Level ",
+        "2",
+        " 33/35 EXP ",
+        " +14% Fake Identity Speed and conservation "
+      ],
+      "fullText": "Python  Current companion  Level 2 33/35 EXP  +14% Fake Identity Speed and conservation",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Python",
+        " Level ",
+        "1"
+      ],
+      "fullText": "Python Level 1",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Python",
+        " Level ",
+        "1",
+        "+12% Fake Identity Speed and conservation"
+      ],
+      "fullText": "Python Level 1+12% Fake Identity Speed and conservation",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Red X",
+        "+10% chance of finding Treasure"
+      ],
+      "fullText": "Red X+10% chance of finding Treasure",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Reinforced Diving Bell",
+        "Find x1.4 more Doubloons when diving Shipwrecks"
+      ],
+      "fullText": "Reinforced Diving BellFind x1.4 more Doubloons when diving Shipwrecks",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "[D24 Y40]: ",
+        "Removed unripe narcotics plant, refunded ",
+        "+",
+        "$480"
+      ],
+      "fullText": "Removed unripe narcotics plant, refunded +$480",
+      "datePrefix": "[D24 Y40]:",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Research Points:",
+        " 14/1K "
+      ],
+      "fullText": "Research Points: 14/1K",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Restless Rest",
+        "Provoke your minions at the Cemetery"
+      ],
+      "fullText": "Restless RestProvoke your minions at the Cemetery",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Ritual Boons",
+        "You have active boons",
+        "x3.83 Money (33 days)",
+        "x3.83 Notoriety (33 days)",
+        "x3.83 Expertise EXP (33 days)"
+      ],
+      "fullText": "Ritual BoonsYou have active boonsx3.83 Money (33 days)x3.83 Notoriety (33 days)x3.83 Expertise EXP (33 days)",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Salvage Net",
+        "x1.4 Supplies from Salvaging Wreckage"
+      ],
+      "fullText": "Salvage Netx1.4 Supplies from Salvaging Wreckage",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Saves $10 per day",
+        "Loses +50% Ritual Power",
+        "Deactivates 2 Blood Pools"
+      ],
+      "fullText": "Saves $10 per dayLoses +50% Ritual PowerDeactivates 2 Blood Pools",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Saves $5 per day",
+        "Loses +25% Ritual Power",
+        "Deactivates 1 Blood Pool"
+      ],
+      "fullText": "Saves $5 per dayLoses +25% Ritual PowerDeactivates 1 Blood Pool",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Saves 1 Souls per day",
+        "Loses +25% Ritual Duration",
+        "Deactivates 1 Shrine"
+      ],
+      "fullText": "Saves 1 Souls per dayLoses +25% Ritual DurationDeactivates 1 Shrine",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Say My Name",
+        "x2 All Notoriety Rewards"
+      ],
+      "fullText": "Say My Namex2 All Notoriety Rewards",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Scavenge Supplies",
+        "Scavenge for supplies at Deserted Islands"
+      ],
+      "fullText": "Scavenge SuppliesScavenge for supplies at Deserted Islands",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Shadowy Whispers",
+        "x1.25 Notoriety from shady talk when not a criminal"
+      ],
+      "fullText": "Shadowy Whispersx1.25 Notoriety from shady talk when not a criminal",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Shady Employees",
+        "+4 Max Gang Members"
+      ],
+      "fullText": "Shady Employees+4 Max Gang Members",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Shipwreck ",
+        " 45 ",
+        "N.M Away"
+      ],
+      "fullText": "Shipwreck  45 N.M Away",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Side Skimmer",
+        "Gain 20% of Supplies when sailing past Shipwrecks"
+      ],
+      "fullText": "Side SkimmerGain 20% of Supplies when sailing past Shipwrecks",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Silent Shoes",
+        "+2 Stolen Goods from shoplifting"
+      ],
+      "fullText": "Silent Shoes+2 Stolen Goods from shoplifting",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Sow Max",
+        " -$100 "
+      ],
+      "fullText": "Sow Max -$100",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Spectral Walker",
+        "+1 Stealth EXP from Shoplifting"
+      ],
+      "fullText": "Spectral Walker+1 Stealth EXP from Shoplifting",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Storage Shed",
+        "+20 Max Stolen Goods"
+      ],
+      "fullText": "Storage Shed+20 Max Stolen Goods",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Street Tribute",
+        "x2 Gang Passive Money Income"
+      ],
+      "fullText": "Street Tributex2 Gang Passive Money Income",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Superstore Partnership",
+        "x1.5 Stolen Goods sell price"
+      ],
+      "fullText": "Superstore Partnershipx1.5 Stolen Goods sell price",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Suspicious Barrels",
+        "+5 Max Narcotics"
+      ],
+      "fullText": "Suspicious Barrels+5 Max Narcotics",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Taken Trinkets",
+        "Mugging gives +2 Stolen Goods"
+      ],
+      "fullText": "Taken TrinketsMugging gives +2 Stolen Goods",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Tampered Locks",
+        "x1.5 Store and Jewelry Store Robbery Notoriety"
+      ],
+      "fullText": "Tampered Locksx1.5 Store and Jewelry Store Robbery Notoriety",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Tempest Medallion ",
+        " +??? ",
+        " 0 / 5 "
+      ],
+      "fullText": "Tempest Medallion  +???  0 / 5",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "The Godfather",
+        "Start your own Mafia family"
+      ],
+      "fullText": "The GodfatherStart your own Mafia family",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Thief's Toolbag",
+        "x1.5 Pickpocket and Shoplift Reward"
+      ],
+      "fullText": "Thief's Toolbagx1.5 Pickpocket and Shoplift Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Towering Tides",
+        "+15% Flee chance"
+      ],
+      "fullText": "Towering Tides+15% Flee chance",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Train Ticket ",
+        " x1.2 Train Robbery Money "
+      ],
+      "fullText": "Train Ticket  x1.2 Train Robbery Money",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Train:",
+        "8.85%"
+      ],
+      "fullText": "Train:8.85%",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Treats",
+        "x2 Pet EXP gain Speed"
+      ],
+      "fullText": "Treatsx2 Pet EXP gain Speed",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Unmarked Van",
+        "x1.5 Store Robbery Reward"
+      ],
+      "fullText": "Unmarked Vanx1.5 Store Robbery Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Violent Streak",
+        "+1 Brutality EXP from Store and Jewelry Store Robberies"
+      ],
+      "fullText": "Violent Streak+1 Brutality EXP from Store and Jewelry Store Robberies",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Wealthier Victims",
+        "x2 Pickpocket and Shoplift Reward"
+      ],
+      "fullText": "Wealthier Victimsx2 Pickpocket and Shoplift Reward",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Whale Status",
+        "x2.5 Gamble amount"
+      ],
+      "fullText": "Whale Statusx2.5 Gamble amount",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Wild Bunch",
+        "Your gang and you can steal the cargo off a Train"
+      ],
+      "fullText": "Wild BunchYour gang and you can steal the cargo off a Train",
+      "complete": false
+    },
+    {
+      "fragments": [
+        "Wildly Notorious",
+        "+15% Notoriety if criminal status >= 5"
+      ],
+      "fullText": "Wildly Notorious+15% Notoriety if criminal status >= 5",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " x1.80 Expertise EXP ",
+        "Not Active"
+      ],
+      "fullText": "x1.80 Expertise EXP Not Active",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Your Ship ",
+        " 62.50 / 70 ",
+        "HP",
+        " 8 / 8 Crewmates ",
+        "5",
+        " / 5 Cannonballs ",
+        "2",
+        " / 2 Harpoons ",
+        " Shipwreck "
+      ],
+      "fullText": "Your Ship  62.50 / 70 HP 8 / 8 Crewmates 5 / 5 Cannonballs 2 / 2 Harpoons  Shipwreck",
+      "complete": false
+    },
+    {
+      "fragments": [
+        " Your Ship ",
+        " 70 / 70 ",
+        "HP",
+        " 8 / 8 Crewmates ",
+        "5",
+        " / 5 Cannonballs ",
+        " Shipwreck "
+      ],
+      "fullText": "Your Ship  70 / 70 HP 8 / 8 Crewmates 5 / 5 Cannonballs  Shipwreck",
+      "complete": false
+    }
+  ]
+}
